@@ -9,6 +9,7 @@ use Src\Domain\Tab\OrderedItem;
 class DrinksOrdered
 {
     public Guid $id;
+    /** @var Collection<OrderedItem> */
     public Collection $items;
 
     public static function of(Guid $id, Collection $items)

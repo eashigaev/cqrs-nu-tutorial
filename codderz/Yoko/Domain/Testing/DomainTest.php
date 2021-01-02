@@ -40,8 +40,12 @@ class DomainTest
         return $this;
     }
 
-    public function thenFail(\Exception $exception)
+    public function thenFailWith(\Exception $exception)
     {
+        if (!$this->exception) {
+            throw new \Error("Expected exception " . get_class($exception) . " but got result");
+        }
+
         Assert::assertEquals($exception, $this->exception);
         return $this;
     }
