@@ -22,15 +22,6 @@ class Aggregate
         );
     }
 
-    public function recordThat($event)
-    {
-        $this->recordedEvents[] = $event;
-
-        $this->apply($event);
-
-        return $this;
-    }
-
     public function apply($event)
     {
         $method = __FUNCTION__ . Reflect::shortClass($event);
@@ -43,6 +34,15 @@ class Aggregate
         throw new \Error(
             get_class($this) . " does not know how to apply event " . get_class($event)
         );
+    }
+
+    public function recordThat($event)
+    {
+        $this->recordedEvents[] = $event;
+
+        $this->apply($event);
+
+        return $this;
     }
 
     public function releaseEvents()
