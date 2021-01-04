@@ -34,7 +34,7 @@ class TabAggregate extends Aggregate
 
     public function handlePlaceOrder(PlaceOrder $command)
     {
-        if (!$this->open) throw TabNotOpen::of();
+        if (!$this->open) throw TabNotOpen::new();
 
         $drinks = $command->items
             ->filter(fn(OrderedItem $item) => $item->isDrink)
@@ -54,7 +54,7 @@ class TabAggregate extends Aggregate
     public function handleMarkDrinksServed(MarkDrinksServed $command)
     {
         if (!$this->areDrinksOutstanding($command->menuNumbers)) {
-            throw DrinksNotOutstanding::of();
+            throw DrinksNotOutstanding::new();
         }
         return $this->recordThat(
             DrinksServed::of($command->id, $command->menuNumbers)
@@ -66,7 +66,7 @@ class TabAggregate extends Aggregate
         $curOutstanding = $this->outstandingDrinks->values();
         foreach ($menuNumbers as $number) {
             if (!$curOutstanding->contains($number)) return false;
-            $curOutstanding = $curOutstanding->remove($number);
+            $curOutstanding = $curOutstanding->removeFirst($number);
         }
         return true;
     }
@@ -92,7 +92,7 @@ class TabAggregate extends Aggregate
 
     public function applyDrinksServed(DrinksServed $event)
     {
-        $removeDrink = fn($item) => $this->outstandingDrinks = $this->outstandingDrinks->remove($item);
+        $removeDrink = fn($item) => $this->outstandingDrinks = $this->outstandingDrinks->removeFirst($item);
 
         $event->menuNumbers->each($removeDrink);
     }

@@ -16,7 +16,7 @@ class PlaceOrder
     {
         $self = new self();
         $self->id = $id;
-        $self->items = $items->assertType(OrderedItem::class);
+        $self->items = $items->assertInstance(OrderedItem::class);
         return $self;
     }
 }

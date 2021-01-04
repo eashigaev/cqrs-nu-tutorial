@@ -8,16 +8,12 @@ class Collection extends BaseCollection
 {
     public function assert(callable $callback)
     {
-        return $this
-            ->filter(function ($item) use ($callback) {
-                if (!$callback($item)) {
-                    throw new \InvalidArgumentException();
-                }
-                return $item;
-            });
+        return $this->each(function ($item) use ($callback) {
+            if (!$callback($item)) throw new \InvalidArgumentException();
+        });
     }
 
-    public function assertType(string $type)
+    public function assertInstance(string $type)
     {
         return $this->assert(fn($item) => is_a($item, $type));
     }
@@ -30,5 +26,11 @@ class Collection extends BaseCollection
     public function remove($item)
     {
         return $this->reject(fn($elem) => $elem === $item);
+    }
+
+    public function removeFirst($item)
+    {
+        $index = $this->search($item);
+        return $this->forget($index)->values();
     }
 }

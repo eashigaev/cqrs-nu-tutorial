@@ -54,7 +54,7 @@ class TabTest extends TestCase
 
     public function testCanNotOrderWithUnopenedTab()
     {
-        $this->expectExceptionObject(TabNotOpen::of());
+        $this->expectExceptionObject(TabNotOpen::new());
 
         TabAggregate::fromEvents()
             ->handle(
@@ -126,7 +126,7 @@ class TabTest extends TestCase
 
     public function testCanNotServeAnUnorderedDrink()
     {
-        $this->expectExceptionObject(DrinksNotOutstanding::of());
+        $this->expectExceptionObject(DrinksNotOutstanding::new());
 
         TabAggregate::fromEvents([
             TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
@@ -139,7 +139,7 @@ class TabTest extends TestCase
 
     public function testCanNotServeAnOrderedDrinkTwice()
     {
-        $this->expectExceptionObject(DrinksNotOutstanding::of());
+        $this->expectExceptionObject(DrinksNotOutstanding::new());
 
         TabAggregate::fromEvents([
             TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
