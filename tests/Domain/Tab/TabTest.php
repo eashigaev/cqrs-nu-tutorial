@@ -2,7 +2,7 @@
 
 namespace Tests\Domain\Tab;
 
-use Codderz\Yoko\Domain\Testing\DomainTest;
+use Codderz\Yoko\Domain\Testing\DomainTestTrait;
 use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -20,6 +20,8 @@ use Tests\TestCase;
 
 class TabTest extends TestCase
 {
+    use DomainTestTrait;
+
     private Guid $testId;
     private int $testTable;
     private string $testWaiter;
@@ -40,120 +42,112 @@ class TabTest extends TestCase
 
     public function testOpenTab()
     {
-        DomainTest::given(
-            TabAggregate::fromEvents()
-        )
-            ->when([
+        $aggregate = TabAggregate::fromEvents()
+            ->handle(
                 OpenTab::of($this->testId, $this->testTable, $this->testWaiter)
-            ])
-            ->then([
-                TabOpened::of($this->testId, $this->testTable, $this->testWaiter)
-            ]);
+            );
+
+        $this->assertReleasedEvents($aggregate, [
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter)
+        ]);
     }
 
     public function testCanNotOrderWithUnopenedTab()
     {
-        DomainTest::given(
-            TabAggregate::fromEvents()
-        )
-            ->when([
+        $this->expectExceptionObject(TabNotOpen::of());
+
+        TabAggregate::fromEvents()
+            ->handle(
                 PlaceOrder::of($this->testId, Collection::make([$this->testDrink1]))
-            ])
-            ->thenFailWith(TabNotOpen::of());
+            );
     }
 
     public function testCanPlaceDrinksOrder()
     {
-        DomainTest::given(
-            TabAggregate::fromEvents([
-                TabOpened::of($this->testId, $this->testTable, $this->testWaiter)
-            ])
-        )
-            ->when([
+        $aggregate = TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter)
+        ])
+            ->handle(
                 PlaceOrder::of($this->testId, Collection::make([$this->testDrink1, $this->testDrink2]))
-            ])
-            ->then([
-                DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1, $this->testDrink2]))
-            ]);
+            );
+
+        $this->assertReleasedEvents($aggregate, [
+            DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1, $this->testDrink2]))
+        ]);
     }
 
     public function testCanPlaceFoodOrder()
     {
-        DomainTest::given(
-            TabAggregate::fromEvents([
-                TabOpened::of($this->testId, $this->testTable, $this->testWaiter)
-            ])
-        )
-            ->when([
+        $aggregate = TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter)
+        ])
+            ->handle(
                 PlaceOrder::of($this->testId, Collection::make([$this->testFood1, $this->testFood2]))
-            ])
-            ->then([
-                FoodOrdered::of($this->testId, Collection::make([$this->testFood1, $this->testFood2]))
-            ]);
+            );
+
+        $this->assertReleasedEvents($aggregate, [
+            FoodOrdered::of($this->testId, Collection::make([$this->testFood1, $this->testFood2]))
+        ]);
     }
 
     public function testCanPlaceFoodAndDrinkOrder()
     {
-        DomainTest::given(
-            TabAggregate::fromEvents([
-                TabOpened::of($this->testId, $this->testTable, $this->testWaiter)
-            ])
-        )
-            ->when([
+        $aggregate = TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter)
+        ])
+            ->handle(
                 PlaceOrder::of($this->testId, Collection::make([$this->testFood1, $this->testDrink1]))
-            ])
-            ->then([
-                DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1])),
-                FoodOrdered::of($this->testId, Collection::make([$this->testFood1]))
-            ]);
+            );
+
+        $this->assertReleasedEvents($aggregate, [
+            DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1])),
+            FoodOrdered::of($this->testId, Collection::make([$this->testFood1]))
+        ]);
     }
 
     public function testOrderedDrinksCanBeServed()
     {
-        DomainTest::given(
-            TabAggregate::fromEvents([
-                TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
-                DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1, $this->testDrink2]))
-            ])
-        )
-            ->when([
+        $aggregate = TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
+            DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1, $this->testDrink2]))
+        ])
+            ->handle(
                 MarkDrinksServed::of($this->testId, Collection::make([
                     $this->testDrink1->menuNumber, $this->testDrink2->menuNumber
                 ]))
-            ])
-            ->then([
-                DrinksServed::of($this->testId, Collection::make([
-                    $this->testDrink1->menuNumber, $this->testDrink2->menuNumber
-                ]))
-            ]);
+            );
+
+        $this->assertReleasedEvents($aggregate, [
+            DrinksServed::of($this->testId, Collection::make([
+                $this->testDrink1->menuNumber, $this->testDrink2->menuNumber
+            ]))
+        ]);
     }
 
     public function testCanNotServeAnUnorderedDrink()
     {
-        DomainTest::given(
-            TabAggregate::fromEvents([
-                TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
-                DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1]))
-            ])
-        )
-            ->when([
+        $this->expectExceptionObject(DrinksNotOutstanding::of());
+
+        TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
+            DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1]))
+        ])
+            ->handle(
                 MarkDrinksServed::of($this->testId, Collection::make([$this->testDrink2->menuNumber]))
-            ])
-            ->thenFailWith(DrinksNotOutstanding::of());
+            );
     }
 
     public function testCanNotServeAnOrderedDrinkTwice()
     {
-        DomainTest::given(
-            TabAggregate::fromEvents([
-                TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
-                DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1])),
-                DrinksServed::of($this->testId, Collection::make([$this->testDrink1->menuNumber]))
-            ])
-        )
-            ->when([
+        $this->expectExceptionObject(DrinksNotOutstanding::of());
+
+        TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
+            DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1])),
+            DrinksServed::of($this->testId, Collection::make([$this->testDrink1->menuNumber]))
+        ])
+            ->handle(
                 MarkDrinksServed::of($this->testId, Collection::make([$this->testDrink1->menuNumber]))
-            ])
-            ->thenFailWith(DrinksNotOutstanding::of());
+            );
     }
 }
