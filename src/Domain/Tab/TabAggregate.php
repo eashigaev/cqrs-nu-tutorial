@@ -6,14 +6,16 @@ use Codderz\Yoko\Domain\Aggregate;
 use Codderz\Yoko\Support\Collection;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
+use Src\Domain\Tab\Commands\MarkFoodPrepared;
 use Src\Domain\Tab\Commands\OpenTab;
 use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\Events\DrinksOrdered;
 use Src\Domain\Tab\Events\DrinksServed;
 use Src\Domain\Tab\Events\FoodOrdered;
+use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\Events\TabClosed;
 use Src\Domain\Tab\Events\TabOpened;
-use Src\Domain\Tab\Exceptions\DrinksNotOutstanding;
+use Src\Domain\Tab\Exceptions\ItemNotOutstanding;
 use Src\Domain\Tab\Exceptions\PaymentNotEnough;
 use Src\Domain\Tab\Exceptions\TabAlreadyClosed;
 use Src\Domain\Tab\Exceptions\TabAlreadyOpen;
@@ -23,14 +25,20 @@ use Src\Domain\Tab\Exceptions\TabNotOpen;
 class TabAggregate extends Aggregate
 {
     private ?bool $open = null;
+    private float $servedItemsValue = 0;
 
     /** @var Collection<OrderedItem> */
     private Collection $outstandingDrinks;
-    private float $servedItemsValue = 0;
+    /** @var Collection<OrderedItem> */
+    private Collection $outstandingFood;
+    /** @var Collection<OrderedItem> */
+    private Collection $preparedFood;
 
     protected function __construct()
     {
         $this->outstandingDrinks = Collection::make();
+        $this->outstandingFood = Collection::make();
+        $this->preparedFood = Collection::make();
     }
 
     public function handleOpenTab(OpenTab $command)
@@ -64,11 +72,21 @@ class TabAggregate extends Aggregate
 
     public function handleMarkDrinksServed(MarkDrinksServed $command)
     {
-        if (!$this->areDrinksOutstanding($command->menuNumbers)) {
-            throw DrinksNotOutstanding::new();
+        if (!$this->hasAllMenuNumbersForItems($this->outstandingDrinks, $command->menuNumbers)) {
+            throw ItemNotOutstanding::new();
         }
         return $this->recordThat(
             DrinksServed::of($command->id, $command->menuNumbers)
+        );
+    }
+
+    public function handleMarkFoodPrepared(MarkFoodPrepared $command)
+    {
+        if (!$this->hasAllMenuNumbersForItems($this->outstandingFood, $command->menuNumbers)) {
+            throw ItemNotOutstanding::new();
+        }
+        return $this->recordThat(
+            FoodPrepared::of($command->id, $command->menuNumbers)
         );
     }
 
@@ -88,21 +106,23 @@ class TabAggregate extends Aggregate
 
     //
 
-    private function areDrinksOutstanding(Collection $menuNumbers)
+    private function hasAllMenuNumbersForItems(Collection $items, Collection $menuNumbers)
     {
-        $curOutstanding = $this->outstandingDrinks->values();
+        $items = $items->values(); // ???
         foreach ($menuNumbers as $number) {
             /** @var OrderedItem $item */
-            $item = $this->outstandingDrinks->first($this->findOrderedItemByNumber($number));
-            if (!$item) return false;
-            $curOutstanding = $curOutstanding->removeFirst($item);
+            if (!$item = $items->first($this->findOrderedItemByNumber($number))) {
+                return false;
+            }
+            $items = $items->removeFirst($item);
         }
         return true;
     }
 
     private function hasOutstandingItems()
     {
-        return $this->outstandingDrinks->count() > 0;
+        return $this->outstandingDrinks->count() > 0
+            || $this->outstandingFood->count() > 0;
     }
 
     private function findOrderedItemByNumber(int $number)
@@ -126,7 +146,9 @@ class TabAggregate extends Aggregate
 
     public function applyFoodOrdered(FoodOrdered $event)
     {
-
+        foreach ($event->items as $item) {
+            $this->outstandingFood = $this->outstandingFood->add($item);
+        }
     }
 
     public function applyDrinksServed(DrinksServed $event)
@@ -136,6 +158,17 @@ class TabAggregate extends Aggregate
             $item = $this->outstandingDrinks->first($this->findOrderedItemByNumber($number));
             $this->outstandingDrinks = $this->outstandingDrinks->removeFirst($item);
             $this->servedItemsValue += $item->price;
+        }
+    }
+
+
+    public function applyFoodPrepared(FoodPrepared $event)
+    {
+        foreach ($event->menuNumbers as $number) {
+            /** @var OrderedItem $item */
+            $item = $this->outstandingFood->first($this->findOrderedItemByNumber($number));
+            $this->outstandingFood = $this->outstandingFood->removeFirst($item);
+            $this->preparedFood = $this->preparedFood->add($item);
         }
     }
 

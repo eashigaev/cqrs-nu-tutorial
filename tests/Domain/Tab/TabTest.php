@@ -7,14 +7,17 @@ use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
+use Src\Domain\Tab\Commands\MarkFoodPrepared;
 use Src\Domain\Tab\Commands\OpenTab;
 use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\Events\DrinksOrdered;
 use Src\Domain\Tab\Events\DrinksServed;
 use Src\Domain\Tab\Events\FoodOrdered;
+use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\Events\TabClosed;
 use Src\Domain\Tab\Events\TabOpened;
-use Src\Domain\Tab\Exceptions\DrinksNotOutstanding;
+use Src\Domain\Tab\Exceptions\FoodNotOutstanding;
+use Src\Domain\Tab\Exceptions\ItemNotOutstanding;
 use Src\Domain\Tab\Exceptions\PaymentNotEnough;
 use Src\Domain\Tab\Exceptions\TabAlreadyClosed;
 use Src\Domain\Tab\Exceptions\TabAlreadyOpen;
@@ -45,6 +48,8 @@ class TabTest extends TestCase
         $this->testFood1 = OrderedItem::of(16, 'Beef Noodles', false, 10.00);
         $this->testFood2 = OrderedItem::of(25, 'Vegetable Curry', false, 10.00);
     }
+
+    // OpenTab
 
     public function testCanOpenTab()
     {
@@ -82,6 +87,8 @@ class TabTest extends TestCase
                 OpenTab::of($this->testId, $this->testTable, $this->testWaiter)
             );
     }
+
+    // PlaceOrder
 
     public function testCanPlaceDrinksOrder()
     {
@@ -149,6 +156,8 @@ class TabTest extends TestCase
             );
     }
 
+    // MarkDrinkServed
+
     public function testCanServeOrderedDrinks()
     {
         $aggregate = TabAggregate::fromEvents([
@@ -170,7 +179,7 @@ class TabTest extends TestCase
 
     public function testCanNotServeAnUnorderedDrink()
     {
-        $this->expectExceptionObject(DrinksNotOutstanding::new());
+        $this->expectExceptionObject(ItemNotOutstanding::new());
 
         TabAggregate::fromEvents([
             TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
@@ -183,7 +192,7 @@ class TabTest extends TestCase
 
     public function testCanNotServeAnOrderedDrinksTwice()
     {
-        $this->expectExceptionObject(DrinksNotOutstanding::new());
+        $this->expectExceptionObject(ItemNotOutstanding::new());
 
         TabAggregate::fromEvents([
             TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
@@ -194,6 +203,52 @@ class TabTest extends TestCase
                 MarkDrinksServed::of($this->testId, Collection::make([$this->testDrink1->menuNumber]))
             );
     }
+
+    // MarkFoodPrepared
+
+    public function testCanPrepareOrderedFood()
+    {
+        $aggregate = TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
+            FoodOrdered::of($this->testId, Collection::make([$this->testFood1, $this->testFood2]))
+        ])
+            ->handle(
+                MarkFoodPrepared::of($this->testId, Collection::make([$this->testFood1->menuNumber]))
+            );
+
+        $this->assertReleasedEvents($aggregate, [
+            FoodPrepared::of($this->testId, Collection::make([$this->testFood1->menuNumber]))
+        ]);
+    }
+
+    public function testCanNotPrepareAnUnorderedFood()
+    {
+        $this->expectExceptionObject(ItemNotOutstanding::new());
+
+        TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
+            FoodOrdered::of($this->testId, Collection::make([$this->testFood1]))
+        ])
+            ->handle(
+                MarkFoodPrepared::of($this->testId, Collection::make([$this->testFood2->menuNumber]))
+            );
+    }
+
+    public function testCanNotPrepareAnOrderedFoodTwice()
+    {
+        $this->expectExceptionObject(ItemNotOutstanding::new());
+
+        TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
+            FoodOrdered::of($this->testId, Collection::make([$this->testFood1])),
+            FoodPrepared::of($this->testId, Collection::make([$this->testFood1->menuNumber]))
+        ])
+            ->handle(
+                MarkFoodPrepared::of($this->testId, Collection::make([$this->testFood1->menuNumber]))
+            );
+    }
+
+    // CloseTab
 
     public function testCanCloseTabWithTip()
     {
@@ -225,13 +280,27 @@ class TabTest extends TestCase
             );
     }
 
-    public function testCanNotCloseTabWithOutstandingItems()
+    public function testCanNotCloseTabWithOutstandingDrinkItems()
     {
         $this->expectExceptionObject(TabHasOutstandingItems::new());
 
         TabAggregate::fromEvents([
             TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
             DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1])),
+        ])
+            ->handle(
+                CloseTab::of($this->testId, 0)
+            );
+    }
+
+    public function testCanNotCloseTabWithOutstandingFoodItems()
+    {
+        $this->expectExceptionObject(TabHasOutstandingItems::new());
+
+        TabAggregate::fromEvents([
+            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
+            FoodOrdered::of($this->testId, Collection::make([$this->testFood1, $this->testFood2])),
+            FoodPrepared::of($this->testId, Collection::make([$this->testFood1->menuNumber])),
         ])
             ->handle(
                 CloseTab::of($this->testId, 0)
