@@ -1,10 +1,10 @@
 <?php
 
-namespace Codderz\Yoko\Domain;
+namespace Codderz\Yoko\Layers\Domain\Aggregate;
 
 use Codderz\Yoko\Support\Reflect;
 
-class Aggregate
+class Aggregate implements AggregateInterface
 {
     protected $recordedEvents = [];
 
