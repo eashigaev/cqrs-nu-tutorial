@@ -2,7 +2,7 @@
 
 namespace Tests\Application\Read\ChiefTodoList;
 
-use Codderz\Yoko\Layers\Application\Read\QueryResult;
+use Codderz\Yoko\Layers\Application\Read\Testing\ReadTestTrait;
 use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
 use Src\Application\Read\ChiefTodoList\ChiefTodoListInterface;
@@ -14,6 +14,8 @@ use Tests\TestCase;
 
 class GetTodoListTest extends TestCase
 {
+    use ReadTestTrait;
+
     protected ChiefTodoListInterface $chiefTodoList;
 
     protected Guid $testId1;
@@ -56,10 +58,5 @@ class GetTodoListTest extends TestCase
                 ['menuNumber' => $this->testFood1->menuNumber, 'description' => $this->testFood1->description],
             ]],
         ]);
-    }
-
-    public function assertResult(QueryResult $result, array $sample)
-    {
-        $this->assertEquals($result->toArray(), $sample);
     }
 }
