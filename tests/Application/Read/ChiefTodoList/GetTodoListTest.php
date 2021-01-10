@@ -5,6 +5,7 @@ namespace Tests\Application\Read\ChiefTodoList;
 use Codderz\Yoko\Layers\Application\Read\Testing\ReadTestTrait;
 use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Src\Application\Read\ChiefTodoList\ChiefTodoListInterface;
 use Src\Application\Read\ChiefTodoList\Queries\GetTodoList;
 use Src\Application\Read\ChiefTodoList\Queries\GetTodoListResult;
@@ -14,6 +15,7 @@ use Tests\TestCase;
 
 class GetTodoListTest extends TestCase
 {
+    use DatabaseTransactions;
     use ReadTestTrait;
 
     protected ChiefTodoListInterface $chiefTodoList;

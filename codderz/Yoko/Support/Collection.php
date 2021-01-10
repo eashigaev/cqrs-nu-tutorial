@@ -6,6 +6,11 @@ use Illuminate\Support\Collection as BaseCollection;
 
 class Collection extends BaseCollection
 {
+    public static function fromBase(BaseCollection $collection)
+    {
+        return self::make($collection->all());
+    }
+
     public function assert(callable $callback)
     {
         return $this->each(function ($item) use ($callback) {
