@@ -10,6 +10,7 @@ use Src\Application\Read\ChiefTodoList\ChiefTodoListInterface;
 use Src\Application\Read\ChiefTodoList\Queries\GetTodoList;
 use Src\Application\Read\ChiefTodoList\Queries\GetTodoListResult;
 use Src\Domain\Tab\Events\FoodOrdered;
+use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\OrderedItem;
 use Tests\TestCase;
 
@@ -52,13 +53,33 @@ class GetTodoListTest extends TestCase
 
         $this->assertInstanceOf(GetTodoListResult::class, $result);
         $this->assertResult($result, [
-            ['tabId' => $this->testId1->value, 'items' => [
-                ['menuNumber' => $this->testFood1->menuNumber, 'description' => $this->testFood1->description],
-                ['menuNumber' => $this->testFood2->menuNumber, 'description' => $this->testFood2->description],
-            ]],
-            ['tabId' => $this->testId2->value, 'items' => [
-                ['menuNumber' => $this->testFood1->menuNumber, 'description' => $this->testFood1->description],
-            ]],
+            [
+                'tabId' => $this->testId1->value,
+                'items' => [
+                    ['menuNumber' => $this->testFood1->menuNumber, 'description' => $this->testFood1->description],
+                    ['menuNumber' => $this->testFood2->menuNumber, 'description' => $this->testFood2->description],
+                ]
+            ],
+            [
+                'tabId' => $this->testId2->value,
+                'items' => [
+                    ['menuNumber' => $this->testFood1->menuNumber, 'description' => $this->testFood1->description],
+                ]
+            ],
         ]);
+    }
+
+    public function testCanNotGetPreparedItems()
+    {
+        $result = $this->chiefTodoList
+            ->withEvents([
+                FoodOrdered::of($this->testId1, Collection::make([$this->testFood1, $this->testFood2])),
+                FoodPrepared::of($this->testId1, Collection::make([
+                    $this->testFood1->menuNumber, $this->testFood2->menuNumber
+                ])),
+            ])
+            ->handle(GetTodoList::of());
+
+        $this->assertResult($result, []);
     }
 }
