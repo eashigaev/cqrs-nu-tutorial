@@ -16,7 +16,7 @@ use Src\Domain\Tab\OrderedItem;
 
 class EloquentChiefTodoList extends ReadModel implements ChiefTodoListInterface
 {
-    public function handleGetTodoList(GetTodoList $query): Collection
+    public function getTodoList(GetTodoList $query): Collection
     {
         return ChiefTodoListModel::query()
             ->orderBy('id')

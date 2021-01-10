@@ -10,5 +10,5 @@ use Src\Application\Read\ChiefTodoList\Queries\GetTodoList;
 interface ChiefTodoListInterface extends ReadModelInterface
 {
     /** @return Collection<TodoListGroup> */
-    public function handleGetTodoList(GetTodoList $query): Collection;
+    public function getTodoList(GetTodoList $query): Collection;
 }

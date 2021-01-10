@@ -8,7 +8,7 @@ class ReadModel implements ReadModelInterface
 {
     public function handle($query)
     {
-        $method = __FUNCTION__ . Reflect::shortClass($query);
+        $method = lcfirst(Reflect::shortClass($query));
 
         if (method_exists($this, $method)) {
             return $this->$method($query);

@@ -45,7 +45,7 @@ class TabAggregate extends Aggregate
         $this->preparedFood = Collection::make();
     }
 
-    public function handleOpenTab(OpenTab $command)
+    public function openTab(OpenTab $command)
     {
         if ($this->open === true) throw TabAlreadyOpen::new();
         if ($this->open === false) throw TabAlreadyClosed::new();
@@ -55,26 +55,24 @@ class TabAggregate extends Aggregate
         );
     }
 
-    public function handlePlaceOrder(PlaceOrder $command)
+    public function placeOrder(PlaceOrder $command)
     {
         if (!$this->open) throw TabNotOpen::new();
 
-        $drinks = $command->items
-            ->filter(fn(OrderedItem $item) => $item->isDrink)
-            ->values();
+        $isDrink = fn(OrderedItem $item) => $item->isDrink;
+
+        $drinks = $command->items->filter($isDrink)->values();
         if ($drinks->isNotEmpty()) {
             $this->recordThat(DrinksOrdered::of($command->id, $drinks));
         }
 
-        $food = $command->items
-            ->filter(fn(OrderedItem $item) => !$item->isDrink)
-            ->values();
+        $food = $command->items->reject($isDrink)->values();
         if ($food->isNotEmpty()) {
             $this->recordThat(FoodOrdered::of($command->id, $food));
         }
     }
 
-    public function handleMarkDrinksServed(MarkDrinksServed $command)
+    public function markDrinksServed(MarkDrinksServed $command)
     {
         if (!$this->hasAllMenuNumbers($this->outstandingDrinks, $command->menuNumbers)) {
             throw DrinkNotOutstanding::new();
@@ -84,7 +82,7 @@ class TabAggregate extends Aggregate
         );
     }
 
-    public function handleMarkFoodPrepared(MarkFoodPrepared $command)
+    public function markFoodPrepared(MarkFoodPrepared $command)
     {
         if ($this->hasAllMenuNumbers($this->preparedFood, $command->menuNumbers)) {
             throw FoodAlreadyPrepared::new();
@@ -96,7 +94,7 @@ class TabAggregate extends Aggregate
         );
     }
 
-    public function handleMarkFoodServed(MarkFoodServed $command)
+    public function markFoodServed(MarkFoodServed $command)
     {
         if (!$this->hasAllMenuNumbers($this->preparedFood, $command->menuNumbers)) {
             throw FoodNotOutstanding::new();
@@ -106,7 +104,7 @@ class TabAggregate extends Aggregate
         );
     }
 
-    public function handleCloseTab(CloseTab $command)
+    public function closeTab(CloseTab $command)
     {
         if (!$this->open) throw TabNotOpen::new();
         if ($this->hasOutstandingItems()) throw TabHasOutstandingItems::new();

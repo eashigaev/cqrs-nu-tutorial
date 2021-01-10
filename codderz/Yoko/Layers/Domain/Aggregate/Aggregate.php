@@ -10,7 +10,7 @@ class Aggregate implements AggregateInterface
 
     public function handle($command)
     {
-        $method = __FUNCTION__ . Reflect::shortClass($command);
+        $method = lcfirst(Reflect::shortClass($command));
 
         if (method_exists($this, $method)) {
             $this->$method($command);
