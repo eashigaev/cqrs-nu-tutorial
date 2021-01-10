@@ -2,7 +2,9 @@
 
 namespace Src\Application\Read\ChiefTodoList\Payloads;
 
-class TodoListItem
+use Codderz\Yoko\Contracts\Arrayable;
+
+class TodoListItem implements Arrayable
 {
     public int $menuNumber;
     public string $description;
@@ -13,5 +15,13 @@ class TodoListItem
         $self->menuNumber = $menuNumber;
         $self->description = $description;
         return $self;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'menuNumber' => $this->menuNumber,
+            'description' => $this->description
+        ];
     }
 }

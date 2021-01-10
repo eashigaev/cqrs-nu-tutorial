@@ -10,25 +10,21 @@ use Src\Application\Read\ChiefTodoList\ChiefTodoListInterface;
 use Src\Application\Read\ChiefTodoList\Payloads\TodoListGroup;
 use Src\Application\Read\ChiefTodoList\Payloads\TodoListItem;
 use Src\Application\Read\ChiefTodoList\Queries\GetTodoList;
-use Src\Application\Read\ChiefTodoList\Queries\GetTodoListResult;
 use Src\Domain\Tab\Events\FoodOrdered;
 use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\OrderedItem;
 
-class ChiefTodoList extends ReadModel implements ChiefTodoListInterface
+class EloquentChiefTodoList extends ReadModel implements ChiefTodoListInterface
 {
-    public function handleGetTodoList(GetTodoList $query): GetTodoListResult
+    public function handleGetTodoList(GetTodoList $query): Collection
     {
-        $groups = ChiefTodoListModel::query()
+        return ChiefTodoListModel::query()
             ->orderBy('id')
             ->get()
+            ->pipeInto(Collection::class)
             ->groupBy('group_id')
             ->map($this->mapGroup())
             ->values();
-
-        return GetTodoListResult::of(
-            Collection::fromBase($groups)
-        );
     }
 
     //
@@ -45,7 +41,7 @@ class ChiefTodoList extends ReadModel implements ChiefTodoListInterface
     {
         return fn($group) => TodoListGroup::of(
             Guid::of($group[0]->tab_id),
-            Collection::fromBase($group->map($this->mapItem()))
+            $group->map($this->mapItem())
         );
     }
 

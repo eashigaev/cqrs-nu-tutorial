@@ -51,7 +51,6 @@ class GetTodoListTest extends TestCase
             ])
             ->handle(GetTodoList::of());
 
-        $this->assertInstanceOf(GetTodoListResult::class, $result);
         $this->assertResult($result, [
             [
                 'tabId' => $this->testId1->value,

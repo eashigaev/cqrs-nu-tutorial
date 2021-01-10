@@ -4,7 +4,7 @@ namespace Src;
 
 use Illuminate\Support\ServiceProvider;
 use Src\Application\Read\ChiefTodoList\ChiefTodoListInterface;
-use Src\Infrastructure\Application\Read\ChiefTodoList;
+use Src\Infrastructure\Application\Read\EloquentChiefTodoList;
 
 class SrcServiceProvider extends ServiceProvider
 {
@@ -22,6 +22,6 @@ class SrcServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind(ChiefTodoListInterface::class, ChiefTodoList::class);
+        $this->app->bind(ChiefTodoListInterface::class, EloquentChiefTodoList::class);
     }
 }
