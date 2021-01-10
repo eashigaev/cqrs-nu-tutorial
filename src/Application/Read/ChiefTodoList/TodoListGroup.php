@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Application\Read\ChiefTodoList\Payloads;
+namespace Src\Application\Read\ChiefTodoList;
 
 use Codderz\Yoko\Contracts\ArrayableInterface;
 use Codderz\Yoko\Support\Collection;

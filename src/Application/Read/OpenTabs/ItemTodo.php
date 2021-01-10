@@ -1,10 +1,10 @@
 <?php
 
-namespace Src\Application\Read\ChiefTodoList\Payloads;
+namespace Src\Application\Read\OpenTabs;
 
 use Codderz\Yoko\Contracts\ArrayableInterface;
 
-class TodoListItem implements ArrayableInterface
+class ItemTodo implements ArrayableInterface
 {
     public int $menuNumber;
     public string $description;

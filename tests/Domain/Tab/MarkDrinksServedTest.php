@@ -15,18 +15,18 @@ class MarkDrinksServedTest extends TabTestCase
     public function testCanServeOrderedDrinks()
     {
         $aggregate = TabAggregate::fromEvents([
-            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
-            DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1, $this->testDrink2]))
+            TabOpened::of($this->tabId, $this->table, $this->waiter),
+            DrinksOrdered::of($this->tabId, Collection::make([$this->drink1, $this->drink2]))
         ])
             ->handle(
-                MarkDrinksServed::of($this->testId, Collection::make([
-                    $this->testDrink1->menuNumber, $this->testDrink2->menuNumber
+                MarkDrinksServed::of($this->tabId, Collection::make([
+                    $this->drink1->menuNumber, $this->drink2->menuNumber
                 ]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            DrinksServed::of($this->testId, Collection::make([
-                $this->testDrink1->menuNumber, $this->testDrink2->menuNumber
+            DrinksServed::of($this->tabId, Collection::make([
+                $this->drink1->menuNumber, $this->drink2->menuNumber
             ]))
         ]);
     }
@@ -36,11 +36,11 @@ class MarkDrinksServedTest extends TabTestCase
         $this->expectExceptionObject(DrinkNotOutstanding::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
-            DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1]))
+            TabOpened::of($this->tabId, $this->table, $this->waiter),
+            DrinksOrdered::of($this->tabId, Collection::make([$this->drink1]))
         ])
             ->handle(
-                MarkDrinksServed::of($this->testId, Collection::make([$this->testDrink2->menuNumber]))
+                MarkDrinksServed::of($this->tabId, Collection::make([$this->drink2->menuNumber]))
             );
     }
 
@@ -49,12 +49,12 @@ class MarkDrinksServedTest extends TabTestCase
         $this->expectExceptionObject(DrinkNotOutstanding::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
-            DrinksOrdered::of($this->testId, Collection::make([$this->testDrink1])),
-            DrinksServed::of($this->testId, Collection::make([$this->testDrink1->menuNumber]))
+            TabOpened::of($this->tabId, $this->table, $this->waiter),
+            DrinksOrdered::of($this->tabId, Collection::make([$this->drink1])),
+            DrinksServed::of($this->tabId, Collection::make([$this->drink1->menuNumber]))
         ])
             ->handle(
-                MarkDrinksServed::of($this->testId, Collection::make([$this->testDrink1->menuNumber]))
+                MarkDrinksServed::of($this->tabId, Collection::make([$this->drink1->menuNumber]))
             );
     }
 }

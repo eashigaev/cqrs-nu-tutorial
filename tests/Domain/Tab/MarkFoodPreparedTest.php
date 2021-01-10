@@ -16,15 +16,15 @@ class MarkFoodPreparedTest extends TabTestCase
     public function testCanPrepareOrderedFood()
     {
         $aggregate = TabAggregate::fromEvents([
-            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
-            FoodOrdered::of($this->testId, Collection::make([$this->testFood1, $this->testFood2]))
+            TabOpened::of($this->tabId, $this->table, $this->waiter),
+            FoodOrdered::of($this->tabId, Collection::make([$this->food1, $this->food2]))
         ])
             ->handle(
-                MarkFoodPrepared::of($this->testId, Collection::make([$this->testFood1->menuNumber]))
+                MarkFoodPrepared::of($this->tabId, Collection::make([$this->food1->menuNumber]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            FoodPrepared::of($this->testId, Collection::make([$this->testFood1->menuNumber]))
+            FoodPrepared::of($this->tabId, Collection::make([$this->food1->menuNumber]))
         ]);
     }
 
@@ -33,11 +33,11 @@ class MarkFoodPreparedTest extends TabTestCase
         $this->expectExceptionObject(FoodNotOutstanding::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
-            FoodOrdered::of($this->testId, Collection::make([$this->testFood1]))
+            TabOpened::of($this->tabId, $this->table, $this->waiter),
+            FoodOrdered::of($this->tabId, Collection::make([$this->food1]))
         ])
             ->handle(
-                MarkFoodPrepared::of($this->testId, Collection::make([$this->testFood2->menuNumber]))
+                MarkFoodPrepared::of($this->tabId, Collection::make([$this->food2->menuNumber]))
             );
     }
 
@@ -46,12 +46,12 @@ class MarkFoodPreparedTest extends TabTestCase
         $this->expectExceptionObject(FoodAlreadyPrepared::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->testId, $this->testTable, $this->testWaiter),
-            FoodOrdered::of($this->testId, Collection::make([$this->testFood1])),
-            FoodPrepared::of($this->testId, Collection::make([$this->testFood1->menuNumber]))
+            TabOpened::of($this->tabId, $this->table, $this->waiter),
+            FoodOrdered::of($this->tabId, Collection::make([$this->food1])),
+            FoodPrepared::of($this->tabId, Collection::make([$this->food1->menuNumber]))
         ])
             ->handle(
-                MarkFoodPrepared::of($this->testId, Collection::make([$this->testFood1->menuNumber]))
+                MarkFoodPrepared::of($this->tabId, Collection::make([$this->food1->menuNumber]))
             );
     }
 }
