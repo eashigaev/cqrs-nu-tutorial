@@ -2,11 +2,11 @@
 
 namespace Codderz\Yoko\Layers\Application\Read\Testing;
 
-use Codderz\Yoko\Contracts\Arrayable;
+use Codderz\Yoko\Contracts\ArrayableInterface;
 
 trait ReadTestTrait
 {
-    public function assertResult(Arrayable $result, array $sample)
+    public function assertResult(ArrayableInterface $result, array $sample)
     {
         $this->assertEquals($result->toArray(), $sample);
     }

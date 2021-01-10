@@ -2,9 +2,9 @@
 
 namespace Src\Application\Read\ChiefTodoList\Payloads;
 
-use Codderz\Yoko\Contracts\Arrayable;
+use Codderz\Yoko\Contracts\ArrayableInterface;
 
-class TodoListItem implements Arrayable
+class TodoListItem implements ArrayableInterface
 {
     public int $menuNumber;
     public string $description;

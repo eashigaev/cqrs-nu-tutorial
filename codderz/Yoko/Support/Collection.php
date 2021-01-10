@@ -2,10 +2,10 @@
 
 namespace Codderz\Yoko\Support;
 
-use Codderz\Yoko\Contracts\Arrayable;
+use Codderz\Yoko\Contracts\ArrayableInterface;
 use Illuminate\Support\Collection as BaseCollection;
 
-class Collection extends BaseCollection implements Arrayable
+class Collection extends BaseCollection implements ArrayableInterface
 {
     public function assert(callable $callback)
     {
