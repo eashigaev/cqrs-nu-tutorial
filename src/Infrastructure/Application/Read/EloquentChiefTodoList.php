@@ -23,13 +23,13 @@ class EloquentChiefTodoList extends ReadModel implements ChiefTodoListInterface
             ->get()
             ->pipeInto(Collection::class)
             ->groupBy('group_id')
-            ->map($this->mapGroup())
+            ->map($this->fnMapGroup())
             ->values();
     }
 
     //
 
-    public function mapItem()
+    public function fnMapItem()
     {
         return fn($item) => TodoListItem::of(
             $item->menu_number,
@@ -37,11 +37,11 @@ class EloquentChiefTodoList extends ReadModel implements ChiefTodoListInterface
         );
     }
 
-    public function mapGroup()
+    public function fnMapGroup()
     {
         return fn($group) => TodoListGroup::of(
             Guid::of($group[0]->tab_id),
-            $group->map($this->mapItem())
+            $group->map($this->fnMapItem())
         );
     }
 

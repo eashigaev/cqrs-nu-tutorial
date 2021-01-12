@@ -9,9 +9,9 @@ class TableTodo implements ArrayableInterface
 {
     public int $tableNumber;
     public string $waiter;
-    /** @var Collection<ItemTodo> */
+    /** @var Collection<TabItem> */
     public Collection $toServe;
-    /** @var Collection<ItemTodo> */
+    /** @var Collection<TabItem> */
     public Collection $inPreparation;
 
     public static function of(
@@ -21,8 +21,8 @@ class TableTodo implements ArrayableInterface
         $self = new self;
         $self->tableNumber = $tableNumber;
         $self->waiter = $waiter;
-        $self->toServe = $toServe->assertInstance(ItemTodo::class);
-        $self->inPreparation = $toServe->assertInstance(ItemTodo::class);
+        $self->toServe = $toServe->assertInstance(TabItem::class);
+        $self->inPreparation = $toServe->assertInstance(TabItem::class);
         return $self;
     }
 

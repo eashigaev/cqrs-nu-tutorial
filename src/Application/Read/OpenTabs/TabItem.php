@@ -4,16 +4,18 @@ namespace Src\Application\Read\OpenTabs;
 
 use Codderz\Yoko\Contracts\ArrayableInterface;
 
-class ItemTodo implements ArrayableInterface
+class TabItem implements ArrayableInterface
 {
     public int $menuNumber;
     public string $description;
+    public float $price;
 
-    public static function of(int $menuNumber, string $description)
+    public static function of(int $menuNumber, string $description, float $price)
     {
         $self = new self;
         $self->menuNumber = $menuNumber;
         $self->description = $description;
+        $self->price = $price;
         return $self;
     }
 
@@ -21,7 +23,8 @@ class ItemTodo implements ArrayableInterface
     {
         return [
             'menuNumber' => $this->menuNumber,
-            'description' => $this->description
+            'description' => $this->description,
+            'price' => $this->price
         ];
     }
 }
