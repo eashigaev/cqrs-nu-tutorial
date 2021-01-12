@@ -15,7 +15,7 @@ interface OpenTabsInterface extends ReadModelInterface
 
     public function getInvoiceForTable(GetInvoiceForTable $query): TabInvoice;
 
-//    public function getTabForTable(GetTabForTable $query): TabStatus;
+    public function getTabForTable(GetTabForTable $query): TabStatus;
 //
 //    /* @return Collection<int, TabItem> */
 //    public function getTodoListForWaiter(GetTodoListForWaiter $query): Collection;

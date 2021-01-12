@@ -11,8 +11,10 @@ use Src\Application\Read\OpenTabs\Exceptions\OpenTabNotFound;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
+use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
 use Src\Application\Read\OpenTabs\TabInvoice;
 use Src\Application\Read\OpenTabs\TabItem;
+use Src\Application\Read\OpenTabs\TabStatus;
 use Src\Domain\Tab\Events\DrinksOrdered;
 use Src\Domain\Tab\Events\DrinksServed;
 use Src\Domain\Tab\Events\FoodOrdered;
@@ -57,6 +59,37 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
             $served,
             $served->sum(fn(TabItem $item) => $item->price),
             $served->count() !== $items->count()
+        );
+    }
+
+
+    public function getTabForTable(GetTabForTable $query): TabStatus
+    {
+        $tab = OpenTabsTabModel::query()
+            ->with('items')
+            ->where('table_number', $query->table)
+            ->first();
+
+        if (!$tab) throw OpenTabNotFound::new();
+
+        /** @var Collection $items */
+        $items = $tab->items->pipeInto(Collection::make());
+
+        return TabStatus::of(
+            $tab->table_number,
+            $tab->waiter,
+            $items
+                ->filter(fn($item) => $item->status === OpenTabsItemModel::TO_SERVE_STATUS)
+                ->map($this->fnMapTabItem())
+                ->values(),
+            $items
+                ->filter(fn($item) => $item->status === OpenTabsItemModel::IN_PREPARATION_STATUS)
+                ->map($this->fnMapTabItem())
+                ->values(),
+            $items
+                ->filter(fn($item) => $item->status === OpenTabsItemModel::SERVED_STATUS)
+                ->map($this->fnMapTabItem())
+                ->values()
         );
     }
 
