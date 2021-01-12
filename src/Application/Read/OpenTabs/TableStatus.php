@@ -5,7 +5,7 @@ namespace Src\Application\Read\OpenTabs;
 use Codderz\Yoko\Contracts\ArrayableInterface;
 use Codderz\Yoko\Support\Collection;
 
-class TableTodo implements ArrayableInterface
+class TableStatus implements ArrayableInterface
 {
     public int $tableNumber;
     public string $waiter;

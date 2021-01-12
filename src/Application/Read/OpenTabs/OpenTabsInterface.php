@@ -6,6 +6,7 @@ use Codderz\Yoko\Layers\Application\Read\ReadModelInterface;
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
+use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
 
 interface OpenTabsInterface extends ReadModelInterface
 {
@@ -13,7 +14,7 @@ interface OpenTabsInterface extends ReadModelInterface
     public function getActiveTableNumbers(GetActiveTableNumbers $query): Collection;
 
     public function getInvoiceForTable(GetInvoiceForTable $query): TabInvoice;
-//
+
 //    public function getTabForTable(GetTabForTable $query): TabStatus;
 //
 //    /* @return Collection<int, TabItem> */

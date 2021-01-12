@@ -27,8 +27,7 @@ class CreateReadOpenTabs extends Migration
             $table->integer('menu_number');
             $table->string('description');
             $table->float('price');
-            $table->boolean('prepared');
-            $table->boolean('served');
+            $table->integer('status');
             $table->timestamps();
         });
     }
