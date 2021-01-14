@@ -7,6 +7,7 @@ use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
 use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
+use Src\Application\Read\OpenTabs\Queries\GetTodoListForWaiter;
 
 interface OpenTabsInterface extends ReadModelInterface
 {
@@ -16,7 +17,7 @@ interface OpenTabsInterface extends ReadModelInterface
     public function getInvoiceForTable(GetInvoiceForTable $query): TabInvoice;
 
     public function getTabForTable(GetTabForTable $query): TabStatus;
-//
-//    /* @return Collection<int, TabItem> */
-//    public function getTodoListForWaiter(GetTodoListForWaiter $query): Collection;
+
+    /* @return Collection<int, Collection<TabItem>> */
+    public function getTodoListForWaiter(GetTodoListForWaiter $query): Collection;
 }

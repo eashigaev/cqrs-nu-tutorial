@@ -19,7 +19,7 @@ class GetInvoiceForTableTest extends OpenTabsTestCase
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter),
+                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
             ])
             ->handle(GetInvoiceForTable::of($this->table1));
 
@@ -46,7 +46,7 @@ class GetInvoiceForTableTest extends OpenTabsTestCase
 
         $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter),
+                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
                 TabClosed::of($this->tabId1, 0, 0, 0),
             ])
             ->handle(GetInvoiceForTable::of($this->table1));
@@ -56,7 +56,7 @@ class GetInvoiceForTableTest extends OpenTabsTestCase
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter),
+                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
                 DrinksOrdered::of($this->tabId1, Collection::make([$this->drink1, $this->drink2])),
                 DrinksServed::of($this->tabId1, Collection::make([$this->drink1->menuNumber]))
             ])
@@ -81,7 +81,7 @@ class GetInvoiceForTableTest extends OpenTabsTestCase
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter),
+                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
                 FoodOrdered::of($this->tabId1, Collection::make([$this->food1, $this->food2, $this->food3])),
                 FoodPrepared::of($this->tabId1, Collection::make([$this->food1->menuNumber, $this->food3->menuNumber])),
                 FoodServed::of($this->tabId1, Collection::make([$this->food3->menuNumber]))

@@ -32,6 +32,7 @@ class Collection extends BaseCollection implements ArrayableInterface
     public function removeFirst($item)
     {
         $index = $this->search($item);
+
         return $this->forget($index)->values();
     }
 }

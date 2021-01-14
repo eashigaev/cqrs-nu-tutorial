@@ -16,7 +16,7 @@ abstract class OpenTabsTestCase extends TestCase
 
     protected Guid $tabId1, $tabId2;
     protected int $table1, $table2;
-    protected string $waiter;
+    protected string $waiter1, $waiter2;
 
     protected OrderedItem $drink1, $drink2, $food1, $food2, $food3;
 
@@ -30,7 +30,8 @@ abstract class OpenTabsTestCase extends TestCase
         $this->tabId2 = Guid::of('tab-456');
         $this->table1 = 21;
         $this->table2 = 87;
-        $this->waiter = 'Steven';
+        $this->waiter1 = 'Steven';
+        $this->waiter2 = 'John';
 
         $this->drink1 = OrderedItem::of(4, 'Sprite', true, 5.00);
         $this->drink2 = OrderedItem::of(10, 'Beer', true, 3.00);

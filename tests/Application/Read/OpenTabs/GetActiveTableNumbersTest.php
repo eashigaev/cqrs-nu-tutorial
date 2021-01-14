@@ -12,8 +12,8 @@ class GetActiveTableNumbersTest extends OpenTabsTestCase
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter),
-                TabOpened::of($this->tabId2, $this->table2, $this->waiter),
+                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
+                TabOpened::of($this->tabId2, $this->table2, $this->waiter1),
             ])
             ->handle(GetActiveTableNumbers::of());
 
@@ -24,8 +24,8 @@ class GetActiveTableNumbersTest extends OpenTabsTestCase
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter),
-                TabOpened::of($this->tabId2, $this->table2, $this->waiter),
+                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
+                TabOpened::of($this->tabId2, $this->table2, $this->waiter1),
                 TabClosed::of($this->tabId2, 0, 0, 0)
             ])
             ->handle(GetActiveTableNumbers::of());
