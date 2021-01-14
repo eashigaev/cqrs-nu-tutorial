@@ -48,10 +48,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
         /** @var Collection $items */
         $items = $tab->items->pipeInto(Collection::make());
 
-        $served = $items
-            ->filter(fn($item) => $item->status === OpenTabsItemModel::SERVED_STATUS)
-            ->map($this->fnMapTabItem())
-            ->values();
+        $served = $this->tabItemsOfStatus($items, OpenTabsItemModel::SERVED_STATUS);
 
         return TabInvoice::of(
             Guid::of($tab->tab_id),
@@ -78,30 +75,24 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
         return TabStatus::of(
             $tab->table_number,
             $tab->waiter,
-            $items
-                ->filter(fn($item) => $item->status === OpenTabsItemModel::TO_SERVE_STATUS)
-                ->map($this->fnMapTabItem())
-                ->values(),
-            $items
-                ->filter(fn($item) => $item->status === OpenTabsItemModel::IN_PREPARATION_STATUS)
-                ->map($this->fnMapTabItem())
-                ->values(),
-            $items
-                ->filter(fn($item) => $item->status === OpenTabsItemModel::SERVED_STATUS)
-                ->map($this->fnMapTabItem())
-                ->values()
+            $this->tabItemsOfStatus($items, OpenTabsItemModel::TO_SERVE_STATUS),
+            $this->tabItemsOfStatus($items, OpenTabsItemModel::IN_PREPARATION_STATUS),
+            $this->tabItemsOfStatus($items, OpenTabsItemModel::SERVED_STATUS),
         );
     }
 
     //
 
-    public function fnMapTabItem()
+    public function tabItemsOfStatus(Collection $items, $status)
     {
-        return fn($item) => TabItem::of(
-            $item->menu_number,
-            $item->description,
-            $item->price
-        );
+        return $items
+            ->filter(fn($item) => $item->status === $status)
+            ->map(fn($item) => TabItem::of(
+                $item->menu_number,
+                $item->description,
+                $item->price
+            ))
+            ->values();
     }
 
     //
@@ -118,37 +109,37 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
 
     public function applyDrinksOrdered(DrinksOrdered $event)
     {
-        $fn = $this->fnInsertTabItem($event->id->value, OpenTabsItemModel::TO_SERVE_STATUS);
-
-        $event->items->each($fn);
+        $event->items->each(
+            $this->fnInsertTabItems($event->id->value, OpenTabsItemModel::TO_SERVE_STATUS)
+        );
     }
 
     public function applyFoodOrdered(FoodOrdered $event)
     {
-        $fn = $this->fnInsertTabItem($event->id->value, OpenTabsItemModel::IN_PREPARATION_STATUS);
-
-        $event->items->each($fn);
+        $event->items->each(
+            $this->fnInsertTabItems($event->id->value, OpenTabsItemModel::IN_PREPARATION_STATUS)
+        );
     }
 
     public function applyDrinksServed(DrinksServed $event)
     {
-        $fn = $this->fnChangeTabItemStatus($event->id->value, OpenTabsItemModel::SERVED_STATUS);
-
-        $event->menuNumbers->each($fn);
+        $event->menuNumbers->each(
+            $this->fnUpdateTabItemStatus($event->id->value, OpenTabsItemModel::SERVED_STATUS)
+        );
     }
 
     public function applyFoodPrepared(FoodPrepared $event)
     {
-        $fn = $this->fnChangeTabItemStatus($event->id->value, OpenTabsItemModel::TO_SERVE_STATUS);
-
-        $event->menuNumbers->each($fn);
+        $event->menuNumbers->each(
+            $this->fnUpdateTabItemStatus($event->id->value, OpenTabsItemModel::TO_SERVE_STATUS)
+        );
     }
 
     public function applyFoodServed(FoodServed $event)
     {
-        $fn = $this->fnChangeTabItemStatus($event->id->value, OpenTabsItemModel::SERVED_STATUS);
-
-        $event->menuNumbers->each($fn);
+        $event->menuNumbers->each(
+            $this->fnUpdateTabItemStatus($event->id->value, OpenTabsItemModel::SERVED_STATUS)
+        );
     }
 
     public function applyTabClosed(TabClosed $event)
@@ -161,7 +152,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
 
     //
 
-    public function fnInsertTabItem($tabId, $status)
+    public function fnInsertTabItems($tabId, $status)
     {
         return fn(OrderedItem $item) => OpenTabsItemModel::query()
             ->insert([
@@ -173,7 +164,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
             ]);
     }
 
-    protected function fnChangeTabItemStatus($tabId, $status)
+    protected function fnUpdateTabItemStatus($tabId, $status)
     {
         return fn(int $menuNumber) => OpenTabsItemModel::query()
             ->where([
