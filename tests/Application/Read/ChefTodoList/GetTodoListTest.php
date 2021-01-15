@@ -6,7 +6,7 @@ use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Domain\Tab\Events\FoodOrdered;
@@ -16,7 +16,7 @@ use Tests\TestCase;
 
 class GetTodoListTest extends TestCase
 {
-    use DatabaseTransactions,
+    use DatabaseMigrations,
         ReadTestTrait,
         ContainerTestTrait;
 

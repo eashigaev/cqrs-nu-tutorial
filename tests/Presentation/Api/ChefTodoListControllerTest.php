@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Presentation;
+namespace Tests\Presentation\Api;
 
 use Tests\TestCase;
 
-class OpenTabsControllerTest extends TestCase
+class ChefTodoListControllerTest extends TestCase
 {
     public function testBasicTest()
     {
