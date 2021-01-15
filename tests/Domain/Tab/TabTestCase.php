@@ -2,7 +2,7 @@
 
 namespace Tests\Domain\Tab;
 
-use Codderz\Yoko\Layers\Domain\Testing\DomainTestTrait;
+use Codderz\Yoko\Layers\Domain\DomainTestTrait;
 use Codderz\Yoko\Support\Guid;
 use Src\Domain\Tab\OrderedItem;
 use Tests\TestCase;

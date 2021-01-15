@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Domain\Aggregate;
+namespace Codderz\Yoko\Layers\Domain;
 
 interface AggregateInterface
 {

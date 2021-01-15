@@ -2,7 +2,8 @@
 
 namespace Tests\Application\Read\ChefTodoList;
 
-use Codderz\Yoko\Layers\Application\Read\Testing\ReadTestTrait;
+use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
+use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -15,8 +16,9 @@ use Tests\TestCase;
 
 class GetTodoListTest extends TestCase
 {
-    use DatabaseTransactions;
-    use ReadTestTrait;
+    use DatabaseTransactions,
+        ReadTestTrait,
+        ContainerTestTrait;
 
     protected ChefTodoListInterface $chefTodoList;
 
@@ -35,7 +37,7 @@ class GetTodoListTest extends TestCase
         $this->food1 = OrderedItem::of(16, 'Beef Noodles', false, 10.00);
         $this->food2 = OrderedItem::of(25, 'Vegetable Curry', false, 10.00);
 
-        $this->chefTodoList = $this->app->make(ChefTodoListInterface::class);
+        $this->chefTodoList = $this->container()->make(ChefTodoListInterface::class);
     }
 
     public function testCanGetFoodListToPrepare()

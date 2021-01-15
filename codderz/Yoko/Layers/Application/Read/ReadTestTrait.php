@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Application\Read\Testing;
+namespace Codderz\Yoko\Layers\Application\Read;
 
 use Codderz\Yoko\Contracts\ArrayableInterface;
 

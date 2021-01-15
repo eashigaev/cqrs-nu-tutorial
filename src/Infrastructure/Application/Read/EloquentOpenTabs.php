@@ -16,7 +16,6 @@ use Src\Application\Read\OpenTabs\Queries\GetTodoListForWaiter;
 use Src\Application\Read\OpenTabs\TabInvoice;
 use Src\Application\Read\OpenTabs\TabItem;
 use Src\Application\Read\OpenTabs\TabStatus;
-use Src\Application\Read\OpenTabs\TabTodo;
 use Src\Domain\Tab\Events\DrinksOrdered;
 use Src\Domain\Tab\Events\DrinksServed;
 use Src\Domain\Tab\Events\FoodOrdered;

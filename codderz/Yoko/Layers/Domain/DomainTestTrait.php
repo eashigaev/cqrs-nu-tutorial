@@ -1,8 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Domain\Testing;
-
-use Codderz\Yoko\Layers\Domain\Aggregate\AggregateInterface;
+namespace Codderz\Yoko\Layers\Domain;
 
 trait DomainTestTrait
 {

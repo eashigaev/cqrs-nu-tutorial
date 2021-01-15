@@ -2,7 +2,8 @@
 
 namespace Tests\Application\Read\OpenTabs;
 
-use Codderz\Yoko\Layers\Application\Read\Testing\ReadTestTrait;
+use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
+use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Codderz\Yoko\Support\Guid;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
@@ -11,8 +12,9 @@ use Tests\TestCase;
 
 abstract class OpenTabsTestCase extends TestCase
 {
-    use DatabaseMigrations;
-    use ReadTestTrait;
+    use DatabaseMigrations,
+        ReadTestTrait,
+        ContainerTestTrait;
 
     protected Guid $tabId1, $tabId2;
     protected int $table1, $table2;
@@ -39,6 +41,6 @@ abstract class OpenTabsTestCase extends TestCase
         $this->food2 = OrderedItem::of(25, 'Vegetable Curry', false, 7.00);
         $this->food3 = OrderedItem::of(34, 'Vegas', false, 5.00);
 
-        $this->openTabs = $this->app->make(OpenTabsInterface::class);
+        $this->openTabs = $this->container()->make(OpenTabsInterface::class);
     }
 }
