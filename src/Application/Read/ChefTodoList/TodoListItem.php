@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Application\Read\ChiefTodoList;
+namespace Src\Application\Read\ChefTodoList;
 
 use Codderz\Yoko\Contracts\ArrayableInterface;
 

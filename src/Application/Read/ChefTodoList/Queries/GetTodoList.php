@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Application\Read\ChiefTodoList\Queries;
+namespace Src\Application\Read\ChefTodoList\Queries;
 
 class GetTodoList
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Application\Read\ChiefTodoList;
+namespace Tests\Application\Read\ChefTodoList;
 
 use Codderz\Yoko\Layers\Application\Read\Testing\ReadTestTrait;
 use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Src\Application\Read\ChiefTodoList\ChiefTodoListInterface;
-use Src\Application\Read\ChiefTodoList\Queries\GetTodoList;
+use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
+use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Domain\Tab\Events\FoodOrdered;
 use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\OrderedItem;
@@ -18,7 +18,7 @@ class GetTodoListTest extends TestCase
     use DatabaseTransactions;
     use ReadTestTrait;
 
-    protected ChiefTodoListInterface $chiefTodoList;
+    protected ChefTodoListInterface $chefTodoList;
 
     protected Guid $tabId1, $tabId2;
     protected OrderedItem $drink1, $drink2, $food1, $food2;
@@ -35,12 +35,12 @@ class GetTodoListTest extends TestCase
         $this->food1 = OrderedItem::of(16, 'Beef Noodles', false, 10.00);
         $this->food2 = OrderedItem::of(25, 'Vegetable Curry', false, 10.00);
 
-        $this->chiefTodoList = $this->app->make(ChiefTodoListInterface::class);
+        $this->chefTodoList = $this->app->make(ChefTodoListInterface::class);
     }
 
     public function testCanGetFoodListToPrepare()
     {
-        $result = $this->chiefTodoList
+        $result = $this->chefTodoList
             ->withEvents([
                 FoodOrdered::of($this->tabId1, Collection::make([$this->food1, $this->food2])),
                 FoodOrdered::of($this->tabId2, Collection::make([$this->food1])),
@@ -66,7 +66,7 @@ class GetTodoListTest extends TestCase
 
     public function testCanNotGetPreparedItems()
     {
-        $result = $this->chiefTodoList
+        $result = $this->chefTodoList
             ->withEvents([
                 FoodOrdered::of($this->tabId1, Collection::make([$this->food1, $this->food2])),
                 FoodPrepared::of($this->tabId1, Collection::make([$this->food1->menuNumber, $this->food2->menuNumber])),

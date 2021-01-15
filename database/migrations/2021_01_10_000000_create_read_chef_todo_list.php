@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReadChiefTodoList extends Migration
+class CreateReadChefTodoList extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateReadChiefTodoList extends Migration
      */
     public function up()
     {
-        Schema::create('read_chief_todo_list', function (Blueprint $table) {
+        Schema::create('read_chef_todo_list', function (Blueprint $table) {
             $table->id();
             $table->string('tab_id');
             $table->string('group_id')->index();
@@ -30,6 +30,6 @@ class CreateReadChiefTodoList extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('read_chief_todo_list');
+        Schema::dropIfExists('read_chef_todo_list');
     }
 }

@@ -2,23 +2,23 @@
 
 namespace Src\Infrastructure\Application\Read;
 
-use App\Models\Read\ChiefTodoListModel;
+use App\Models\Read\ChefTodoListModel;
 use Codderz\Yoko\Layers\Application\Read\ReadModel;
 use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
-use Src\Application\Read\ChiefTodoList\ChiefTodoListInterface;
-use Src\Application\Read\ChiefTodoList\Queries\GetTodoList;
-use Src\Application\Read\ChiefTodoList\TodoListGroup;
-use Src\Application\Read\ChiefTodoList\TodoListItem;
+use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
+use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
+use Src\Application\Read\ChefTodoList\TodoListGroup;
+use Src\Application\Read\ChefTodoList\TodoListItem;
 use Src\Domain\Tab\Events\FoodOrdered;
 use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\OrderedItem;
 
-class EloquentChiefTodoList extends ReadModel implements ChiefTodoListInterface
+class EloquentChefTodoList extends ReadModel implements ChefTodoListInterface
 {
     public function getTodoList(GetTodoList $query): Collection
     {
-        return ChiefTodoListModel::query()
+        return ChefTodoListModel::query()
             ->orderBy('id')
             ->get()
             ->pipeInto(Collection::class)
@@ -51,7 +51,7 @@ class EloquentChiefTodoList extends ReadModel implements ChiefTodoListInterface
     {
         $groupId = Guid::generate();
 
-        $createItem = fn(OrderedItem $item) => ChiefTodoListModel::query()
+        $createItem = fn(OrderedItem $item) => ChefTodoListModel::query()
             ->insert([
                 'tab_id' => $event->id->value,
                 'group_id' => $groupId->value,
@@ -64,7 +64,7 @@ class EloquentChiefTodoList extends ReadModel implements ChiefTodoListInterface
 
     public function applyFoodPrepared(FoodPrepared $event)
     {
-        ChiefTodoListModel::query()
+        ChefTodoListModel::query()
             ->where('tab_id', $event->id->value)
             ->whereIn('menu_number', $event->menuNumbers->toArray())
             ->delete();

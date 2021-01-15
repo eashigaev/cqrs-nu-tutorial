@@ -1,12 +1,12 @@
 <?php
 
-namespace Src\Application\Read\ChiefTodoList;
+namespace Src\Application\Read\ChefTodoList;
 
 use Codderz\Yoko\Layers\Application\Read\ReadModelInterface;
 use Codderz\Yoko\Support\Collection;
-use Src\Application\Read\ChiefTodoList\Queries\GetTodoList;
+use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 
-interface ChiefTodoListInterface extends ReadModelInterface
+interface ChefTodoListInterface extends ReadModelInterface
 {
     /** @return Collection<TodoListGroup> */
     public function getTodoList(GetTodoList $query): Collection;
