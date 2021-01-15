@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Application\Read\OpenTabs;
+namespace Tests\Unit\Application\Read\OpenTabs;
 
 use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;

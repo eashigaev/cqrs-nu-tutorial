@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Domain\Tab;
+namespace Tests\Unit\Domain\Tab;
 
 use Codderz\Yoko\Layers\Domain\DomainTestTrait;
 use Codderz\Yoko\Support\Guid;

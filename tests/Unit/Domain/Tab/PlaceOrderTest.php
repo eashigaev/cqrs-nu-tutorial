@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Domain\Tab;
+namespace Tests\Unit\Domain\Tab;
 
 use Codderz\Yoko\Support\Collection;
 use Src\Domain\Tab\Commands\PlaceOrder;

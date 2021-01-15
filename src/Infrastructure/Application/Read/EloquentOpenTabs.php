@@ -4,7 +4,7 @@ namespace Src\Infrastructure\Application\Read;
 
 use App\Models\Read\OpenTabsItemModel;
 use App\Models\Read\OpenTabsTabModel;
-use Codderz\Yoko\Layers\Application\Read\ReadModel;
+use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModel;
 use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
 use Src\Application\Read\OpenTabs\Exceptions\OpenTabNotFound;

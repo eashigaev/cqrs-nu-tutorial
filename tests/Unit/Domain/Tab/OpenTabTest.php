@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Domain\Tab;
+namespace Tests\Unit\Domain\Tab;
 
 use Src\Domain\Tab\Commands\OpenTab;
 use Src\Domain\Tab\Events\TabClosed;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Application\Read\ChefTodoList;
+namespace Tests\Unit\Application\Read\ChefTodoList;
 
 use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;

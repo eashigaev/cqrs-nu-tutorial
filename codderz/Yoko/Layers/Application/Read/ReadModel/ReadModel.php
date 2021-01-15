@@ -1,16 +1,27 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Application\Read;
+namespace Codderz\Yoko\Layers\Application\Read\ReadModel;
 
 use Codderz\Yoko\Support\Reflect;
 
 class ReadModel implements ReadModelInterface
 {
+    protected array $mocks = [];
+
+    public function mock(string $query, callable $callback)
+    {
+        $this->mocks[$query] = $callback;
+    }
+
     public function handle($query)
     {
         $method = lcfirst(Reflect::shortClass($query));
 
         if (method_exists($this, $method)) {
+
+            $mock = $this->mocks[get_class($query)] ?? null;
+            if ($mock) return $mock($query);
+
             return $this->$method($query);
         }
 

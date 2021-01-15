@@ -2,7 +2,7 @@
 
 namespace Src\Domain\Tab;
 
-use Codderz\Yoko\Layers\Domain\Aggregate;
+use Codderz\Yoko\Layers\Domain\Aggregate\Aggregate;
 use Codderz\Yoko\Support\Collection;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;

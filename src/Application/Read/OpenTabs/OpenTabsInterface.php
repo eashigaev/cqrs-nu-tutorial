@@ -2,7 +2,7 @@
 
 namespace Src\Application\Read\OpenTabs;
 
-use Codderz\Yoko\Layers\Application\Read\ReadModelInterface;
+use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModelInterface;
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
