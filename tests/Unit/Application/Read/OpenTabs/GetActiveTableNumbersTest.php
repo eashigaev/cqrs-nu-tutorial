@@ -6,30 +6,30 @@ use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Domain\Tab\Events\TabClosed;
 use Src\Domain\Tab\Events\TabOpened;
 
-class GetActiveTableNumbersTest extends OpenTabsTestCase
+class GetActiveTableNumbersTest extends TestCase
 {
     public function testCanGetActiveTableNumbers()
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                TabOpened::of($this->tabId2, $this->table2, $this->waiter1),
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                TabOpened::of($this->bTabId, $this->bTable, $this->aWaiter),
             ])
             ->handle(GetActiveTableNumbers::of());
 
-        $this->assertResult($result, [$this->table1, $this->table2]);
+        $this->assertResult($result, [$this->aTable, $this->bTable]);
     }
 
     public function testCanGetOnlyActiveTableNumbers()
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                TabOpened::of($this->tabId2, $this->table2, $this->waiter1),
-                TabClosed::of($this->tabId2, 0, 0, 0)
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                TabOpened::of($this->bTabId, $this->bTable, $this->aWaiter),
+                TabClosed::of($this->bTabId, 0, 0, 0)
             ])
             ->handle(GetActiveTableNumbers::of());
 
-        $this->assertResult($result, [$this->table1]);
+        $this->assertResult($result, [$this->aTable]);
     }
 }

@@ -11,48 +11,48 @@ use Src\Domain\Tab\Events\TabOpened;
 use Src\Domain\Tab\Exceptions\TabNotOpen;
 use Src\Domain\Tab\TabAggregate;
 
-class PlaceOrderTest extends TabTestCase
+class PlaceOrderTest extends TestCase
 {
     public function testCanPlaceDrinksOrder()
     {
         $aggregate = TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter)
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
             ->handle(
-                PlaceOrder::of($this->tabId, Collection::make([$this->drink1, $this->drink2]))
+                PlaceOrder::of($this->aTabId, Collection::make([$this->drink1, $this->drink2]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            DrinksOrdered::of($this->tabId, Collection::make([$this->drink1, $this->drink2]))
+            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2]))
         ]);
     }
 
     public function testCanPlaceFoodOrder()
     {
         $aggregate = TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter)
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
             ->handle(
-                PlaceOrder::of($this->tabId, Collection::make([$this->food1, $this->food2]))
+                PlaceOrder::of($this->aTabId, Collection::make([$this->food1, $this->food2]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            FoodOrdered::of($this->tabId, Collection::make([$this->food1, $this->food2]))
+            FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2]))
         ]);
     }
 
     public function testCanPlaceFoodAndDrinksOrder()
     {
         $aggregate = TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter)
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
             ->handle(
-                PlaceOrder::of($this->tabId, Collection::make([$this->food1, $this->drink1]))
+                PlaceOrder::of($this->aTabId, Collection::make([$this->food1, $this->drink1]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            DrinksOrdered::of($this->tabId, Collection::make([$this->drink1])),
-            FoodOrdered::of($this->tabId, Collection::make([$this->food1]))
+            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
+            FoodOrdered::of($this->aTabId, Collection::make([$this->food1]))
         ]);
     }
 
@@ -62,7 +62,7 @@ class PlaceOrderTest extends TabTestCase
 
         TabAggregate::fromEvents()
             ->handle(
-                PlaceOrder::of($this->tabId, Collection::make([$this->drink1]))
+                PlaceOrder::of($this->aTabId, Collection::make([$this->drink1]))
             );
     }
 
@@ -71,11 +71,11 @@ class PlaceOrderTest extends TabTestCase
         $this->expectExceptionObject(TabNotOpen::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            TabClosed::of($this->tabId, 0, 0, 0),
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            TabClosed::of($this->aTabId, 0, 0, 0),
         ])
             ->handle(
-                PlaceOrder::of($this->tabId, Collection::make([$this->drink1]))
+                PlaceOrder::of($this->aTabId, Collection::make([$this->drink1]))
             );
     }
 }

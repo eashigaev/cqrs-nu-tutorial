@@ -6,7 +6,6 @@ use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
-use Tests\TestCase;
 
 class ChefTodoListTest extends TestCase
 {
@@ -18,7 +17,7 @@ class ChefTodoListTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
+        $this->setUpFixture();
         $this->chefTodoList = $this->container()->make(ChefTodoListInterface::class);
     }
 

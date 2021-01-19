@@ -2,13 +2,33 @@
 
 namespace Tests\Unit\Application\Read\ChefTodoList;
 
+use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
+use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Codderz\Yoko\Support\Collection;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Domain\Tab\Events\FoodOrdered;
 use Src\Domain\Tab\Events\FoodPrepared;
+use Tests\TestCase as BaseTestCase;
+use Tests\Unit\FixtureTestTrait;
 
-class GetTodoListTest extends TestCase
+abstract class TestCase extends BaseTestCase
 {
+    use DatabaseMigrations,
+        FixtureTestTrait,
+        ReadTestTrait,
+        ContainerTestTrait;
+
+    protected ChefTodoListInterface $chefTodoList;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->setUpFixture();
+        $this->chefTodoList = $this->container()->make(ChefTodoListInterface::class);
+    }
+
     public function testCanGetFoodListToPrepare()
     {
         $result = $this->chefTodoList

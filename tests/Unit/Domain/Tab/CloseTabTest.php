@@ -16,38 +16,38 @@ use Src\Domain\Tab\Exceptions\TabHasOutstandingItems;
 use Src\Domain\Tab\Exceptions\TabNotOpen;
 use Src\Domain\Tab\TabAggregate;
 
-class CloseTabTest extends TabTestCase
+class CloseTabTest extends TestCase
 {
     public function testCanCloseTabWithPaymentForDrinks()
     {
         $aggregate = TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            DrinksOrdered::of($this->tabId, Collection::make([$this->drink1])),
-            DrinksServed::of($this->tabId, Collection::make([$this->drink1->menuNumber]))
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
+            DrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber]))
         ])
             ->handle(
-                CloseTab::of($this->tabId, $this->drink1->price)
+                CloseTab::of($this->aTabId, $this->drink1->price)
             );
 
         $this->assertReleasedEvents($aggregate, [
-            TabClosed::of($this->tabId, $this->drink1->price, $this->drink1->price, 0.00)
+            TabClosed::of($this->aTabId, $this->drink1->price, $this->drink1->price, 0.00)
         ]);
     }
 
     public function testCanCloseTabWithPaymentForFood()
     {
         $aggregate = TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            FoodOrdered::of($this->tabId, Collection::make([$this->food1])),
-            FoodPrepared::of($this->tabId, Collection::make([$this->food1->menuNumber])),
-            FoodServed::of($this->tabId, Collection::make([$this->food1->menuNumber])),
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            FoodOrdered::of($this->aTabId, Collection::make([$this->food1])),
+            FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
+            FoodServed::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
         ])
             ->handle(
-                CloseTab::of($this->tabId, $this->food1->price)
+                CloseTab::of($this->aTabId, $this->food1->price)
             );
 
         $this->assertReleasedEvents($aggregate, [
-            TabClosed::of($this->tabId, $this->food1->price, $this->food1->price, 0.00)
+            TabClosed::of($this->aTabId, $this->food1->price, $this->food1->price, 0.00)
         ]);
     }
 
@@ -56,19 +56,19 @@ class CloseTabTest extends TabTestCase
         $amountValue = $this->drink1->price + $this->food1->price;
 
         $aggregate = TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            DrinksOrdered::of($this->tabId, Collection::make([$this->drink1])),
-            DrinksServed::of($this->tabId, Collection::make([$this->drink1->menuNumber])),
-            FoodOrdered::of($this->tabId, Collection::make([$this->food1])),
-            FoodPrepared::of($this->tabId, Collection::make([$this->food1->menuNumber])),
-            FoodServed::of($this->tabId, Collection::make([$this->food1->menuNumber]))
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
+            DrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber])),
+            FoodOrdered::of($this->aTabId, Collection::make([$this->food1])),
+            FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
+            FoodServed::of($this->aTabId, Collection::make([$this->food1->menuNumber]))
         ])
             ->handle(
-                CloseTab::of($this->tabId, $amountValue + 2.00)
+                CloseTab::of($this->aTabId, $amountValue + 2.00)
             );
 
         $this->assertReleasedEvents($aggregate, [
-            TabClosed::of($this->tabId, $amountValue + 2.00, $amountValue, 2.00)
+            TabClosed::of($this->aTabId, $amountValue + 2.00, $amountValue, 2.00)
         ]);
     }
 
@@ -77,12 +77,12 @@ class CloseTabTest extends TabTestCase
         $this->expectExceptionObject(PaymentNotEnough::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            DrinksOrdered::of($this->tabId, Collection::make([$this->drink1])),
-            DrinksServed::of($this->tabId, Collection::make([$this->drink1->menuNumber]))
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
+            DrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber]))
         ])
             ->handle(
-                CloseTab::of($this->tabId, 0)
+                CloseTab::of($this->aTabId, 0)
             );
     }
 
@@ -91,13 +91,13 @@ class CloseTabTest extends TabTestCase
         $this->expectExceptionObject(PaymentNotEnough::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            FoodOrdered::of($this->tabId, Collection::make([$this->food1])),
-            FoodPrepared::of($this->tabId, Collection::make([$this->food1->menuNumber])),
-            FoodServed::of($this->tabId, Collection::make([$this->food1->menuNumber])),
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            FoodOrdered::of($this->aTabId, Collection::make([$this->food1])),
+            FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
+            FoodServed::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
         ])
             ->handle(
-                CloseTab::of($this->tabId, 0)
+                CloseTab::of($this->aTabId, 0)
             );
     }
 
@@ -106,11 +106,11 @@ class CloseTabTest extends TabTestCase
         $this->expectExceptionObject(TabHasOutstandingItems::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            DrinksOrdered::of($this->tabId, Collection::make([$this->drink1])),
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
         ])
             ->handle(
-                CloseTab::of($this->tabId, 0)
+                CloseTab::of($this->aTabId, 0)
             );
     }
 
@@ -119,11 +119,11 @@ class CloseTabTest extends TabTestCase
         $this->expectExceptionObject(TabHasOutstandingItems::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            FoodOrdered::of($this->tabId, Collection::make([$this->food1, $this->food2])),
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2])),
         ])
             ->handle(
-                CloseTab::of($this->tabId, 0)
+                CloseTab::of($this->aTabId, 0)
             );
     }
 
@@ -132,12 +132,12 @@ class CloseTabTest extends TabTestCase
         $this->expectExceptionObject(TabHasOutstandingItems::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            FoodOrdered::of($this->tabId, Collection::make([$this->food1])),
-            FoodPrepared::of($this->tabId, Collection::make([$this->food1->menuNumber])),
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            FoodOrdered::of($this->aTabId, Collection::make([$this->food1])),
+            FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
         ])
             ->handle(
-                CloseTab::of($this->tabId, 0)
+                CloseTab::of($this->aTabId, 0)
             );
     }
 
@@ -147,7 +147,7 @@ class CloseTabTest extends TabTestCase
 
         TabAggregate::fromEvents()
             ->handle(
-                CloseTab::of($this->tabId, $this->drink1->price + 1.00)
+                CloseTab::of($this->aTabId, $this->drink1->price + 1.00)
             );
     }
 
@@ -156,11 +156,11 @@ class CloseTabTest extends TabTestCase
         $this->expectExceptionObject(TabNotOpen::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            TabClosed::of($this->tabId, 0, 0, 0),
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            TabClosed::of($this->aTabId, 0, 0, 0),
         ])
             ->handle(
-                CloseTab::of($this->tabId, 0)
+                CloseTab::of($this->aTabId, 0)
             );
     }
 }

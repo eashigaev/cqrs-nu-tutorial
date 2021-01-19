@@ -13,19 +13,19 @@ use Src\Domain\Tab\Events\FoodServed;
 use Src\Domain\Tab\Events\TabClosed;
 use Src\Domain\Tab\Events\TabOpened;
 
-class GetTabForTableTest extends OpenTabsTestCase
+class GetTabForTableTest extends TestCase
 {
     public function testCanGetEmptyTab()
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             ])
-            ->handle(GetTabForTable::of($this->table1));
+            ->handle(GetTabForTable::of($this->aTable));
 
         $this->assertResult($result, [
-            'tableNumber' => $this->table1,
-            'waiter' => $this->waiter1,
+            'tableNumber' => $this->aTable,
+            'waiter' => $this->aWaiter,
             'toServe' => [],
             'inPreparation' => [],
             'served' => []
@@ -37,7 +37,7 @@ class GetTabForTableTest extends OpenTabsTestCase
         $this->expectExceptionObject(OpenTabNotFound::new());
 
         $this->openTabs
-            ->handle(GetTabForTable::of($this->table1));
+            ->handle(GetTabForTable::of($this->aTable));
     }
 
     public function testCanNotGetClosedTab()
@@ -46,25 +46,25 @@ class GetTabForTableTest extends OpenTabsTestCase
 
         $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                TabClosed::of($this->tabId1, 0, 0, 0),
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                TabClosed::of($this->aTabId, 0, 0, 0),
             ])
-            ->handle(GetTabForTable::of($this->table1));
+            ->handle(GetTabForTable::of($this->aTable));
     }
 
     public function testCanGetTabWithDrinks()
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                DrinksOrdered::of($this->tabId1, Collection::make([$this->drink1, $this->drink2])),
-                DrinksServed::of($this->tabId1, Collection::make([$this->drink2->menuNumber]))
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2])),
+                DrinksServed::of($this->aTabId, Collection::make([$this->drink2->menuNumber]))
             ])
-            ->handle(GetTabForTable::of($this->table1));
+            ->handle(GetTabForTable::of($this->aTable));
 
         $this->assertResult($result, [
-            'tableNumber' => $this->table1,
-            'waiter' => $this->waiter1,
+            'tableNumber' => $this->aTable,
+            'waiter' => $this->aWaiter,
             'toServe' => [
                 [
                     'menuNumber' => $this->drink1->menuNumber,
@@ -87,16 +87,16 @@ class GetTabForTableTest extends OpenTabsTestCase
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                FoodOrdered::of($this->tabId1, Collection::make([$this->food1, $this->food2, $this->food3])),
-                FoodPrepared::of($this->tabId1, Collection::make([$this->food2->menuNumber, $this->food3->menuNumber])),
-                FoodServed::of($this->tabId1, Collection::make([$this->food3->menuNumber])),
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2, $this->food3])),
+                FoodPrepared::of($this->aTabId, Collection::make([$this->food2->menuNumber, $this->food3->menuNumber])),
+                FoodServed::of($this->aTabId, Collection::make([$this->food3->menuNumber])),
             ])
-            ->handle(GetTabForTable::of($this->table1));
+            ->handle(GetTabForTable::of($this->aTable));
 
         $this->assertResult($result, [
-            'tableNumber' => $this->table1,
-            'waiter' => $this->waiter1,
+            'tableNumber' => $this->aTable,
+            'waiter' => $this->aWaiter,
             'toServe' => [
                 [
                     'menuNumber' => $this->food2->menuNumber,

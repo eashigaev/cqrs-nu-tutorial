@@ -11,23 +11,23 @@ use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\Events\FoodServed;
 use Src\Domain\Tab\Events\TabOpened;
 
-class GetTodoListForWaiterTest extends OpenTabsTestCase
+class GetTodoListForWaiterTest extends TestCase
 {
     public function testCanGetTodoListForWaiter()
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                DrinksOrdered::of($this->tabId1, Collection::make([$this->drink1, $this->drink2])),
-                DrinksServed::of($this->tabId1, Collection::make([$this->drink1->menuNumber])),
-                FoodOrdered::of($this->tabId1, Collection::make([$this->food1, $this->food2, $this->food3])),
-                FoodPrepared::of($this->tabId1, Collection::make([$this->food1->menuNumber, $this->food2->menuNumber])),
-                FoodServed::of($this->tabId1, Collection::make([$this->food1->menuNumber])),
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2])),
+                DrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber])),
+                FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2, $this->food3])),
+                FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber, $this->food2->menuNumber])),
+                FoodServed::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
             ])
-            ->handle(GetTodoListForWaiter::of($this->waiter1));
+            ->handle(GetTodoListForWaiter::of($this->aWaiter));
 
         $this->assertResult($result, [
-            $this->table1 => [
+            $this->aTable => [
                 [
                     'menuNumber' => $this->drink2->menuNumber,
                     'description' => $this->drink2->description,
@@ -46,12 +46,12 @@ class GetTodoListForWaiterTest extends OpenTabsTestCase
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                DrinksOrdered::of($this->tabId1, Collection::make([$this->drink1])),
-                FoodOrdered::of($this->tabId1, Collection::make([$this->food1])),
-                FoodPrepared::of($this->tabId1, Collection::make([$this->food1->menuNumber])),
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
+                FoodOrdered::of($this->aTabId, Collection::make([$this->food1])),
+                FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
             ])
-            ->handle(GetTodoListForWaiter::of($this->waiter2));
+            ->handle(GetTodoListForWaiter::of($this->bWaiter));
 
         $this->assertResult($result, []);
     }
@@ -60,9 +60,9 @@ class GetTodoListForWaiterTest extends OpenTabsTestCase
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             ])
-            ->handle(GetTodoListForWaiter::of($this->waiter1));
+            ->handle(GetTodoListForWaiter::of($this->aWaiter));
 
         $this->assertResult($result, []);
     }
@@ -70,7 +70,7 @@ class GetTodoListForWaiterTest extends OpenTabsTestCase
     public function testMustGetEmptyTodoListWhenNoTabs()
     {
         $result = $this->openTabs
-            ->handle(GetTodoListForWaiter::of($this->waiter1));
+            ->handle(GetTodoListForWaiter::of($this->aWaiter));
 
         $this->assertResult($result, []);
     }

@@ -9,17 +9,17 @@ use Src\Domain\Tab\Exceptions\TabAlreadyClosed;
 use Src\Domain\Tab\Exceptions\TabAlreadyOpen;
 use Src\Domain\Tab\TabAggregate;
 
-class OpenTabTest extends TabTestCase
+class OpenTabTest extends TestCase
 {
     public function testCanOpenTab()
     {
         $aggregate = TabAggregate::fromEvents()
             ->handle(
-                OpenTab::of($this->tabId, $this->table, $this->waiter)
+                OpenTab::of($this->aTabId, $this->aTable, $this->aWaiter)
             );
 
         $this->assertReleasedEvents($aggregate, [
-            TabOpened::of($this->tabId, $this->table, $this->waiter)
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ]);
     }
 
@@ -28,10 +28,10 @@ class OpenTabTest extends TabTestCase
         $this->expectExceptionObject(TabAlreadyOpen::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter)
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
             ->handle(
-                OpenTab::of($this->tabId, $this->table, $this->waiter)
+                OpenTab::of($this->aTabId, $this->aTable, $this->aWaiter)
             );
     }
 
@@ -40,11 +40,11 @@ class OpenTabTest extends TabTestCase
         $this->expectExceptionObject(TabAlreadyClosed::new());
 
         TabAggregate::fromEvents([
-            TabOpened::of($this->tabId, $this->table, $this->waiter),
-            TabClosed::of($this->tabId, 0, 0, 0),
+            TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+            TabClosed::of($this->aTabId, 0, 0, 0),
         ])
             ->handle(
-                OpenTab::of($this->tabId, $this->table, $this->waiter)
+                OpenTab::of($this->aTabId, $this->aTable, $this->aWaiter)
             );
     }
 }

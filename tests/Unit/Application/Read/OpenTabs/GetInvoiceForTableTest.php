@@ -13,19 +13,19 @@ use Src\Domain\Tab\Events\FoodServed;
 use Src\Domain\Tab\Events\TabClosed;
 use Src\Domain\Tab\Events\TabOpened;
 
-class GetInvoiceForTableTest extends OpenTabsTestCase
+class GetInvoiceForTableTest extends TestCase
 {
     public function testCanGetEmptyTabInvoice()
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             ])
-            ->handle(GetInvoiceForTable::of($this->table1));
+            ->handle(GetInvoiceForTable::of($this->aTable));
 
         $this->assertResult($result, [
-            'tabId' => $this->tabId1->value,
-            'tableNumber' => $this->table1,
+            'tabId' => $this->aTabId->value,
+            'tableNumber' => $this->aTable,
             'items' => [],
             'total' => 0,
             'hasUnservedItems' => false
@@ -37,7 +37,7 @@ class GetInvoiceForTableTest extends OpenTabsTestCase
         $this->expectExceptionObject(OpenTabNotFound::new());
 
         $this->openTabs
-            ->handle(GetInvoiceForTable::of($this->table1));
+            ->handle(GetInvoiceForTable::of($this->aTable));
     }
 
     public function testCanNotGetClosedTabInvoice()
@@ -46,25 +46,25 @@ class GetInvoiceForTableTest extends OpenTabsTestCase
 
         $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                TabClosed::of($this->tabId1, 0, 0, 0),
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                TabClosed::of($this->aTabId, 0, 0, 0),
             ])
-            ->handle(GetInvoiceForTable::of($this->table1));
+            ->handle(GetInvoiceForTable::of($this->aTable));
     }
 
     public function testCanGetTabInvoiceForDrinks()
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                DrinksOrdered::of($this->tabId1, Collection::make([$this->drink1, $this->drink2])),
-                DrinksServed::of($this->tabId1, Collection::make([$this->drink1->menuNumber]))
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2])),
+                DrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber]))
             ])
-            ->handle(GetInvoiceForTable::of($this->table1));
+            ->handle(GetInvoiceForTable::of($this->aTable));
 
         $this->assertResult($result, [
-            'tabId' => $this->tabId1->value,
-            'tableNumber' => $this->table1,
+            'tabId' => $this->aTabId->value,
+            'tableNumber' => $this->aTable,
             'items' => [
                 [
                     'menuNumber' => $this->drink1->menuNumber,
@@ -81,16 +81,16 @@ class GetInvoiceForTableTest extends OpenTabsTestCase
     {
         $result = $this->openTabs
             ->withEvents([
-                TabOpened::of($this->tabId1, $this->table1, $this->waiter1),
-                FoodOrdered::of($this->tabId1, Collection::make([$this->food1, $this->food2, $this->food3])),
-                FoodPrepared::of($this->tabId1, Collection::make([$this->food1->menuNumber, $this->food3->menuNumber])),
-                FoodServed::of($this->tabId1, Collection::make([$this->food3->menuNumber]))
+                TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
+                FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2, $this->food3])),
+                FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber, $this->food3->menuNumber])),
+                FoodServed::of($this->aTabId, Collection::make([$this->food3->menuNumber]))
             ])
-            ->handle(GetInvoiceForTable::of($this->table1));
+            ->handle(GetInvoiceForTable::of($this->aTable));
 
         $this->assertResult($result, [
-            'tabId' => $this->tabId1->value,
-            'tableNumber' => $this->table1,
+            'tabId' => $this->aTabId->value,
+            'tableNumber' => $this->aTable,
             'items' => [
                 [
                     'menuNumber' => $this->food3->menuNumber,
