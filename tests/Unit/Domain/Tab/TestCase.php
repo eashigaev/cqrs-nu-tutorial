@@ -3,8 +3,8 @@
 namespace Tests\Unit\Domain\Tab;
 
 use Codderz\Yoko\Layers\Domain\DomainTestTrait;
+use Tests\FixtureTestTrait;
 use Tests\TestCase as BaseTestCase;
-use Tests\Unit\FixtureTestTrait;
 
 abstract class TestCase extends BaseTestCase
 {

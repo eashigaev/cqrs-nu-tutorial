@@ -16,21 +16,23 @@ class QueryBus implements QueryBusInterface
         $this->container = $container;
     }
 
-    public function subscribe(string $message, string $handler)
+    public function subscribe(string $query, $handler)
     {
-        $this->handlers[$message] = $handler;
+        $this->handlers[$query] = $handler;
         return $this;
     }
 
-    public function handle($message)
+    public function handle($query)
     {
-        $handler = $this->handlers[get_class($message)] ?? null;
+        $handler = $this->handlers[get_class($query)] ?? null;
 
-        if (!$handler) throw CommonException::new('Handler not found');
+        if (!$handler) throw CommonException::new('Bus can not handle query ' . get_class($query));
 
-        return $this
-            ->container
-            ->make($handler)
-            ->handle($message);
+        return is_callable($handler)
+            ? $handler($query)
+            : $this
+                ->container
+                ->make($handler)
+                ->handle($query);
     }
 }

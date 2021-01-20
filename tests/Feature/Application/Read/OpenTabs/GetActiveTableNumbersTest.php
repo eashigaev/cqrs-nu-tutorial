@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Application\Read\OpenTabs;
+namespace Tests\Feature\Application\Read\OpenTabs;
 
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Domain\Tab\Events\TabClosed;

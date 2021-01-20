@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests;
 
 use Codderz\Yoko\Support\Guid;
 use Src\Domain\Tab\OrderedItem;

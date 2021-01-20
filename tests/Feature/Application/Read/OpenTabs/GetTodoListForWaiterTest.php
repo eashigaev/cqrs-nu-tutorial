@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Application\Read\OpenTabs;
+namespace Tests\Feature\Application\Read\OpenTabs;
 
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\OpenTabs\Queries\GetTodoListForWaiter;

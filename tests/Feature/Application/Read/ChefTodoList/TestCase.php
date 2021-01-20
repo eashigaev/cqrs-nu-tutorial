@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Application\Read\ChefTodoList;
+namespace Tests\Feature\Application\Read\ChefTodoList;
 
 use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
@@ -10,8 +10,8 @@ use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Domain\Tab\Events\FoodOrdered;
 use Src\Domain\Tab\Events\FoodPrepared;
+use Tests\FixtureTestTrait;
 use Tests\TestCase as BaseTestCase;
-use Tests\Unit\FixtureTestTrait;
 
 abstract class TestCase extends BaseTestCase
 {

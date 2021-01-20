@@ -2,28 +2,13 @@
 
 namespace Tests\Unit\Presentation\Api;
 
-use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 
 class ChefTodoListTest extends TestCase
 {
-    use ContainerTestTrait,
-        WithoutMiddleware;
-
-    protected ChefTodoListInterface $chefTodoList;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->setUpFixture();
-        $this->chefTodoList = $this->container()->make(ChefTodoListInterface::class);
-    }
-
     public function testCanGetTodoListResponse()
     {
-        $this->chefTodoList->mock(GetTodoList::class, function ($query) {
+        $this->queryBus->subscribe(GetTodoList::class, function ($query) {
             $this->assertEquals(GetTodoList::of(), $query);
             return [1, 2, 3];
         });

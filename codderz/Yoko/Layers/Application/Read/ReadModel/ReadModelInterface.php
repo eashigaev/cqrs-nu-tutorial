@@ -2,13 +2,11 @@
 
 namespace Codderz\Yoko\Layers\Application\Read\ReadModel;
 
-use Codderz\Yoko\Layers\Application\Read\QueryHandlerInterface;
-
-interface ReadModelInterface extends QueryHandlerInterface
+interface ReadModelInterface
 {
+    public function handle($query);
+
     public function apply($event);
 
     public function withEvents(array $events = []);
-
-    public function mock(string $query, callable $callback);
 }

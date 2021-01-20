@@ -17,9 +17,7 @@ class SrcServiceProvider extends ServiceProvider
 {
     public static function providers()
     {
-        return [
-            self::class,
-        ];
+        return [self::class];
     }
 
     public function boot(QueryBusInterface $queryBus)

@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit\Application\Read\OpenTabs;
+namespace Tests\Feature\Application\Read\OpenTabs;
 
 use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
+use Tests\FixtureTestTrait;
 use Tests\TestCase as BaseTestCase;
-use Tests\Unit\FixtureTestTrait;
 
 abstract class TestCase extends BaseTestCase
 {

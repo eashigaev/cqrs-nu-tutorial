@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Application\Read\ChefTodoList;
+namespace Tests\Feature\Application\Read\ChefTodoList;
 
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
@@ -35,7 +35,15 @@ class GetTodoListTest extends TestCase
         ]);
     }
 
-    public function testCanNotGetPreparedItems()
+    public function testCanGetEmptyListWhenFoodNotOrdered()
+    {
+        $result = $this->chefTodoList
+            ->handle(GetTodoList::of());
+
+        $this->assertResult($result, []);
+    }
+
+    public function testCanGetEmptyListWhenFoodAlreadyPrepared()
     {
         $result = $this->chefTodoList
             ->withEvents([
