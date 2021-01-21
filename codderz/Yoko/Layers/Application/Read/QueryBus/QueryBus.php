@@ -10,6 +10,7 @@ class QueryBus implements QueryBusInterface
     protected ContainerInterface $container;
 
     public array $handlers = [];
+    public array $handledQueries = [];
 
     public function __construct(ContainerInterface $container)
     {
@@ -28,11 +29,24 @@ class QueryBus implements QueryBusInterface
 
         if (!$handler) throw CommonException::new('Bus can not handle query ' . get_class($query));
 
-        return is_callable($handler)
-            ? $handler($query)
-            : $this
-                ->container
-                ->make($handler)
-                ->handle($query);
+        $this->handledQueries[] = $query;
+
+        if (is_callable($handler)) return $handler($query);
+
+        if (is_object($handler)) return $handler->handle($query);
+
+        return $this
+            ->container
+            ->make($handler)
+            ->handle($query);
+    }
+
+    public function releaseQueries()
+    {
+        $releasedQueries = $this->handledQueries;
+
+        $this->handledQueries = [];
+
+        return $releasedQueries;
     }
 }

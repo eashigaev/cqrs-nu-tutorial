@@ -7,7 +7,7 @@ use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
 use Codderz\Yoko\Layers\Presentation\ApiPresenterTrait;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 
-class ChefTodoListController extends Controller
+class ChefController extends Controller
 {
     use ApiPresenterTrait;
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\ChefTodoListController;
+use App\Http\Controllers\Api\ChefController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('/chef/todo-list', [ChefTodoListController::class, 'getTodoList']);
+    Route::get('/chef/todo-list', [ChefController::class, 'getTodoList']);
 });
