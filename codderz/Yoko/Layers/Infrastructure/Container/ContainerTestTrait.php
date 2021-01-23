@@ -9,7 +9,7 @@ trait ContainerTestTrait
         return $this->app->make(ContainerInterface::class);
     }
 
-    public function freshInstance(string $contract)
+    public function makeFreshInstance(string $contract)
     {
         $this->app->forgetInstance($contract);
 

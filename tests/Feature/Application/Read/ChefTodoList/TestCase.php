@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Application\Read\ChefTodoList;
 
-use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
+use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModelTestTrait;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Codderz\Yoko\Support\Collection;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -17,7 +17,7 @@ abstract class TestCase extends BaseTestCase
 {
     use DatabaseMigrations,
         FixtureTestTrait,
-        ReadTestTrait,
+        ReadModelTestTrait,
         ContainerTestTrait;
 
     protected ChefTodoListInterface $chefTodoList;

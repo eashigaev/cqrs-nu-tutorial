@@ -1,10 +1,10 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Application\Read;
+namespace Codderz\Yoko\Layers\Application\Read\ReadModel;
 
 use Codderz\Yoko\Contracts\ArrayableInterface;
 
-trait ReadTestTrait
+trait ReadModelTestTrait
 {
     public function assertResult(ArrayableInterface $result, array $sample)
     {

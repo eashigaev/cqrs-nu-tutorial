@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Application\Read\OpenTabs;
 
-use Codderz\Yoko\Layers\Application\Read\ReadTestTrait;
+use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModelTestTrait;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
@@ -13,7 +13,7 @@ abstract class TestCase extends BaseTestCase
 {
     use DatabaseMigrations,
         FixtureTestTrait,
-        ReadTestTrait,
+        ReadModelTestTrait,
         ContainerTestTrait;
 
     protected OpenTabsInterface $openTabs;
