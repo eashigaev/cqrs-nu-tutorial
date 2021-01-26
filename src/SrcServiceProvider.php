@@ -6,6 +6,10 @@ use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBus;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryMapper;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryMapperInterface;
+use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBus;
+use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusInterface;
+use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandMapper;
+use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandMapperInterface;
 use Codderz\Yoko\Layers\Infrastructure\Container\Container;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
 use Codderz\Yoko\Layers\Infrastructure\MessageBus\MessageResolver;
@@ -37,6 +41,9 @@ class SrcServiceProvider extends ServiceProvider
 
         $this->app->singleton(QueryBusInterface::class, QueryBus::class);
         $this->app->singleton(QueryMapperInterface::class, QueryMapper::class);
+
+        $this->app->singleton(CommandBusInterface::class, CommandBus::class);
+        $this->app->singleton(CommandMapperInterface::class, CommandMapper::class);
 
         $this->app->singleton(ChefTodoListInterface::class, EloquentChefTodoList::class);
         $this->app->singleton(OpenTabsInterface::class, EloquentOpenTabs::class);

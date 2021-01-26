@@ -9,7 +9,7 @@ use Throwable;
 
 trait ApiPresenterTrait
 {
-    public function successApiResponse($payload, $message = null, $code = 200)
+    public function successApiResponse($payload = null, $message = null, $code = 200)
     {
         return response()->json([
             'status' => 'success',
