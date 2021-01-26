@@ -19,11 +19,11 @@ class PlaceOrderTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
             ->handle(
-                PlaceOrder::of($this->aTabId, Collection::make([$this->drink1, $this->drink2]))
+                PlaceOrder::of($this->aTabId, Collection::of([$this->drink1, $this->drink2]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2]))
+            DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1, $this->drink2]))
         ]);
     }
 
@@ -33,11 +33,11 @@ class PlaceOrderTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
             ->handle(
-                PlaceOrder::of($this->aTabId, Collection::make([$this->food1, $this->food2]))
+                PlaceOrder::of($this->aTabId, Collection::of([$this->food1, $this->food2]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2]))
+            FoodOrdered::of($this->aTabId, Collection::of([$this->food1, $this->food2]))
         ]);
     }
 
@@ -47,12 +47,12 @@ class PlaceOrderTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
             ->handle(
-                PlaceOrder::of($this->aTabId, Collection::make([$this->food1, $this->drink1]))
+                PlaceOrder::of($this->aTabId, Collection::of([$this->food1, $this->drink1]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
-            FoodOrdered::of($this->aTabId, Collection::make([$this->food1]))
+            DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1])),
+            FoodOrdered::of($this->aTabId, Collection::of([$this->food1]))
         ]);
     }
 
@@ -62,7 +62,7 @@ class PlaceOrderTest extends TestCase
 
         TabAggregate::fromEvents()
             ->handle(
-                PlaceOrder::of($this->aTabId, Collection::make([$this->drink1]))
+                PlaceOrder::of($this->aTabId, Collection::of([$this->drink1]))
             );
     }
 
@@ -75,7 +75,7 @@ class PlaceOrderTest extends TestCase
             TabClosed::of($this->aTabId, 0, 0, 0),
         ])
             ->handle(
-                PlaceOrder::of($this->aTabId, Collection::make([$this->drink1]))
+                PlaceOrder::of($this->aTabId, Collection::of([$this->drink1]))
             );
     }
 }

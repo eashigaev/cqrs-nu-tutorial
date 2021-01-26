@@ -18,11 +18,11 @@ class GetTodoListForWaiterTest extends TestCase
         $result = $this
             ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-                DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2])),
-                DrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber])),
-                FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2, $this->food3])),
-                FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber, $this->food2->menuNumber])),
-                FoodServed::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
+                DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1, $this->drink2])),
+                DrinksServed::of($this->aTabId, Collection::of([$this->drink1->menuNumber])),
+                FoodOrdered::of($this->aTabId, Collection::of([$this->food1, $this->food2, $this->food3])),
+                FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber, $this->food2->menuNumber])),
+                FoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
             ])
             ->getTodoListForWaiter(GetTodoListForWaiter::of($this->aWaiter));
 
@@ -47,9 +47,9 @@ class GetTodoListForWaiterTest extends TestCase
         $result = $this
             ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-                DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
-                FoodOrdered::of($this->aTabId, Collection::make([$this->food1])),
-                FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
+                DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1])),
+                FoodOrdered::of($this->aTabId, Collection::of([$this->food1])),
+                FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
             ])
             ->getTodoListForWaiter(GetTodoListForWaiter::of($this->bWaiter));
 

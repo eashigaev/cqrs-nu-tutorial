@@ -47,7 +47,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
         if (!$tab) throw OpenTabNotFound::new();
 
         /** @var Collection $items */
-        $items = $tab->items->pipeInto(Collection::make());
+        $items = $tab->items->pipeInto(Collection::of());
 
         $served = $this->filterItemsOfStatus($items, OpenTabsItemModel::SERVED_STATUS);
 
@@ -71,7 +71,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
         if (!$tab) throw OpenTabNotFound::new();
 
         /** @var Collection $items */
-        $items = $tab->items->pipeInto(Collection::make());
+        $items = $tab->items->pipeInto(Collection::of());
 
         return TabStatus::of(
             $tab->table_number,

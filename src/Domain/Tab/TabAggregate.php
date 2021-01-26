@@ -40,9 +40,9 @@ class TabAggregate extends Aggregate
 
     protected function __construct()
     {
-        $this->outstandingDrinks = Collection::make();
-        $this->outstandingFood = Collection::make();
-        $this->preparedFood = Collection::make();
+        $this->outstandingDrinks = Collection::of();
+        $this->outstandingFood = Collection::of();
+        $this->preparedFood = Collection::of();
     }
 
     public function openTab(OpenTab $command)

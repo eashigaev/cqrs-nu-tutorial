@@ -7,6 +7,11 @@ use Illuminate\Support\Collection as BaseCollection;
 
 class Collection extends BaseCollection implements ArrayableInterface
 {
+    public static function of($items = [])
+    {
+        return static::make($items);
+    }
+
     public function assert(callable $callback)
     {
         return $this->each(function ($item) use ($callback) {

@@ -58,8 +58,8 @@ class GetTabForTableTest extends TestCase
         $result = $this
             ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-                DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2])),
-                DrinksServed::of($this->aTabId, Collection::make([$this->drink2->menuNumber]))
+                DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1, $this->drink2])),
+                DrinksServed::of($this->aTabId, Collection::of([$this->drink2->menuNumber]))
             ])
             ->getTabForTable(GetTabForTable::of($this->aTable));
 
@@ -89,9 +89,9 @@ class GetTabForTableTest extends TestCase
         $result = $this
             ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-                FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2, $this->food3])),
-                FoodPrepared::of($this->aTabId, Collection::make([$this->food2->menuNumber, $this->food3->menuNumber])),
-                FoodServed::of($this->aTabId, Collection::make([$this->food3->menuNumber])),
+                FoodOrdered::of($this->aTabId, Collection::of([$this->food1, $this->food2, $this->food3])),
+                FoodPrepared::of($this->aTabId, Collection::of([$this->food2->menuNumber, $this->food3->menuNumber])),
+                FoodServed::of($this->aTabId, Collection::of([$this->food3->menuNumber])),
             ])
             ->getTabForTable(GetTabForTable::of($this->aTable));
 

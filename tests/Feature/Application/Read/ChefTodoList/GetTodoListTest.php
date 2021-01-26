@@ -13,8 +13,8 @@ class GetTodoListTest extends TestCase
     {
         $result = $this
             ->chefTodoList([
-                FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2])),
-                FoodOrdered::of($this->bTabId, Collection::make([$this->food1])),
+                FoodOrdered::of($this->aTabId, Collection::of([$this->food1, $this->food2])),
+                FoodOrdered::of($this->bTabId, Collection::of([$this->food1])),
             ])
             ->getTodoList(GetTodoList::of());
 
@@ -48,8 +48,8 @@ class GetTodoListTest extends TestCase
     {
         $result = $this
             ->chefTodoList([
-                FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2])),
-                FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber, $this->food2->menuNumber])),
+                FoodOrdered::of($this->aTabId, Collection::of([$this->food1, $this->food2])),
+                FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber, $this->food2->menuNumber])),
             ])
             ->getTodoList(GetTodoList::of());
 

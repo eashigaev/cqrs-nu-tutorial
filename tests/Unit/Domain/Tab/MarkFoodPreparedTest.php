@@ -17,14 +17,14 @@ class MarkFoodPreparedTest extends TestCase
     {
         $aggregate = TabAggregate::fromEvents([
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-            FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2]))
+            FoodOrdered::of($this->aTabId, Collection::of([$this->food1, $this->food2]))
         ])
             ->handle(
-                MarkFoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber]))
+                MarkFoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber]))
+            FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber]))
         ]);
     }
 
@@ -34,10 +34,10 @@ class MarkFoodPreparedTest extends TestCase
 
         TabAggregate::fromEvents([
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-            FoodOrdered::of($this->aTabId, Collection::make([$this->food1]))
+            FoodOrdered::of($this->aTabId, Collection::of([$this->food1]))
         ])
             ->handle(
-                MarkFoodPrepared::of($this->aTabId, Collection::make([$this->food2->menuNumber]))
+                MarkFoodPrepared::of($this->aTabId, Collection::of([$this->food2->menuNumber]))
             );
     }
 
@@ -47,11 +47,11 @@ class MarkFoodPreparedTest extends TestCase
 
         TabAggregate::fromEvents([
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-            FoodOrdered::of($this->aTabId, Collection::make([$this->food1])),
-            FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber]))
+            FoodOrdered::of($this->aTabId, Collection::of([$this->food1])),
+            FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber]))
         ])
             ->handle(
-                MarkFoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber]))
+                MarkFoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber]))
             );
     }
 }

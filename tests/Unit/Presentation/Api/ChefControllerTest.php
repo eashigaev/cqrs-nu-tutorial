@@ -28,7 +28,7 @@ class ChefControllerTest extends TestCase
         $this
             ->mockCommandBus()
             ->with(MarkFoodPrepared::of(
-                $this->aTabId, Collection::make([$this->food1->menuNumber, $this->food2->menuNumber])
+                $this->aTabId, Collection::of([$this->food1->menuNumber, $this->food2->menuNumber])
             ));
 
         $this

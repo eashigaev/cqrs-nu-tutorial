@@ -38,7 +38,7 @@ class ChefController extends Controller
     {
         $command = MarkFoodPrepared::of(
             Guid::of($request->tabId),
-            Collection::make($request->menuNumbers)
+            Collection::of($request->menuNumbers)
         );
 
         $this->commandBus->handle($command);

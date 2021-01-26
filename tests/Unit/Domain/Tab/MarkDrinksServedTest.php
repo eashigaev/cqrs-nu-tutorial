@@ -16,16 +16,16 @@ class MarkDrinksServedTest extends TestCase
     {
         $aggregate = TabAggregate::fromEvents([
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2]))
+            DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1, $this->drink2]))
         ])
             ->handle(
-                MarkDrinksServed::of($this->aTabId, Collection::make([
+                MarkDrinksServed::of($this->aTabId, Collection::of([
                     $this->drink1->menuNumber, $this->drink2->menuNumber
                 ]))
             );
 
         $this->assertReleasedEvents($aggregate, [
-            DrinksServed::of($this->aTabId, Collection::make([
+            DrinksServed::of($this->aTabId, Collection::of([
                 $this->drink1->menuNumber, $this->drink2->menuNumber
             ]))
         ]);
@@ -37,10 +37,10 @@ class MarkDrinksServedTest extends TestCase
 
         TabAggregate::fromEvents([
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1]))
+            DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1]))
         ])
             ->handle(
-                MarkDrinksServed::of($this->aTabId, Collection::make([$this->drink2->menuNumber]))
+                MarkDrinksServed::of($this->aTabId, Collection::of([$this->drink2->menuNumber]))
             );
     }
 
@@ -50,11 +50,11 @@ class MarkDrinksServedTest extends TestCase
 
         TabAggregate::fromEvents([
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
-            DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
-            DrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber]))
+            DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1])),
+            DrinksServed::of($this->aTabId, Collection::of([$this->drink1->menuNumber]))
         ])
             ->handle(
-                MarkDrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber]))
+                MarkDrinksServed::of($this->aTabId, Collection::of([$this->drink1->menuNumber]))
             );
     }
 }
