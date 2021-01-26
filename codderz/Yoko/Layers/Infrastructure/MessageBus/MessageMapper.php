@@ -3,9 +3,8 @@
 namespace Codderz\Yoko\Layers\Infrastructure\MessageBus;
 
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
-use Codderz\Yoko\Support\Reflect;
 
-class MessageSubscriber implements MessageSubscriberInterface
+class MessageMapper implements MessageMapperInterface
 {
     protected ContainerInterface $container;
 
@@ -16,13 +15,13 @@ class MessageSubscriber implements MessageSubscriberInterface
         $this->container = $container;
     }
 
-    public function listen(string $message, $handler)
+    public function on(string $message, $handler)
     {
         $this->handlers[$message] = $handler;
         return $this;
     }
 
-    public function match($message)
+    public function map($message)
     {
         $handler = $this->handlers[get_class($message)] ?? null;
 
@@ -30,23 +29,6 @@ class MessageSubscriber implements MessageSubscriberInterface
             get_class($this) . " does not have handler for " . get_class($message)
         );
 
-        return $this
-            ->container
-            ->make($handler);
+        return $handler;
     }
-
-    public function handle($message)
-    {
-        $handler = $this->match($message);
-
-        $method = lcfirst(Reflect::shortClass($message));
-
-        if (!method_exists($handler, $method)) throw new \Error(
-            get_class($this) . " does not have method for " . get_class($message)
-        );
-
-        return $handler->$method($message);
-    }
-
-
 }

@@ -2,7 +2,8 @@
 
 namespace Codderz\Yoko\Layers\Application\Read\QueryBus;
 
-interface QueryBusInterface
+use Codderz\Yoko\Layers\Infrastructure\MessageBus\MessageBusInterface;
+
+interface QueryBusInterface extends MessageBusInterface
 {
-    public function handle($message);
 }

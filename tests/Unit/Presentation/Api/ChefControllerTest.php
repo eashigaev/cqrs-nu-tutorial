@@ -19,4 +19,18 @@ class ChefControllerTest extends TestCase
                 'payload' => [1, 2, 3]
             ]);
     }
+
+    public function testCanCommandGetTodoList()
+    {
+        $this
+            ->mockQueryBus()
+            ->with(GetTodoList::of())
+            ->willReturn([1, 2, 3]);
+
+        $this->get('/api/chef/todo-list')
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'payload' => [1, 2, 3]
+            ]);
+    }
 }
