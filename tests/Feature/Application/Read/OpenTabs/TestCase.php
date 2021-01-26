@@ -16,12 +16,17 @@ abstract class TestCase extends BaseTestCase
         ReadModelTestTrait,
         ContainerTestTrait;
 
-    protected OpenTabsInterface $openTabs;
-
     public function setUp(): void
     {
         parent::setUp();
         $this->setUpFixture();
-        $this->openTabs = $this->container()->make(OpenTabsInterface::class);
+    }
+
+    public function openTabs(array $events = []): OpenTabsInterface
+    {
+        return $this
+            ->container()
+            ->make(OpenTabsInterface::class)
+            ->withEvents($events);
     }
 }

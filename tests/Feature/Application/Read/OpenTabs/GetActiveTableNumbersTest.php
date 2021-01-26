@@ -10,25 +10,25 @@ class GetActiveTableNumbersTest extends TestCase
 {
     public function testCanGetActiveTableNumbers()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 TabOpened::of($this->bTabId, $this->bTable, $this->aWaiter),
             ])
-            ->handle(GetActiveTableNumbers::of());
+            ->getActiveTableNumbers(GetActiveTableNumbers::of());
 
         $this->assertResult($result, [$this->aTable, $this->bTable]);
     }
 
     public function testCanGetOnlyActiveTableNumbers()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 TabOpened::of($this->bTabId, $this->bTable, $this->aWaiter),
                 TabClosed::of($this->bTabId, 0, 0, 0)
             ])
-            ->handle(GetActiveTableNumbers::of());
+            ->getActiveTableNumbers(GetActiveTableNumbers::of());
 
         $this->assertResult($result, [$this->aTable]);
     }

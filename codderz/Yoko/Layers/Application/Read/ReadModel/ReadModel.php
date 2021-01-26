@@ -6,19 +6,6 @@ use Codderz\Yoko\Support\Reflect;
 
 class ReadModel implements ReadModelInterface
 {
-    public function handle($query)
-    {
-        $method = lcfirst(Reflect::shortClass($query));
-
-        if (method_exists($this, $method)) {
-            return $this->$method($query);
-        }
-
-        throw new \Error(
-            get_class($this) . " does not yet handle query " . get_class($query)
-        );
-    }
-
     public function apply($event)
     {
         $method = __FUNCTION__ . Reflect::shortClass($event);

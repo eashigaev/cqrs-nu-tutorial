@@ -11,12 +11,12 @@ class GetTodoListTest extends TestCase
 {
     public function testCanGetFoodListToPrepare()
     {
-        $result = $this->chefTodoList
-            ->withEvents([
+        $result = $this
+            ->chefTodoList([
                 FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2])),
                 FoodOrdered::of($this->bTabId, Collection::make([$this->food1])),
             ])
-            ->handle(GetTodoList::of());
+            ->getTodoList(GetTodoList::of());
 
         $this->assertResult($result, [
             [
@@ -37,20 +37,21 @@ class GetTodoListTest extends TestCase
 
     public function testCanGetEmptyListWhenFoodNotOrdered()
     {
-        $result = $this->chefTodoList
-            ->handle(GetTodoList::of());
+        $result = $this
+            ->chefTodoList()
+            ->getTodoList(GetTodoList::of());
 
         $this->assertResult($result, []);
     }
 
     public function testCanGetEmptyListWhenFoodAlreadyPrepared()
     {
-        $result = $this->chefTodoList
-            ->withEvents([
+        $result = $this
+            ->chefTodoList([
                 FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2])),
                 FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber, $this->food2->menuNumber])),
             ])
-            ->handle(GetTodoList::of());
+            ->getTodoList(GetTodoList::of());
 
         $this->assertResult($result, []);
     }

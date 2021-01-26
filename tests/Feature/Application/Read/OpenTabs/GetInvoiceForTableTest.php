@@ -17,11 +17,11 @@ class GetInvoiceForTableTest extends TestCase
 {
     public function testCanGetEmptyTabInvoice()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             ])
-            ->handle(GetInvoiceForTable::of($this->aTable));
+            ->getInvoiceForTable(GetInvoiceForTable::of($this->aTable));
 
         $this->assertResult($result, [
             'tabId' => $this->aTabId->value,
@@ -36,31 +36,32 @@ class GetInvoiceForTableTest extends TestCase
     {
         $this->expectExceptionObject(OpenTabNotFound::new());
 
-        $this->openTabs
-            ->handle(GetInvoiceForTable::of($this->aTable));
+        $this
+            ->openTabs()
+            ->getInvoiceForTable(GetInvoiceForTable::of($this->aTable));
     }
 
     public function testCanNotGetClosedTabInvoice()
     {
         $this->expectExceptionObject(OpenTabNotFound::new());
 
-        $this->openTabs
-            ->withEvents([
+        $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 TabClosed::of($this->aTabId, 0, 0, 0),
             ])
-            ->handle(GetInvoiceForTable::of($this->aTable));
+            ->getInvoiceForTable(GetInvoiceForTable::of($this->aTable));
     }
 
     public function testCanGetTabInvoiceForDrinks()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2])),
                 DrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber]))
             ])
-            ->handle(GetInvoiceForTable::of($this->aTable));
+            ->getInvoiceForTable(GetInvoiceForTable::of($this->aTable));
 
         $this->assertResult($result, [
             'tabId' => $this->aTabId->value,
@@ -79,14 +80,14 @@ class GetInvoiceForTableTest extends TestCase
 
     public function testCanGetTabInvoiceForFood()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2, $this->food3])),
                 FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber, $this->food3->menuNumber])),
                 FoodServed::of($this->aTabId, Collection::make([$this->food3->menuNumber]))
             ])
-            ->handle(GetInvoiceForTable::of($this->aTable));
+            ->getInvoiceForTable(GetInvoiceForTable::of($this->aTable));
 
         $this->assertResult($result, [
             'tabId' => $this->aTabId->value,

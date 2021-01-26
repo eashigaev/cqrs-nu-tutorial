@@ -7,4 +7,6 @@ use Codderz\Yoko\Layers\Application\Read\QueryBus\QuerySubscriberInterface;
 interface MessageSubscriberInterface extends QuerySubscriberInterface
 {
     public function listen(string $message, $handler);
+
+    public function match($message);
 }

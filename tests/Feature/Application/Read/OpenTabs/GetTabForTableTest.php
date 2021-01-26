@@ -17,11 +17,11 @@ class GetTabForTableTest extends TestCase
 {
     public function testCanGetEmptyTab()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             ])
-            ->handle(GetTabForTable::of($this->aTable));
+            ->getTabForTable(GetTabForTable::of($this->aTable));
 
         $this->assertResult($result, [
             'tableNumber' => $this->aTable,
@@ -36,31 +36,32 @@ class GetTabForTableTest extends TestCase
     {
         $this->expectExceptionObject(OpenTabNotFound::new());
 
-        $this->openTabs
-            ->handle(GetTabForTable::of($this->aTable));
+        $this
+            ->openTabs()
+            ->getTabForTable(GetTabForTable::of($this->aTable));
     }
 
     public function testCanNotGetClosedTab()
     {
         $this->expectExceptionObject(OpenTabNotFound::new());
 
-        $this->openTabs
-            ->withEvents([
+        $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 TabClosed::of($this->aTabId, 0, 0, 0),
             ])
-            ->handle(GetTabForTable::of($this->aTable));
+            ->getTabForTable(GetTabForTable::of($this->aTable));
     }
 
     public function testCanGetTabWithDrinks()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2])),
                 DrinksServed::of($this->aTabId, Collection::make([$this->drink2->menuNumber]))
             ])
-            ->handle(GetTabForTable::of($this->aTable));
+            ->getTabForTable(GetTabForTable::of($this->aTable));
 
         $this->assertResult($result, [
             'tableNumber' => $this->aTable,
@@ -85,14 +86,14 @@ class GetTabForTableTest extends TestCase
 
     public function testCanGetTabWithFood()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 FoodOrdered::of($this->aTabId, Collection::make([$this->food1, $this->food2, $this->food3])),
                 FoodPrepared::of($this->aTabId, Collection::make([$this->food2->menuNumber, $this->food3->menuNumber])),
                 FoodServed::of($this->aTabId, Collection::make([$this->food3->menuNumber])),
             ])
-            ->handle(GetTabForTable::of($this->aTable));
+            ->getTabForTable(GetTabForTable::of($this->aTable));
 
         $this->assertResult($result, [
             'tableNumber' => $this->aTable,

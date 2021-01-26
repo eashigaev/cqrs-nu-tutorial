@@ -2,8 +2,8 @@
 
 namespace Codderz\Yoko\Layers\Infrastructure\MessageBus;
 
-use Codderz\Yoko\CommonException;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
+use Codderz\Yoko\Support\Reflect;
 
 class MessageSubscriber implements MessageSubscriberInterface
 {
@@ -22,19 +22,31 @@ class MessageSubscriber implements MessageSubscriberInterface
         return $this;
     }
 
-    public function handle($message)
+    public function match($message)
     {
         $handler = $this->handlers[get_class($message)] ?? null;
 
-        if (!$handler) throw new CommonException('Bus can not handle message ' . get_class($message));
-
-        if (is_callable($handler)) return $handler($message);
-
-        if (is_object($handler)) return $handler->handle($message);
+        if (!$handler) throw new \Error(
+            get_class($this) . " does not have handler for " . get_class($message)
+        );
 
         return $this
             ->container
-            ->make($handler)
-            ->handle($message);
+            ->make($handler);
     }
+
+    public function handle($message)
+    {
+        $handler = $this->match($message);
+
+        $method = lcfirst(Reflect::shortClass($message));
+
+        if (!method_exists($handler, $method)) throw new \Error(
+            get_class($this) . " does not have method for " . get_class($message)
+        );
+
+        return $handler->$method($message);
+    }
+
+
 }

@@ -9,10 +9,12 @@ trait ContainerTestTrait
         return $this->app->make(ContainerInterface::class);
     }
 
-    public function makeFreshInstance(string $contract)
+    public function setUpMock(string $contract)
     {
-        $this->app->forgetInstance($contract);
+        $mock = $this->createMock($contract);
 
-        return $this->app->make($contract);
+        $this->app->instance($contract, $mock);
+
+        return $mock;
     }
 }

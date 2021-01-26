@@ -15,8 +15,8 @@ class GetTodoListForWaiterTest extends TestCase
 {
     public function testCanGetTodoListForWaiter()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1, $this->drink2])),
                 DrinksServed::of($this->aTabId, Collection::make([$this->drink1->menuNumber])),
@@ -24,7 +24,7 @@ class GetTodoListForWaiterTest extends TestCase
                 FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber, $this->food2->menuNumber])),
                 FoodServed::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
             ])
-            ->handle(GetTodoListForWaiter::of($this->aWaiter));
+            ->getTodoListForWaiter(GetTodoListForWaiter::of($this->aWaiter));
 
         $this->assertResult($result, [
             $this->aTable => [
@@ -44,33 +44,34 @@ class GetTodoListForWaiterTest extends TestCase
 
     public function testMustGetEmptyTodoListForFreeWaiter()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
                 DrinksOrdered::of($this->aTabId, Collection::make([$this->drink1])),
                 FoodOrdered::of($this->aTabId, Collection::make([$this->food1])),
                 FoodPrepared::of($this->aTabId, Collection::make([$this->food1->menuNumber])),
             ])
-            ->handle(GetTodoListForWaiter::of($this->bWaiter));
+            ->getTodoListForWaiter(GetTodoListForWaiter::of($this->bWaiter));
 
         $this->assertResult($result, []);
     }
 
     public function testMustGetTableListsOnlyWhenItemsToServe()
     {
-        $result = $this->openTabs
-            ->withEvents([
+        $result = $this
+            ->openTabs([
                 TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             ])
-            ->handle(GetTodoListForWaiter::of($this->aWaiter));
+            ->getTodoListForWaiter(GetTodoListForWaiter::of($this->aWaiter));
 
         $this->assertResult($result, []);
     }
 
     public function testMustGetEmptyTodoListWhenNoTabs()
     {
-        $result = $this->openTabs
-            ->handle(GetTodoListForWaiter::of($this->aWaiter));
+        $result = $this
+            ->openTabs()
+            ->getTodoListForWaiter(GetTodoListForWaiter::of($this->aWaiter));
 
         $this->assertResult($result, []);
     }
