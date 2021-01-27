@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusInterface;
 use Codderz\Yoko\Layers\Presentation\ApiPresenterTrait;
-use Codderz\Yoko\Support\Collection;
-use Codderz\Yoko\Support\Guid;
 use Illuminate\Http\Request;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Domain\Tab\Commands\MarkFoodPrepared;
@@ -36,9 +34,9 @@ class ChefController extends Controller
 
     public function markFoodPrepared(Request $request)
     {
-        $command = MarkFoodPrepared::of(
-            Guid::of($request->tabId),
-            Collection::of($request->menuNumbers)
+        $command = MarkFoodPrepared::ofValues(
+            $request->tabId,
+            $request->menuNumbers
         );
 
         $this->commandBus->handle($command);
