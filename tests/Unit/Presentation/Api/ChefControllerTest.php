@@ -18,9 +18,7 @@ class ChefControllerTest extends TestCase
         $this
             ->get('/api/chef/todo-list')
             ->assertStatus(200)
-            ->assertJsonFragment([
-                'payload' => [1, 2, 3]
-            ]);
+            ->assertJsonFragment(['payload' => [1, 2, 3]]);
     }
 
     public function testCanMarkFoodPrepared()
@@ -32,7 +30,7 @@ class ChefControllerTest extends TestCase
             ));
 
         $this
-            ->post('/api/chef/mark-food-prepared', [
+            ->post('/api/chef/prepare', [
                 'tabId' => $this->aTabId->value,
                 'menuNumbers' => [$this->food1->menuNumber, $this->food2->menuNumber]
             ])

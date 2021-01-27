@@ -4,6 +4,9 @@ namespace Tests\Unit\Presentation\Api;
 
 use Codderz\Yoko\Support\Guid;
 use Src\Application\StaticData;
+use Src\Domain\Tab\Commands\CloseTab;
+use Src\Domain\Tab\Commands\MarkDrinksServed;
+use Src\Domain\Tab\Commands\MarkFoodServed;
 use Src\Domain\Tab\Commands\OpenTab;
 use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\OrderedItem;
@@ -16,9 +19,7 @@ class TabControllerTest extends TestCase
 
         $this
             ->mockCommandBus()
-            ->with(OpenTab::of(
-                $this->aTabId, $this->aTable, $this->aWaiter
-            ));
+            ->with(OpenTab::of($this->aTabId, $this->aTable, $this->aWaiter));
 
         $this
             ->post('/api/tab/open', [
@@ -26,9 +27,7 @@ class TabControllerTest extends TestCase
                 'waiter' => $this->aWaiter
             ])
             ->assertStatus(200)
-            ->assertJsonFragment([
-                'payload' => $this->aTabId->value
-            ]);
+            ->assertJsonFragment(['payload' => $this->aTabId->value]);
     }
 
     public function testCanPlaceOrder()
@@ -39,14 +38,45 @@ class TabControllerTest extends TestCase
 
         $this
             ->mockCommandBus()
-            ->with(PlaceOrder::of(
-                $this->aTabId, $orderedItems
-            ));
+            ->with(PlaceOrder::of($this->aTabId, $orderedItems));
 
         $this
             ->post('/api/tab/order', [
                 'tabId' => $this->aTabId->value,
                 'menuNumbers' => $orderedItems->pluck('menuNumber')
+            ])
+            ->assertStatus(200);
+    }
+
+    public function testCanMarkServed()
+    {
+        $products = StaticData::products();
+
+        $this
+            ->mockCommandBus($this->exactly(2))
+            ->withConsecutive(
+                [MarkDrinksServed::of($this->aTabId, $products->where('isDrink', true)->pluck('menuNumber'))],
+                [MarkFoodServed::of($this->aTabId, $products->where('isDrink', false)->pluck('menuNumber'))]
+            );
+
+        $this
+            ->post('/api/tab/serve', [
+                'tabId' => $this->aTabId->value,
+                'menuNumbers' => $products->pluck('menuNumber')
+            ])
+            ->assertStatus(200);
+    }
+
+    public function testCanCloseTab()
+    {
+        $this
+            ->mockCommandBus()
+            ->with(CloseTab::of($this->aTabId, 999.99));
+
+        $this
+            ->post('/api/tab/close', [
+                'tabId' => $this->aTabId->value,
+                'amountPaid' => 999.99
             ])
             ->assertStatus(200);
     }

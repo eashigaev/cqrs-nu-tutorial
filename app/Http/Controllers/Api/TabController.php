@@ -9,6 +9,9 @@ use Codderz\Yoko\Layers\Presentation\ApiPresenterTrait;
 use Codderz\Yoko\Support\Guid;
 use Illuminate\Http\Request;
 use Src\Application\StaticData;
+use Src\Domain\Tab\Commands\CloseTab;
+use Src\Domain\Tab\Commands\MarkDrinksServed;
+use Src\Domain\Tab\Commands\MarkFoodServed;
 use Src\Domain\Tab\Commands\OpenTab;
 use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\OrderedItem;
@@ -26,7 +29,7 @@ class TabController extends Controller
         $this->commandBus = $commandBus;
     }
 
-    public function open(Request $request)
+    public function openTab(Request $request)
     {
         $tabId = Guid::generate();
 
@@ -41,7 +44,7 @@ class TabController extends Controller
         return $this->successApiResponse($tabId->value);
     }
 
-    public function order(Request $request)
+    public function placeOrder(Request $request)
     {
         $orderedItems = StaticData::products()
             ->whereIn('menuNumber', $request->menuNumbers)
@@ -50,6 +53,38 @@ class TabController extends Controller
         $command = PlaceOrder::of(
             Guid::of($request->tabId),
             $orderedItems
+        );
+
+        $this->commandBus->handle($command);
+
+        return $this->successApiResponse();
+    }
+
+    public function markServed(Request $request)
+    {
+        $products = StaticData::products()
+            ->whereIn('menuNumber', $request->menuNumbers);
+
+        $drinksCommand = MarkDrinksServed::of(
+            Guid::of($request->tabId),
+            $products->where('isDrink', true)->pluck('menuNumber')
+        );
+        $this->commandBus->handle($drinksCommand);
+
+        $foodCommand = MarkFoodServed::of(
+            Guid::of($request->tabId),
+            $products->where('isDrink', false)->pluck('menuNumber')
+        );
+        $this->commandBus->handle($foodCommand);
+
+        return $this->successApiResponse();
+    }
+
+    public function closeTab(Request $request)
+    {
+        $command = CloseTab::of(
+            Guid::of($request->tabId),
+            $request->amountPaid
         );
 
         $this->commandBus->handle($command);

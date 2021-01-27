@@ -24,12 +24,14 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => '/chef'], function () {
         Route::get('/todo-list', [ChefController::class, 'getTodoList']);
-        Route::post('/mark-food-prepared', [ChefController::class, 'markFoodPrepared']);
+        Route::post('/prepare', [ChefController::class, 'markFoodPrepared']);
     });
 
     Route::group(['prefix' => '/tab'], function () {
-        Route::post('/open', [TabController::class, 'open']);
-        Route::post('/order', [TabController::class, 'order']);
+        Route::post('/open', [TabController::class, 'openTab']);
+        Route::post('/order', [TabController::class, 'placeOrder']);
+        Route::post('/serve', [TabController::class, 'markServed']);
+        Route::post('/close', [TabController::class, 'closeTab']);
     });
 
 });
