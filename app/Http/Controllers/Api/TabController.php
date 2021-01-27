@@ -8,6 +8,8 @@ use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusInterface;
 use Codderz\Yoko\Layers\Presentation\ApiPresenterTrait;
 use Codderz\Yoko\Support\Guid;
 use Illuminate\Http\Request;
+use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
+use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
 use Src\Application\StaticData;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -90,5 +92,23 @@ class TabController extends Controller
         $this->commandBus->handle($command);
 
         return $this->successApiResponse();
+    }
+
+    public function getTabFotTable($table)
+    {
+        $query = GetTabForTable::of($table);
+
+        $result = $this->queryBus->handle($query);
+
+        return $this->successApiResponse($result);
+    }
+
+    public function getInvoiceForTable($table)
+    {
+        $query = GetInvoiceForTable::of($table);
+
+        $result = $this->queryBus->handle($query);
+
+        return $this->successApiResponse($result);
     }
 }

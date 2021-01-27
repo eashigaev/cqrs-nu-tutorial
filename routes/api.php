@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     Route::group(['prefix' => '/tab'], function () {
+        Route::get('/status/{table}', [TabController::class, 'getTabFotTable']);
+        Route::get('/invoice/{table}', [TabController::class, 'getInvoiceForTable']);
         Route::post('/open', [TabController::class, 'openTab']);
         Route::post('/order', [TabController::class, 'placeOrder']);
         Route::post('/serve', [TabController::class, 'markServed']);

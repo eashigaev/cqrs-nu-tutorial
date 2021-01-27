@@ -10,15 +10,17 @@ class ChefControllerTest extends TestCase
 {
     public function testCanGetTodoList()
     {
+        $result = uniqid();
+
         $this
             ->mockQueryBus()
             ->with(GetTodoList::of())
-            ->willReturn([1, 2, 3]);
+            ->willReturn($result);
 
         $this
             ->get('/api/chef/todo-list')
             ->assertStatus(200)
-            ->assertJsonFragment(['payload' => [1, 2, 3]]);
+            ->assertJsonFragment(['payload' => $result]);
     }
 
     public function testCanMarkFoodPrepared()

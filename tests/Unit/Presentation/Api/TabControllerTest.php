@@ -3,6 +3,8 @@
 namespace Tests\Unit\Presentation\Api;
 
 use Codderz\Yoko\Support\Guid;
+use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
+use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
 use Src\Application\StaticData;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -79,5 +81,35 @@ class TabControllerTest extends TestCase
                 'amountPaid' => 999.99
             ])
             ->assertStatus(200);
+    }
+
+    public function testCanGetTabForTable()
+    {
+        $result = uniqid();
+
+        $this
+            ->mockQueryBus()
+            ->with(GetTabForTable::of($this->aTable))
+            ->willReturn($result);
+
+        $this
+            ->get('/api/tab/status/' . $this->aTable)
+            ->assertStatus(200)
+            ->assertJsonFragment(['payload' => $result]);
+    }
+
+    public function testCanGetInvoiceForTable()
+    {
+        $result = uniqid();
+
+        $this
+            ->mockQueryBus()
+            ->with(GetInvoiceForTable::of($this->aTable))
+            ->willReturn($result);
+
+        $this
+            ->get('/api/tab/invoice/' . $this->aTable)
+            ->assertStatus(200)
+            ->assertJsonFragment(['payload' => $result]);
     }
 }
