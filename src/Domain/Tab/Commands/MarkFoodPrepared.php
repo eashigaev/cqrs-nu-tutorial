@@ -18,12 +18,4 @@ class MarkFoodPrepared
         $self->menuNumbers = $menuNumbers->assertInt();
         return $self;
     }
-
-    public static function ofValues(string $id, array $menuNumbers)
-    {
-        return self::of(
-            Guid::of($id),
-            Collection::make($menuNumbers)
-        );
-    }
 }

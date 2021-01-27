@@ -6,13 +6,11 @@ use App\Http\Controllers\Controller;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusInterface;
 use Codderz\Yoko\Layers\Presentation\ApiPresenterTrait;
-use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
 use Illuminate\Http\Request;
-use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
-use Src\Domain\Tab\Commands\MarkFoodPrepared;
+use Src\Domain\Tab\Commands\OpenTab;
 
-class ChefController extends Controller
+class TabController extends Controller
 {
     use ApiPresenterTrait;
 
@@ -25,24 +23,18 @@ class ChefController extends Controller
         $this->commandBus = $commandBus;
     }
 
-    public function getTodoList()
+    public function open(Request $request)
     {
-        $query = GetTodoList::of();
+        $tabId = Guid::generate();
 
-        $result = $this->queryBus->handle($query);
-
-        return $this->successApiResponse($result);
-    }
-
-    public function markFoodPrepared(Request $request)
-    {
-        $command = MarkFoodPrepared::of(
-            Guid::of($request->tabId),
-            Collection::of($request->menuNumbers)
+        $command = OpenTab::of(
+            $tabId,
+            $request->tableNumber,
+            $request->waiter
         );
 
         $this->commandBus->handle($command);
 
-        return $this->successApiResponse();
+        return $this->successApiResponse($tabId->value);
     }
 }

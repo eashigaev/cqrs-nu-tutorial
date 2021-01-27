@@ -49,12 +49,12 @@ class EloquentChefTodoList extends ReadModel implements ChefTodoListInterface
 
     public function applyFoodOrdered(FoodOrdered $event)
     {
-        $groupId = Guid::generate();
+        $groupId = Guid::uuid();
 
         $createItem = fn(OrderedItem $item) => ChefTodoListModel::query()
             ->insert([
                 'tab_id' => $event->id->value,
-                'group_id' => $groupId->value,
+                'group_id' => $groupId,
                 'menu_number' => $item->menuNumber,
                 'description' => $item->description,
             ]);

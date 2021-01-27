@@ -8,7 +8,7 @@ use Src\Domain\Tab\Commands\MarkFoodPrepared;
 
 class ChefControllerTest extends TestCase
 {
-    public function testCanQueryGetTodoList()
+    public function testCanGetTodoList()
     {
         $this
             ->mockQueryBus()
@@ -23,7 +23,7 @@ class ChefControllerTest extends TestCase
             ]);
     }
 
-    public function testCanCommandMarkFoodPrepared()
+    public function testCanMarkFoodPrepared()
     {
         $this
             ->mockCommandBus()

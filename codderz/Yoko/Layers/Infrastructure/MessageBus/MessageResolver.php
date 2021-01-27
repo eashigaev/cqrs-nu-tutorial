@@ -14,7 +14,7 @@ class MessageResolver implements MessageResolverInterface
         $this->container = $container;
     }
 
-    public function resolve($message, $handler)
+    public function resolve($message, $handler): callable
     {
         $handler = $this->container->make($handler);
 
@@ -24,7 +24,7 @@ class MessageResolver implements MessageResolverInterface
             get_class($this) . " does not have method for " . get_class($message)
         );
 
-        return $handler->$method($message);
+        return fn($message) => $handler->$method($message);
     }
 
 

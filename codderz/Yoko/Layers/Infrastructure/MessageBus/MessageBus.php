@@ -17,6 +17,8 @@ class MessageBus implements MessageBusInterface
     {
         $handler = $this->mapper->map($message);
 
-        return $this->resolver->resolve($message, $handler);
+        $handler = $this->resolver->resolve($message, $handler);
+
+        return $handler($message);
     }
 }

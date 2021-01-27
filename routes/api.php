@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ChefController;
+use App\Http\Controllers\Api\TabController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('/chef/todo-list', [ChefController::class, 'getTodoList']);
-    Route::post('/chef/mark-food-prepared', [ChefController::class, 'markFoodPrepared']);
+
+    Route::group(['prefix' => '/chef'], function () {
+        Route::get('/todo-list', [ChefController::class, 'getTodoList']);
+        Route::post('/mark-food-prepared', [ChefController::class, 'markFoodPrepared']);
+    });
+
+    Route::group(['prefix' => '/tab'], function () {
+        Route::post('/open', [TabController::class, 'open']);
+    });
+
 });

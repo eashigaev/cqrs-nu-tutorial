@@ -2,18 +2,9 @@
 
 namespace Codderz\Yoko\Layers\Infrastructure\MessageBus;
 
-use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
-
 class MessageMapper implements MessageMapperInterface
 {
-    protected ContainerInterface $container;
-
     public array $handlers = [];
-
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
 
     public function on(string $message, $handler)
     {
