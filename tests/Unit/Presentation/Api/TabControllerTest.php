@@ -2,10 +2,11 @@
 
 namespace Tests\Unit\Presentation\Api;
 
-use Codderz\Yoko\Support\Collection;
 use Codderz\Yoko\Support\Guid;
+use Src\Application\StaticData;
 use Src\Domain\Tab\Commands\OpenTab;
 use Src\Domain\Tab\Commands\PlaceOrder;
+use Src\Domain\Tab\OrderedItem;
 
 class TabControllerTest extends TestCase
 {
@@ -28,5 +29,25 @@ class TabControllerTest extends TestCase
             ->assertJsonFragment([
                 'payload' => $this->aTabId->value
             ]);
+    }
+
+    public function testCanPlaceOrder()
+    {
+        $orderedItems = StaticData::products()
+            ->take(2)
+            ->map(fn($item) => OrderedItem::ofArray($item));
+
+        $this
+            ->mockCommandBus()
+            ->with(PlaceOrder::of(
+                $this->aTabId, $orderedItems
+            ));
+
+        $this
+            ->post('/api/tab/order', [
+                'tabId' => $this->aTabId->value,
+                'menuNumbers' => $orderedItems->pluck('menuNumber')
+            ])
+            ->assertStatus(200);
     }
 }

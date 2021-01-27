@@ -8,7 +8,10 @@ use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusInterface;
 use Codderz\Yoko\Layers\Presentation\ApiPresenterTrait;
 use Codderz\Yoko\Support\Guid;
 use Illuminate\Http\Request;
+use Src\Application\StaticData;
 use Src\Domain\Tab\Commands\OpenTab;
+use Src\Domain\Tab\Commands\PlaceOrder;
+use Src\Domain\Tab\OrderedItem;
 
 class TabController extends Controller
 {
@@ -36,5 +39,21 @@ class TabController extends Controller
         $this->commandBus->handle($command);
 
         return $this->successApiResponse($tabId->value);
+    }
+
+    public function order(Request $request)
+    {
+        $orderedItems = StaticData::products()
+            ->whereIn('menuNumber', $request->menuNumbers)
+            ->map(fn($item) => OrderedItem::ofArray($item));
+
+        $command = PlaceOrder::of(
+            Guid::of($request->tabId),
+            $orderedItems
+        );
+
+        $this->commandBus->handle($command);
+
+        return $this->successApiResponse();
     }
 }

@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => '/tab'], function () {
         Route::post('/open', [TabController::class, 'open']);
+        Route::post('/order', [TabController::class, 'order']);
     });
 
 });

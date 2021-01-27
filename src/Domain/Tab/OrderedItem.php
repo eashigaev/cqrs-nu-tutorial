@@ -18,4 +18,14 @@ class OrderedItem
         $self->price = $price;
         return $self;
     }
+
+    public static function ofArray(array $arr)
+    {
+        return self::of(
+            $arr['menuNumber'],
+            $arr['description'],
+            $arr['isDrink'],
+            $arr['price']
+        );
+    }
 }
