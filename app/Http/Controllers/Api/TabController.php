@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusInterface;
 use Codderz\Yoko\Layers\Presentation\ApiPresenterTrait;
-use Codderz\Yoko\Support\Guid;
+use Codderz\Yoko\Support\Domain\Guid;
 use Illuminate\Http\Request;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
 use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
@@ -33,7 +33,7 @@ class TabController extends Controller
 
     public function openTab(Request $request)
     {
-        $tabId = Guid::generate();
+        $tabId = Guid::ofUuid();
 
         $command = OpenTab::of(
             $tabId,

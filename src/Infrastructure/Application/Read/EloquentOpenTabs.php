@@ -6,7 +6,7 @@ use App\Models\Read\OpenTabsItemModel;
 use App\Models\Read\OpenTabsTabModel;
 use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModel;
 use Codderz\Yoko\Support\Collection;
-use Codderz\Yoko\Support\Guid;
+use Codderz\Yoko\Support\Domain\Guid;
 use Src\Application\Read\OpenTabs\Exceptions\OpenTabNotFound;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;

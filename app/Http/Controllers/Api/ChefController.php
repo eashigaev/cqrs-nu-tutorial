@@ -7,7 +7,7 @@ use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusInterface;
 use Codderz\Yoko\Layers\Presentation\ApiPresenterTrait;
 use Codderz\Yoko\Support\Collection;
-use Codderz\Yoko\Support\Guid;
+use Codderz\Yoko\Support\Domain\Guid;
 use Illuminate\Http\Request;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Domain\Tab\Commands\MarkFoodPrepared;

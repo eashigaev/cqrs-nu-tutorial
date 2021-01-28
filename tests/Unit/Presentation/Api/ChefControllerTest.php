@@ -3,6 +3,7 @@
 namespace Tests\Unit\Presentation\Api;
 
 use Codderz\Yoko\Support\Collection;
+use Codderz\Yoko\Support\Domain\Guid;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Domain\Tab\Commands\MarkFoodPrepared;
 
@@ -10,17 +11,17 @@ class ChefControllerTest extends TestCase
 {
     public function testCanGetTodoList()
     {
-        $result = uniqid();
+        $payload = Guid::uuid();
 
         $this
             ->mockQueryBus()
             ->with(GetTodoList::of())
-            ->willReturn($result);
+            ->willReturn($payload);
 
         $this
             ->get('/api/chef/todo-list')
             ->assertStatus(200)
-            ->assertJsonFragment(['payload' => $result]);
+            ->assertJsonFragment(['payload' => $payload]);
     }
 
     public function testCanMarkFoodPrepared()

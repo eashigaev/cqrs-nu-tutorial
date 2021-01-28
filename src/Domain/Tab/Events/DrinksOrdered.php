@@ -3,7 +3,7 @@
 namespace Src\Domain\Tab\Events;
 
 use Codderz\Yoko\Support\Collection;
-use Codderz\Yoko\Support\Guid;
+use Codderz\Yoko\Support\Domain\Guid;
 use Src\Domain\Tab\OrderedItem;
 
 class DrinksOrdered

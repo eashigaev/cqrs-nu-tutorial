@@ -4,7 +4,7 @@ namespace Src\Application\Read\OpenTabs;
 
 use Codderz\Yoko\Contracts\ArrayableInterface;
 use Codderz\Yoko\Support\Collection;
-use Codderz\Yoko\Support\Guid;
+use Codderz\Yoko\Support\Domain\Guid;
 
 class TabInvoice implements ArrayableInterface
 {

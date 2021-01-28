@@ -2,7 +2,7 @@
 
 namespace Src\Domain\Tab\Events;
 
-use Codderz\Yoko\Support\Guid;
+use Codderz\Yoko\Support\Domain\Guid;
 
 class TabOpened
 {

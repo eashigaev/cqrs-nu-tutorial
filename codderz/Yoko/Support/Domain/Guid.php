@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Support;
+namespace Codderz\Yoko\Support\Domain;
 
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
@@ -17,7 +17,7 @@ class Guid
         return $self;
     }
 
-    public static function generate()
+    public static function ofUuid()
     {
         return static::of(static::uuid());
     }
