@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Support\Domain;
+namespace Codderz\Yoko\Layers\Domain;
 
 use Ramsey\Uuid\Uuid as RamseyUuid;
 

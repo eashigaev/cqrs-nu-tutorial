@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Presentation\Api;
 
-use Codderz\Yoko\Support\Domain\Guid;
+use Codderz\Yoko\Layers\Domain\Guid;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
 use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
 use Src\Application\StaticData;

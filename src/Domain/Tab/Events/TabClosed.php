@@ -2,7 +2,7 @@
 
 namespace Src\Domain\Tab\Events;
 
-use Codderz\Yoko\Support\Domain\Guid;
+use Codderz\Yoko\Layers\Domain\Guid;
 
 class TabClosed
 {

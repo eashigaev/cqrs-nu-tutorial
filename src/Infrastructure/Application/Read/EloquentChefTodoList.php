@@ -4,8 +4,8 @@ namespace Src\Infrastructure\Application\Read;
 
 use App\Models\Read\ChefTodoListModel;
 use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModel;
+use Codderz\Yoko\Layers\Domain\Guid;
 use Codderz\Yoko\Support\Collection;
-use Codderz\Yoko\Support\Domain\Guid;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Application\Read\ChefTodoList\TodoListGroup;

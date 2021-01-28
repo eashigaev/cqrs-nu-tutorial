@@ -2,8 +2,8 @@
 
 namespace Src\Domain\Tab\Commands;
 
+use Codderz\Yoko\Layers\Domain\Guid;
 use Codderz\Yoko\Support\Collection;
-use Codderz\Yoko\Support\Domain\Guid;
 use Src\Domain\Tab\OrderedItem;
 
 class PlaceOrder

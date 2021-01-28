@@ -3,8 +3,8 @@
 namespace Src\Application\Read\OpenTabs;
 
 use Codderz\Yoko\Contracts\ArrayableInterface;
+use Codderz\Yoko\Layers\Domain\Guid;
 use Codderz\Yoko\Support\Collection;
-use Codderz\Yoko\Support\Domain\Guid;
 
 class TabInvoice implements ArrayableInterface
 {

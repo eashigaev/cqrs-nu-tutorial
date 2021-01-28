@@ -2,7 +2,7 @@
 
 namespace Src\Domain\Tab\Commands;
 
-use Codderz\Yoko\Support\Domain\Guid;
+use Codderz\Yoko\Layers\Domain\Guid;
 
 class CloseTab
 {

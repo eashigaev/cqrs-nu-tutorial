@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Codderz\Yoko\Support\Domain\Guid;
+use Codderz\Yoko\Layers\Domain\Guid;
 use Src\Domain\Tab\OrderedItem;
 
 trait FixtureTestTrait
