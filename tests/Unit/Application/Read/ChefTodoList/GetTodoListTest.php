@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Application\Read\ChefTodoList;
+namespace Tests\Unit\Application\Read\ChefTodoList;
 
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;

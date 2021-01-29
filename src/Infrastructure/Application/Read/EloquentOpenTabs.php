@@ -108,7 +108,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
     protected function filterItemsOfStatus(Collection $items, $status): Collection
     {
         return $items
-            ->filter(fn($item) => $item->status === $status)
+            ->filter(fn($item) => $item->status == $status)
             ->map(fn($item) => TabItem::of(
                 $item->menu_number,
                 $item->description,

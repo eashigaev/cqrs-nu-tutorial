@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature\Application\Read\OpenTabs;
+namespace Tests\Unit\Application\Read\ChefTodoList;
 
 use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModelTestTrait;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Src\Application\Read\OpenTabs\OpenTabsInterface;
+use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Tests\FixtureTestTrait;
 use Tests\TestCase as BaseTestCase;
 
@@ -22,11 +22,11 @@ abstract class TestCase extends BaseTestCase
         $this->setUpFixture();
     }
 
-    public function openTabs(array $events = []): OpenTabsInterface
+    public function chefTodoList(array $events = []): ChefTodoListInterface
     {
         return $this
             ->container()
-            ->make(OpenTabsInterface::class)
+            ->make(ChefTodoListInterface::class)
             ->withEvents($events);
     }
 }
