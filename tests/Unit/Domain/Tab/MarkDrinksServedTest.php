@@ -18,7 +18,7 @@ class MarkDrinksServedTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1, $this->drink2]))
         ])
-            ->handle(
+            ->markDrinksServed(
                 MarkDrinksServed::of($this->aTabId, Collection::of([
                     $this->drink1->menuNumber, $this->drink2->menuNumber
                 ]))
@@ -39,7 +39,7 @@ class MarkDrinksServedTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1]))
         ])
-            ->handle(
+            ->markDrinksServed(
                 MarkDrinksServed::of($this->aTabId, Collection::of([$this->drink2->menuNumber]))
             );
     }
@@ -53,7 +53,7 @@ class MarkDrinksServedTest extends TestCase
             DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1])),
             DrinksServed::of($this->aTabId, Collection::of([$this->drink1->menuNumber]))
         ])
-            ->handle(
+            ->markDrinksServed(
                 MarkDrinksServed::of($this->aTabId, Collection::of([$this->drink1->menuNumber]))
             );
     }

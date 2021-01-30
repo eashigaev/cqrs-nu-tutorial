@@ -15,9 +15,17 @@ class MessageBus implements MessageBusInterface, MessageResolverInterface
         $this->container = $container;
     }
 
-    public function on(string $message, $handler)
+    public function bind($handler, string $message): self
     {
         $this->handlers[$message] = $handler;
+        return $this;
+    }
+
+    public function bindAll($handler, array $messages): self
+    {
+        foreach ($messages as $message) {
+            $this->bind($handler, $message);
+        }
         return $this;
     }
 

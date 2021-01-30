@@ -20,7 +20,7 @@ class MarkFoodServedTest extends TestCase
             FoodOrdered::of($this->aTabId, Collection::of([$this->food1, $this->food2])),
             FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber, $this->food2->menuNumber]))
         ])
-            ->handle(
+            ->markFoodServed(
                 MarkFoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber, $this->food2->menuNumber]))
             );
 
@@ -37,7 +37,7 @@ class MarkFoodServedTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             FoodOrdered::of($this->aTabId, Collection::of([$this->food1])),
         ])
-            ->handle(
+            ->markFoodServed(
                 MarkFoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber]))
             );
     }
@@ -52,7 +52,7 @@ class MarkFoodServedTest extends TestCase
             FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
             FoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
         ])
-            ->handle(
+            ->markFoodServed(
                 MarkFoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber]))
             );
     }
@@ -68,7 +68,7 @@ class MarkFoodServedTest extends TestCase
             FoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
             FoodOrdered::of($this->aTabId, Collection::of([$this->food1])),
         ])
-            ->handle(
+            ->markFoodServed(
                 MarkFoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber]))
             );
     }

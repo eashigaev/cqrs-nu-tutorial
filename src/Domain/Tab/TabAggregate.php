@@ -3,6 +3,7 @@
 namespace Src\Domain\Tab;
 
 use Codderz\Yoko\Layers\Domain\Aggregate\Aggregate;
+use Codderz\Yoko\Layers\Domain\Guid;
 use Codderz\Yoko\Support\Collection;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -21,36 +22,27 @@ use Src\Domain\Tab\Exceptions\DrinkNotOutstanding;
 use Src\Domain\Tab\Exceptions\FoodAlreadyPrepared;
 use Src\Domain\Tab\Exceptions\FoodNotOutstanding;
 use Src\Domain\Tab\Exceptions\PaymentNotEnough;
-use Src\Domain\Tab\Exceptions\TabAlreadyClosed;
-use Src\Domain\Tab\Exceptions\TabAlreadyOpen;
 use Src\Domain\Tab\Exceptions\TabHasOutstandingItems;
 use Src\Domain\Tab\Exceptions\TabNotOpen;
 
 class TabAggregate extends Aggregate
 {
-    private ?bool $open = null;
-    private float $servedItemsValue = 0;
+    public Guid $id;
+    public int $table;
+
+    public ?bool $open = null;
+    public float $servedItemsValue = 0;
 
     /** @var Collection<OrderedItem> */
-    private Collection $outstandingDrinks;
+    public Collection $outstandingDrinks;
     /** @var Collection<OrderedItem> */
-    private Collection $outstandingFood;
+    public Collection $outstandingFood;
     /** @var Collection<OrderedItem> */
-    private Collection $preparedFood;
+    public Collection $preparedFood;
 
-    protected function __construct()
+    public static function openTab(OpenTab $command)
     {
-        $this->outstandingDrinks = Collection::of();
-        $this->outstandingFood = Collection::of();
-        $this->preparedFood = Collection::of();
-    }
-
-    public function openTab(OpenTab $command)
-    {
-        if ($this->open === true) throw TabAlreadyOpen::new();
-        if ($this->open === false) throw TabAlreadyClosed::new();
-
-        return $this->recordThat(
+        return (new self())->recordThat(
             TabOpened::of($command->id, $command->tableNumber, $command->waiter)
         );
     }
@@ -63,13 +55,15 @@ class TabAggregate extends Aggregate
 
         $drinks = $command->items->filter($isDrink)->values();
         if ($drinks->isNotEmpty()) {
-            $this->recordThat(DrinksOrdered::of($command->id, $drinks));
+            $this->recordThat(DrinksOrdered::of($this->id, $drinks));
         }
 
         $food = $command->items->reject($isDrink)->values();
         if ($food->isNotEmpty()) {
-            $this->recordThat(FoodOrdered::of($command->id, $food));
+            $this->recordThat(FoodOrdered::of($this->id, $food));
         }
+
+        return $this;
     }
 
     public function markDrinksServed(MarkDrinksServed $command)
@@ -78,7 +72,7 @@ class TabAggregate extends Aggregate
             throw DrinkNotOutstanding::new();
         }
         return $this->recordThat(
-            DrinksServed::of($command->id, $command->menuNumbers)
+            DrinksServed::of($this->id, $command->menuNumbers)
         );
     }
 
@@ -90,7 +84,7 @@ class TabAggregate extends Aggregate
             throw FoodNotOutstanding::new();
         }
         return $this->recordThat(
-            FoodPrepared::of($command->id, $command->menuNumbers)
+            FoodPrepared::of($this->id, $command->menuNumbers)
         );
     }
 
@@ -100,7 +94,7 @@ class TabAggregate extends Aggregate
             throw FoodNotOutstanding::new();
         }
         return $this->recordThat(
-            FoodServed::of($command->id, $command->menuNumbers)
+            FoodServed::of($this->id, $command->menuNumbers)
         );
     }
 
@@ -114,7 +108,7 @@ class TabAggregate extends Aggregate
         if ($tipValue < 0) throw PaymentNotEnough::new();
 
         return $this->recordThat(
-            TabClosed::of($command->id, $command->amountPaid, $this->servedItemsValue, $tipValue)
+            TabClosed::of($this->id, $command->amountPaid, $this->servedItemsValue, $tipValue)
         );
     }
 
@@ -149,7 +143,12 @@ class TabAggregate extends Aggregate
 
     public function applyTabOpened(TabOpened $event)
     {
+        $this->id = $event->id;
+        $this->table = $event->tableNumber;
         $this->open = true;
+        $this->outstandingDrinks = Collection::of();
+        $this->outstandingFood = Collection::of();
+        $this->preparedFood = Collection::of();
     }
 
     public function applyDrinksOrdered(DrinksOrdered $event)
@@ -199,5 +198,33 @@ class TabAggregate extends Aggregate
     public function applyTabClosed(TabClosed $event)
     {
         $this->open = false;
+    }
+
+    //
+
+    public static function fromArray(array $array)
+    {
+        $self = new self();
+        $self->id = Guid::of($array['id']);
+        $self->table = $array['table'];
+        $self->open = $array['open'];
+        $self->servedItemsValue = $array['served_items_value'];
+        $self->outstandingDrinks = Collection::of($array['outstanding_drinks'])->mapInto(OrderedItem::class);
+        $self->outstandingFood = Collection::of($array['outstanding_food'])->mapInto(OrderedItem::class);
+        $self->preparedFood = Collection::of($array['prepared_food'])->mapInto(OrderedItem::class);
+        return $self;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id->value,
+            'table' => $this->table,
+            'open' => $this->open,
+            'served_items_value' => $this->servedItemsValue,
+            'outstanding_drinks' => $this->outstandingDrinks->toArray(),
+            'outstanding_food' => $this->outstandingFood->toArray(),
+            'prepared_food' => $this->preparedFood->toArray()
+        ];
     }
 }

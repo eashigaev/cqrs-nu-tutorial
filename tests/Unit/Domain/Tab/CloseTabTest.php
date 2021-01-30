@@ -25,7 +25,7 @@ class CloseTabTest extends TestCase
             DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1])),
             DrinksServed::of($this->aTabId, Collection::of([$this->drink1->menuNumber]))
         ])
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, $this->drink1->price)
             );
 
@@ -42,7 +42,7 @@ class CloseTabTest extends TestCase
             FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
             FoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
         ])
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, $this->food1->price)
             );
 
@@ -63,7 +63,7 @@ class CloseTabTest extends TestCase
             FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
             FoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber]))
         ])
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, $amountValue + 2.00)
             );
 
@@ -81,7 +81,7 @@ class CloseTabTest extends TestCase
             DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1])),
             DrinksServed::of($this->aTabId, Collection::of([$this->drink1->menuNumber]))
         ])
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, 0)
             );
     }
@@ -96,7 +96,7 @@ class CloseTabTest extends TestCase
             FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
             FoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
         ])
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, 0)
             );
     }
@@ -109,7 +109,7 @@ class CloseTabTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             DrinksOrdered::of($this->aTabId, Collection::of([$this->drink1])),
         ])
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, 0)
             );
     }
@@ -122,7 +122,7 @@ class CloseTabTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             FoodOrdered::of($this->aTabId, Collection::of([$this->food1, $this->food2])),
         ])
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, 0)
             );
     }
@@ -136,7 +136,7 @@ class CloseTabTest extends TestCase
             FoodOrdered::of($this->aTabId, Collection::of([$this->food1])),
             FoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
         ])
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, 0)
             );
     }
@@ -146,7 +146,7 @@ class CloseTabTest extends TestCase
         $this->expectExceptionObject(TabNotOpen::new());
 
         TabAggregate::fromEvents()
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, $this->drink1->price + 1.00)
             );
     }
@@ -159,7 +159,7 @@ class CloseTabTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             TabClosed::of($this->aTabId, 0, 0, 0),
         ])
-            ->handle(
+            ->closeTab(
                 CloseTab::of($this->aTabId, 0)
             );
     }

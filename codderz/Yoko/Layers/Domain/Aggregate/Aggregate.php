@@ -6,21 +6,7 @@ use Codderz\Yoko\Support\Reflect;
 
 class Aggregate implements AggregateInterface
 {
-    protected $recordedEvents = [];
-
-    public function handle($command)
-    {
-        $method = lcfirst(Reflect::shortClass($command));
-
-        if (method_exists($this, $method)) {
-            $this->$method($command);
-            return $this;
-        }
-
-        throw new \Error(
-            get_class($this) . " does not yet handle command " . get_class($command)
-        );
-    }
+    protected array $recordedEvents = [];
 
     public function apply($event)
     {

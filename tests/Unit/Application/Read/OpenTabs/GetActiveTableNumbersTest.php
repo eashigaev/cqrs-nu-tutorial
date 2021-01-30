@@ -20,6 +20,15 @@ class GetActiveTableNumbersTest extends TestCase
         $this->assertResult($result, [$this->aTable, $this->bTable]);
     }
 
+    public function testCanGetEmptyTableNumbersList()
+    {
+        $result = $this
+            ->openTabs()
+            ->getActiveTableNumbers(GetActiveTableNumbers::of());
+
+        $this->assertResult($result, []);
+    }
+
     public function testCanGetOnlyActiveTableNumbers()
     {
         $result = $this

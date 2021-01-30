@@ -16,12 +16,25 @@ use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandResolverInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\QueueCommandBus;
 use Codderz\Yoko\Layers\Infrastructure\Container\Container;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
+use Codderz\Yoko\Layers\Infrastructure\EventBus\EventBus;
+use Codderz\Yoko\Layers\Infrastructure\EventBus\EventBusInterface;
+use Codderz\Yoko\Layers\Infrastructure\EventBus\EventResolverInterface;
 use Illuminate\Support\ServiceProvider;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
-use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
+use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
+use Src\Application\Write\TabHandler;
+use Src\Domain\Tab\Commands\CloseTab;
+use Src\Domain\Tab\Commands\MarkDrinksServed;
+use Src\Domain\Tab\Commands\MarkFoodPrepared;
+use Src\Domain\Tab\Commands\MarkFoodServed;
+use Src\Domain\Tab\Commands\OpenTab;
+use Src\Domain\Tab\Commands\PlaceOrder;
+use Src\Domain\Tab\Events\TabOpened;
+use Src\Domain\Tab\TabRepositoryInterface;
 use Src\Infrastructure\Application\Read\EloquentChefTodoList;
 use Src\Infrastructure\Application\Read\EloquentOpenTabs;
+use Src\Infrastructure\Application\Write\EloquentTabRepository;
 
 class SrcServiceProvider extends ServiceProvider
 {
@@ -30,14 +43,13 @@ class SrcServiceProvider extends ServiceProvider
         return [self::class];
     }
 
-    public function boot(QueryResolverInterface $queryResolver)
-    {
-        $queryResolver->on(GetTodoList::class, ChefTodoListInterface::class);
-    }
-
     public function register()
     {
         $this->app->singleton(ContainerInterface::class, Container::class);
+
+        $this->app->singleton(EventBus::class);
+        $this->app->bind(EventResolverInterface::class, EventBus::class);
+        $this->app->bind(EventBusInterface::class, EventBus::class);
 
         $this->app->singleton(QueryBus::class);
         $this->app->bind(QueryResolverInterface::class, QueryBus::class);
@@ -50,5 +62,34 @@ class SrcServiceProvider extends ServiceProvider
 
         $this->app->singleton(ChefTodoListInterface::class, EloquentChefTodoList::class);
         $this->app->singleton(OpenTabsInterface::class, EloquentOpenTabs::class);
+
+        $this->app->singleton(TabRepositoryInterface::class, EloquentTabRepository::class);
+    }
+
+    public function boot(
+        QueryResolverInterface $queryResolver,
+        CommandResolverInterface $commandResolver,
+        EventResolverInterface $eventResolver,
+    )
+    {
+        $queryResolver
+            ->bindAll(OpenTabsInterface::class, [
+                GetActiveTableNumbers::class
+            ]);
+
+        $eventResolver
+            ->bindAll(OpenTabsInterface::class, [
+                TabOpened::class
+            ]);
+
+        $commandResolver
+            ->bindAll(TabHandler::class, [
+                OpenTab::class,
+                PlaceOrder::class,
+                MarkDrinksServed::class,
+                MarkFoodPrepared::class,
+                MarkFoodServed::class,
+                CloseTab::class
+            ]);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\MessageBus;
+namespace Codderz\Yoko\Layers\Infrastructure\EventBus;
 
-interface MessageResolverInterface
+interface EventResolverInterface
 {
     public function bind($handler, string $message): self;
 

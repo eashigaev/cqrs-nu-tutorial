@@ -1,8 +1,10 @@
 <?php
 
-namespace Tests\Integration;
+namespace Tests\Integration\UseCases;
 
+use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusTestTrait;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusTestTrait;
+use Codderz\Yoko\Layers\Infrastructure\Container\ContainerTestTrait;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\FixtureTestTrait;
 use Tests\TestCase as BaseTestCase;
@@ -10,8 +12,10 @@ use Tests\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     use DatabaseMigrations,
+        ContainerTestTrait,
         FixtureTestTrait,
-        CommandBusTestTrait;
+        CommandBusTestTrait,
+        QueryBusTestTrait;
 
     public function setUp(): void
     {

@@ -18,7 +18,7 @@ class PlaceOrderTest extends TestCase
         $aggregate = TabAggregate::fromEvents([
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
-            ->handle(
+            ->placeOrder(
                 PlaceOrder::of($this->aTabId, Collection::of([$this->drink1, $this->drink2]))
             );
 
@@ -32,7 +32,7 @@ class PlaceOrderTest extends TestCase
         $aggregate = TabAggregate::fromEvents([
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
-            ->handle(
+            ->placeOrder(
                 PlaceOrder::of($this->aTabId, Collection::of([$this->food1, $this->food2]))
             );
 
@@ -46,7 +46,7 @@ class PlaceOrderTest extends TestCase
         $aggregate = TabAggregate::fromEvents([
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter)
         ])
-            ->handle(
+            ->placeOrder(
                 PlaceOrder::of($this->aTabId, Collection::of([$this->food1, $this->drink1]))
             );
 
@@ -61,7 +61,7 @@ class PlaceOrderTest extends TestCase
         $this->expectExceptionObject(TabNotOpen::new());
 
         TabAggregate::fromEvents()
-            ->handle(
+            ->placeOrder(
                 PlaceOrder::of($this->aTabId, Collection::of([$this->drink1]))
             );
     }
@@ -74,7 +74,7 @@ class PlaceOrderTest extends TestCase
             TabOpened::of($this->aTabId, $this->aTable, $this->aWaiter),
             TabClosed::of($this->aTabId, 0, 0, 0),
         ])
-            ->handle(
+            ->placeOrder(
                 PlaceOrder::of($this->aTabId, Collection::of([$this->drink1]))
             );
     }

@@ -3,7 +3,7 @@
 namespace Src\Infrastructure\Application\Read;
 
 use App\Models\Read\OpenTabsItemModel;
-use App\Models\Read\OpenTabsTabModel;
+use App\Models\Read\OpenTabsTabsModel;
 use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModel;
 use Codderz\Yoko\Layers\Domain\Guid;
 use Codderz\Yoko\Support\Collection;
@@ -30,7 +30,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
     /* @return Collection<int> */
     public function getActiveTableNumbers(GetActiveTableNumbers $query): Collection
     {
-        return OpenTabsTabModel::query()
+        return OpenTabsTabsModel::query()
             ->get()
             ->pipeInto(Collection::class)
             ->map(fn($item) => $item->table_number)
@@ -39,7 +39,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
 
     public function getInvoiceForTable(GetInvoiceForTable $query): TabInvoice
     {
-        $tab = OpenTabsTabModel::query()
+        $tab = OpenTabsTabsModel::query()
             ->with('items')
             ->where('table_number', $query->table)
             ->first();
@@ -63,7 +63,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
 
     public function getTabForTable(GetTabForTable $query): TabStatus
     {
-        $tab = OpenTabsTabModel::query()
+        $tab = OpenTabsTabsModel::query()
             ->with('items')
             ->where('table_number', $query->table)
             ->first();
@@ -93,7 +93,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
 
         $rejectEmptyTodoCallback = fn(Collection $tab, $table) => $tab->isEmpty();
 
-        return OpenTabsTabModel::query()
+        return OpenTabsTabsModel::query()
             ->with('items')
             ->where('waiter', $query->waiter)
             ->get()
@@ -121,7 +121,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
 
     public function applyTabOpened(TabOpened $event)
     {
-        OpenTabsTabModel::query()
+        OpenTabsTabsModel::query()
             ->insert([
                 'tab_id' => $event->id->value,
                 'table_number' => $event->tableNumber,
@@ -166,7 +166,7 @@ class EloquentOpenTabs extends ReadModel implements OpenTabsInterface
 
     public function applyTabClosed(TabClosed $event)
     {
-        OpenTabsTabModel::query()
+        OpenTabsTabsModel::query()
             ->where('tab_id', $event->id->value)
             ->limit(1)
             ->delete();

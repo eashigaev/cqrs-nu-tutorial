@@ -4,7 +4,7 @@ namespace Codderz\Yoko\Layers\Infrastructure\EventBus;
 
 interface EventBusInterface
 {
-    public function subscribe(string $eventType, string $handler);
+    public function publish($event);
 
     public function publishAll(array $events);
 }
