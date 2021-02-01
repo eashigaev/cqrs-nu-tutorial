@@ -6,7 +6,7 @@ use Codderz\Yoko\Support\Collection;
 use Illuminate\Database\QueryException;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
-use Src\Domain\Tab\Commands\CloseTab;
+use Src\Application\Read\OpenTabs\TabInvoice;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
 use Src\Domain\Tab\Commands\MarkFoodPrepared;
 use Src\Domain\Tab\Commands\MarkFoodServed;
@@ -25,7 +25,7 @@ class TabTest extends TestCase
         ]);
     }
 
-    public function testCanViewActiveTableNumbers()
+    public function testCanGetActiveTableNumbers()
     {
         $empty = $this->queryBus()->handle(GetActiveTableNumbers::of());
         $this->assertEquals(0, $empty->count());
@@ -39,19 +39,21 @@ class TabTest extends TestCase
         $this->assertEquals([$this->aTable, $this->bTable], $numbers->toArray());
     }
 
-    public function t1estCanViewTabInvoice()
+    public function testCanGetTabInvoice()
     {
         $this->handleCommands([
             OpenTab::of($this->aTabId, $this->aTable, $this->aWaiter),
             PlaceOrder::of($this->aTabId, Collection::of([$this->drink1, $this->food1])),
             MarkDrinksServed::of($this->aTabId, Collection::of([$this->drink1->menuNumber])),
             MarkFoodPrepared::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
-            MarkFoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber])),
-            CloseTab::of($this->aTabId, $this->drink1->price + $this->food1->price + 2)
+            MarkFoodServed::of($this->aTabId, Collection::of([$this->food1->menuNumber]))
         ]);
 
+        /** @var TabInvoice $invoice */
         $invoice = $this->queryBus()->handle(GetInvoiceForTable::of($this->aTable));
 
-        dd($invoice);
+        $this->assertEquals(2, $invoice->items->count());
+        $this->assertEquals(false, $invoice->hasUnservedItems);
+        $this->assertEquals($this->drink1->price + $this->food1->price, $invoice->total);
     }
 }

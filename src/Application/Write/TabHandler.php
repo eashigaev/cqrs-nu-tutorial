@@ -2,8 +2,11 @@
 
 namespace Src\Application\Write;
 
-use App\Models\Write\TabAggregateModel;
 use Codderz\Yoko\Layers\Infrastructure\EventBus\EventBusInterface;
+use Src\Domain\Tab\Commands\CloseTab;
+use Src\Domain\Tab\Commands\MarkDrinksServed;
+use Src\Domain\Tab\Commands\MarkFoodPrepared;
+use Src\Domain\Tab\Commands\MarkFoodServed;
 use Src\Domain\Tab\Commands\OpenTab;
 use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\TabAggregate;
@@ -31,7 +34,39 @@ class TabHandler
     {
         $tab = $this->tabRepository->ofId($command->id);
         $tab->placeOrder($command);
-        dd(TabAggregateModel::all()->toArray());
         $this->tabRepository->save($tab);
+        $this->eventBus->publishAll($tab->releaseEvents());
+    }
+
+    public function markDrinksServed(MarkDrinksServed $command)
+    {
+        $tab = $this->tabRepository->ofId($command->id);
+        $tab->markDrinksServed($command);
+        $this->tabRepository->save($tab);
+        $this->eventBus->publishAll($tab->releaseEvents());
+    }
+
+    public function markFoodPrepared(MarkFoodPrepared $command)
+    {
+        $tab = $this->tabRepository->ofId($command->id);
+        $tab->markFoodPrepared($command);
+        $this->tabRepository->save($tab);
+        $this->eventBus->publishAll($tab->releaseEvents());
+    }
+
+    public function markFoodServed(MarkFoodServed $command)
+    {
+        $tab = $this->tabRepository->ofId($command->id);
+        $tab->markFoodServed($command);
+        $this->tabRepository->save($tab);
+        $this->eventBus->publishAll($tab->releaseEvents());
+    }
+
+    public function closeTab(CloseTab $command)
+    {
+        $tab = $this->tabRepository->ofId($command->id);
+        $tab->closeTab($command);
+        $this->tabRepository->save($tab);
+        $this->eventBus->publishAll($tab->releaseEvents());
     }
 }

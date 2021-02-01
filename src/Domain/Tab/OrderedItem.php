@@ -2,7 +2,9 @@
 
 namespace Src\Domain\Tab;
 
-class OrderedItem
+use Codderz\Yoko\Contracts\ArrayableInterface;
+
+class OrderedItem implements ArrayableInterface
 {
     public int $menuNumber;
     public string $description;
@@ -19,13 +21,23 @@ class OrderedItem
         return $self;
     }
 
-    public static function ofArray(array $arr)
+    public static function fromArray(array $array)
     {
         return self::of(
-            $arr['menuNumber'],
-            $arr['description'],
-            $arr['isDrink'],
-            $arr['price']
+            $array['menuNumber'],
+            $array['description'],
+            $array['isDrink'],
+            $array['price']
         );
+    }
+
+    public function toArray()
+    {
+        return [
+            'menuNumber' => $this->menuNumber,
+            'description' => $this->description,
+            'isDrink' => $this->isDrink,
+            'price' => $this->price
+        ];
     }
 }

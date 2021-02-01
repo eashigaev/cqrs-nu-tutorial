@@ -23,6 +23,7 @@ use Illuminate\Support\ServiceProvider;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
+use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
 use Src\Application\Write\TabHandler;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -30,6 +31,12 @@ use Src\Domain\Tab\Commands\MarkFoodPrepared;
 use Src\Domain\Tab\Commands\MarkFoodServed;
 use Src\Domain\Tab\Commands\OpenTab;
 use Src\Domain\Tab\Commands\PlaceOrder;
+use Src\Domain\Tab\Events\DrinksOrdered;
+use Src\Domain\Tab\Events\DrinksServed;
+use Src\Domain\Tab\Events\FoodOrdered;
+use Src\Domain\Tab\Events\FoodPrepared;
+use Src\Domain\Tab\Events\FoodServed;
+use Src\Domain\Tab\Events\TabClosed;
 use Src\Domain\Tab\Events\TabOpened;
 use Src\Domain\Tab\TabRepositoryInterface;
 use Src\Infrastructure\Application\Read\EloquentChefTodoList;
@@ -69,17 +76,24 @@ class SrcServiceProvider extends ServiceProvider
     public function boot(
         QueryResolverInterface $queryResolver,
         CommandResolverInterface $commandResolver,
-        EventResolverInterface $eventResolver,
+        EventResolverInterface $eventResolver
     )
     {
         $queryResolver
             ->bindAll(OpenTabsInterface::class, [
-                GetActiveTableNumbers::class
+                GetActiveTableNumbers::class,
+                GetInvoiceForTable::class
             ]);
 
         $eventResolver
             ->bindAll(OpenTabsInterface::class, [
-                TabOpened::class
+                TabOpened::class,
+                DrinksOrdered::class,
+                FoodOrdered::class,
+                DrinksServed::class,
+                FoodServed::class,
+                FoodPrepared::class,
+                TabClosed::class
             ]);
 
         $commandResolver

@@ -204,14 +204,16 @@ class TabAggregate extends Aggregate
 
     public static function fromArray(array $array)
     {
+        $toOrderedItem = fn($item) => OrderedItem::fromArray($item);
+
         $self = new self();
         $self->id = Guid::of($array['id']);
         $self->table = $array['table'];
         $self->open = $array['open'];
         $self->servedItemsValue = $array['served_items_value'];
-        $self->outstandingDrinks = Collection::of($array['outstanding_drinks'])->mapInto(OrderedItem::class);
-        $self->outstandingFood = Collection::of($array['outstanding_food'])->mapInto(OrderedItem::class);
-        $self->preparedFood = Collection::of($array['prepared_food'])->mapInto(OrderedItem::class);
+        $self->outstandingDrinks = Collection::of($array['outstanding_drinks'])->map($toOrderedItem);
+        $self->outstandingFood = Collection::of($array['outstanding_food'])->map($toOrderedItem);
+        $self->preparedFood = Collection::of($array['prepared_food'])->map($toOrderedItem);
         return $self;
     }
 

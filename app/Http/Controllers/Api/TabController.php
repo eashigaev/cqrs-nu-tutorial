@@ -50,7 +50,7 @@ class TabController extends Controller
     {
         $orderedItems = StaticData::products()
             ->whereIn('menuNumber', $request->menuNumbers)
-            ->map(fn($item) => OrderedItem::ofArray($item));
+            ->map(fn($item) => OrderedItem::fromArray($item));
 
         $command = PlaceOrder::of(
             Guid::of($request->tabId),

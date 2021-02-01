@@ -36,7 +36,7 @@ class TabControllerTest extends TestCase
     {
         $orderedItems = StaticData::products()
             ->take(2)
-            ->map(fn($item) => OrderedItem::ofArray($item));
+            ->map(fn($item) => OrderedItem::fromArray($item));
 
         $this
             ->mockCommandBus()

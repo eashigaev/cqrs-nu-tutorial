@@ -13,10 +13,10 @@ class EloquentTabRepository implements TabRepositoryInterface
     {
         $model = TabAggregateModel::find($id->value);
 
-        $aggregate = json_decode($model->aggregate, true);
-
         return $model
-            ? TabAggregate::fromArray($aggregate)
+            ? TabAggregate::fromArray(
+                json_decode($model->aggregate, true)
+            )
             : null;
     }
 
@@ -26,6 +26,7 @@ class EloquentTabRepository implements TabRepositoryInterface
             ->updateOrInsert([
                 'id' => $aggregate->id->value,
                 'table' => $aggregate->table,
+            ], [
                 'aggregate' => json_encode($aggregate->toArray())
             ]);
     }
