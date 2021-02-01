@@ -3,15 +3,10 @@
 namespace Src;
 
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBus;
-use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusHandler;
-use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusHandlerInterface;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
-use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryResolver;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryResolverInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBus;
-use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusHandlerInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusInterface;
-use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandResolver;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandResolverInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\QueueCommandBus;
 use Codderz\Yoko\Layers\Infrastructure\Container\Container;
