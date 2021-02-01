@@ -23,6 +23,7 @@ use Src\Domain\Tab\Exceptions\FoodAlreadyPrepared;
 use Src\Domain\Tab\Exceptions\FoodNotOutstanding;
 use Src\Domain\Tab\Exceptions\PaymentNotEnough;
 use Src\Domain\Tab\Exceptions\TabHasOutstandingItems;
+use Src\Domain\Tab\Exceptions\TableAlreadyOpened;
 use Src\Domain\Tab\Exceptions\TabNotOpen;
 
 class TabAggregate extends Aggregate
@@ -40,8 +41,12 @@ class TabAggregate extends Aggregate
     /** @var Collection<OrderedItem> */
     public Collection $preparedFood;
 
-    public static function openTab(OpenTab $command)
+    public static function openTab(OpenTab $command, ?Collection $activeTableNumbers = null)
     {
+        if ($activeTableNumbers && $activeTableNumbers->contains($command->tableNumber)) {
+            throw TableAlreadyOpened::new();
+        }
+
         return (new self())->recordThat(
             TabOpened::of($command->id, $command->tableNumber, $command->waiter)
         );

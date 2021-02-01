@@ -15,7 +15,6 @@ class CreateTabAggregates extends Migration
     {
         Schema::create('write_tab_aggregates', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->integer('table')->unique();
             $table->json('aggregate');
             $table->timestamps();
         });

@@ -2,7 +2,9 @@
 
 namespace Src\Application\Write;
 
+use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
 use Codderz\Yoko\Layers\Infrastructure\EventBus\EventBusInterface;
+use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
 use Src\Domain\Tab\Commands\MarkFoodPrepared;
@@ -15,17 +17,25 @@ use Src\Domain\Tab\TabRepositoryInterface;
 class TabHandler
 {
     protected EventBusInterface $eventBus;
+    protected QueryBusInterface $queryBus;
     protected TabRepositoryInterface $tabRepository;
 
-    public function __construct(EventBusInterface $eventBus, TabRepositoryInterface $tabRepository)
+    public function __construct(
+        EventBusInterface $eventBus,
+        QueryBusInterface $queryBus,
+        TabRepositoryInterface $tabRepository
+    )
     {
         $this->eventBus = $eventBus;
+        $this->queryBus = $queryBus;
         $this->tabRepository = $tabRepository;
     }
 
     public function openTab(OpenTab $command)
     {
-        $tab = TabAggregate::openTab($command);
+        $activeTableNumbers = $this->queryBus->handle(GetActiveTableNumbers::of());
+
+        $tab = TabAggregate::openTab($command, $activeTableNumbers);
         $this->tabRepository->save($tab);
         $this->eventBus->publishAll($tab->releaseEvents());
     }

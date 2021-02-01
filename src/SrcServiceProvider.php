@@ -21,9 +21,12 @@ use Codderz\Yoko\Layers\Infrastructure\EventBus\EventBusInterface;
 use Codderz\Yoko\Layers\Infrastructure\EventBus\EventResolverInterface;
 use Illuminate\Support\ServiceProvider;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
+use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
+use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
+use Src\Application\Read\OpenTabs\Queries\GetTodoListForWaiter;
 use Src\Application\Write\TabHandler;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -82,7 +85,12 @@ class SrcServiceProvider extends ServiceProvider
         $queryResolver
             ->bindAll(OpenTabsInterface::class, [
                 GetActiveTableNumbers::class,
-                GetInvoiceForTable::class
+                GetInvoiceForTable::class,
+                GetTabForTable::class,
+                GetTodoListForWaiter::class
+            ])
+            ->bindAll(ChefTodoListInterface::class, [
+                GetTodoList::class,
             ]);
 
         $eventResolver
@@ -94,6 +102,10 @@ class SrcServiceProvider extends ServiceProvider
                 FoodServed::class,
                 FoodPrepared::class,
                 TabClosed::class
+            ])
+            ->bindAll(ChefTodoListInterface::class, [
+                FoodOrdered::class,
+                FoodPrepared::class,
             ]);
 
         $commandResolver

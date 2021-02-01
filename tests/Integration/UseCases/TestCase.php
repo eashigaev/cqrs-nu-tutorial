@@ -12,14 +12,8 @@ use Tests\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     use DatabaseMigrations,
-        ContainerTestTrait,
         FixtureTestTrait,
+        ContainerTestTrait,
         CommandBusTestTrait,
         QueryBusTestTrait;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->setUpFixture();
-    }
 }

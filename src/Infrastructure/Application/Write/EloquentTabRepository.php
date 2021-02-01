@@ -25,7 +25,6 @@ class EloquentTabRepository implements TabRepositoryInterface
         TabAggregateModel::query()
             ->updateOrInsert([
                 'id' => $aggregate->id->value,
-                'table' => $aggregate->table,
             ], [
                 'aggregate' => json_encode($aggregate->toArray())
             ]);

@@ -6,7 +6,7 @@ use Codderz\Yoko\Support\Collection;
 
 trait CommandBusTestTrait
 {
-    public function handleCommands(array $commands)
+    public function commandBatch(array $commands)
     {
         Collection::of($commands)
             ->each(fn($command) => $this->commandBus()->handle($command));
