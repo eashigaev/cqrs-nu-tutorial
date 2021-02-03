@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus;
+namespace Codderz\Yoko\Layers\Infrastructure\Messaging\Events\EventBus;
 
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
 use Codderz\Yoko\Layers\Infrastructure\Messaging\HandlerRegistryInterface;
@@ -31,14 +31,14 @@ class EventBus implements EventBusInterface, HandlerRegistryInterface
         return $this;
     }
 
-    public function publishAll(array $events)
+    public function applyAll(array $events)
     {
         foreach ($events as $event) {
-            $this->publish($event);
+            $this->apply($event);
         }
     }
 
-    public function publish($event)
+    public function apply($event)
     {
         foreach ($this->handlers as $handler) {
             $this

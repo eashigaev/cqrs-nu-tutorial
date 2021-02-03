@@ -3,9 +3,9 @@
 namespace Src\Application\Write;
 
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus\EventBusInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\HandleMessageInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\HandleMessageTrait;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\Events\EventBus\EventBusInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\Messages\MessageHandlerInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\Messages\MessageHandlerTrait;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -16,9 +16,9 @@ use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\TabAggregate;
 use Src\Domain\Tab\TabRepositoryInterface;
 
-class TabHandler implements HandleMessageInterface
+class TabHandler implements MessageHandlerInterface
 {
-    use HandleMessageTrait;
+    use MessageHandlerTrait;
 
     protected EventBusInterface $eventBus;
     protected QueryBusInterface $queryBus;
@@ -41,7 +41,7 @@ class TabHandler implements HandleMessageInterface
 
         $tab = TabAggregate::openTab($command, $activeTableNumbers);
         $this->tabRepository->save($tab);
-        $this->eventBus->publishAll($tab->releaseEvents());
+        $this->eventBus->applyAll($tab->releaseEvents());
     }
 
     public function placeOrder(PlaceOrder $command)
@@ -49,7 +49,7 @@ class TabHandler implements HandleMessageInterface
         $tab = $this->tabRepository->ofId($command->id);
         $tab->placeOrder($command);
         $this->tabRepository->save($tab);
-        $this->eventBus->publishAll($tab->releaseEvents());
+        $this->eventBus->applyAll($tab->releaseEvents());
     }
 
     public function markDrinksServed(MarkDrinksServed $command)
@@ -57,7 +57,7 @@ class TabHandler implements HandleMessageInterface
         $tab = $this->tabRepository->ofId($command->id);
         $tab->markDrinksServed($command);
         $this->tabRepository->save($tab);
-        $this->eventBus->publishAll($tab->releaseEvents());
+        $this->eventBus->applyAll($tab->releaseEvents());
     }
 
     public function markFoodPrepared(MarkFoodPrepared $command)
@@ -65,7 +65,7 @@ class TabHandler implements HandleMessageInterface
         $tab = $this->tabRepository->ofId($command->id);
         $tab->markFoodPrepared($command);
         $this->tabRepository->save($tab);
-        $this->eventBus->publishAll($tab->releaseEvents());
+        $this->eventBus->applyAll($tab->releaseEvents());
     }
 
     public function markFoodServed(MarkFoodServed $command)
@@ -73,7 +73,7 @@ class TabHandler implements HandleMessageInterface
         $tab = $this->tabRepository->ofId($command->id);
         $tab->markFoodServed($command);
         $this->tabRepository->save($tab);
-        $this->eventBus->publishAll($tab->releaseEvents());
+        $this->eventBus->applyAll($tab->releaseEvents());
     }
 
     public function closeTab(CloseTab $command)
@@ -81,6 +81,6 @@ class TabHandler implements HandleMessageInterface
         $tab = $this->tabRepository->ofId($command->id);
         $tab->closeTab($command);
         $this->tabRepository->save($tab);
-        $this->eventBus->publishAll($tab->releaseEvents());
+        $this->eventBus->applyAll($tab->releaseEvents());
     }
 }

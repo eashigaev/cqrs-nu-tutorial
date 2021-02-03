@@ -2,11 +2,11 @@
 
 namespace Codderz\Yoko\Layers\Domain\Aggregate;
 
-use Codderz\Yoko\Layers\Infrastructure\Messaging\ApplyEventsTrait;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\Events\EventHandlerTrait;
 
 class Aggregate implements AggregateInterface
 {
-    use ApplyEventsTrait;
+    use EventHandlerTrait;
 
     protected array $recordedEvents = [];
 

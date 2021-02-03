@@ -1,10 +1,10 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messaging;
+namespace Codderz\Yoko\Layers\Infrastructure\Messaging\Messages;
 
 use Codderz\Yoko\Support\Reflect;
 
-trait HandleMessageTrait
+trait MessageHandlerTrait
 {
     public function handle($message)
     {
@@ -14,6 +14,6 @@ trait HandleMessageTrait
             return $this->$method($message);
         }
 
-        throw HandleMessageException::new();
+        throw MessageNotHandled::new();
     }
 }

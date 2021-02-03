@@ -1,10 +1,10 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messaging;
+namespace Codderz\Yoko\Layers\Infrastructure\Messaging\Events;
 
 use Codderz\Yoko\Support\Reflect;
 
-trait ApplyEventsTrait
+trait EventHandlerTrait
 {
     public function apply($event)
     {

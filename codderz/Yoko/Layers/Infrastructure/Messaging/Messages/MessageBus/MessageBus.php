@@ -1,10 +1,10 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messaging\MessageBus;
+namespace Codderz\Yoko\Layers\Infrastructure\Messaging\Messages\MessageBus;
 
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\HandleMessageException;
 use Codderz\Yoko\Layers\Infrastructure\Messaging\HandlerRegistryInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\Messages\MessageNotHandled;
 
 class MessageBus implements MessageBusInterface, HandlerRegistryInterface
 {
@@ -40,7 +40,7 @@ class MessageBus implements MessageBusInterface, HandlerRegistryInterface
                     ->container
                     ->make($handler)
                     ->handle($message);
-            } catch (HandleMessageException $exception) {
+            } catch (MessageNotHandled $exception) {
                 continue;
             }
         }

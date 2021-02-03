@@ -2,14 +2,14 @@
 
 namespace Src\Application\Read\OpenTabs;
 
-use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModelInterface;
+use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModelHandlerInterface;
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
 use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
 use Src\Application\Read\OpenTabs\Queries\GetTodoListForWaiter;
 
-interface OpenTabsInterface extends ReadModelInterface
+interface OpenTabsInterface extends ReadModelHandlerInterface
 {
     /* @return Collection<int> */
     public function getActiveTableNumbers(GetActiveTableNumbers $query): Collection;
