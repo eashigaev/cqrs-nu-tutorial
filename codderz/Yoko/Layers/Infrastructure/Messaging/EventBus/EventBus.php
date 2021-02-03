@@ -3,7 +3,6 @@
 namespace Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus;
 
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\ApplyEventsInterface;
 use Codderz\Yoko\Layers\Infrastructure\Messaging\HandlerRegistryInterface;
 
 class EventBus implements EventBusInterface, HandlerRegistryInterface
@@ -42,11 +41,6 @@ class EventBus implements EventBusInterface, HandlerRegistryInterface
     public function publish($event)
     {
         foreach ($this->handlers as $handler) {
-
-            if (!is_subclass_of($handler, ApplyEventsInterface::class)) {
-                continue;
-            }
-
             $this
                 ->container
                 ->make($handler)

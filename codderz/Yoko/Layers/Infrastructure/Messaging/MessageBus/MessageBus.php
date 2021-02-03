@@ -4,7 +4,6 @@ namespace Codderz\Yoko\Layers\Infrastructure\Messaging\MessageBus;
 
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
 use Codderz\Yoko\Layers\Infrastructure\Messaging\HandleMessageException;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\HandleMessageInterface;
 use Codderz\Yoko\Layers\Infrastructure\Messaging\HandlerRegistryInterface;
 
 class MessageBus implements MessageBusInterface, HandlerRegistryInterface
@@ -36,11 +35,6 @@ class MessageBus implements MessageBusInterface, HandlerRegistryInterface
     public function handle($message)
     {
         foreach ($this->handlers as $handler) {
-
-            if (!is_subclass_of($handler, HandleMessageInterface::class)) {
-                continue;
-            }
-
             try {
                 return $this
                     ->container
