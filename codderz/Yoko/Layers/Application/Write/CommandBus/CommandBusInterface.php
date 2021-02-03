@@ -2,7 +2,8 @@
 
 namespace Codderz\Yoko\Layers\Application\Write\CommandBus;
 
-interface CommandBusInterface
+use Codderz\Yoko\Layers\Infrastructure\Messaging\MessageBus\MessageBusInterface;
+
+interface CommandBusInterface extends MessageBusInterface
 {
-    public function handle($message);
 }
