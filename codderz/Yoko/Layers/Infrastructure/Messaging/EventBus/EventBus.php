@@ -4,8 +4,9 @@ namespace Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus;
 
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
 use Codderz\Yoko\Layers\Infrastructure\Messaging\ApplyEventsInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\HandlerRegistryInterface;
 
-class EventBus implements EventBusInterface, EventHandlerRegistryInterface
+class EventBus implements EventBusInterface, HandlerRegistryInterface
 {
     protected ContainerInterface $container;
     protected $handlers = [];

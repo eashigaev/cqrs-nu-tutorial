@@ -4,6 +4,8 @@ namespace Src\Application\Write;
 
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
 use Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus\EventBusInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\HandleMessageInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\HandleMessageTrait;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -14,8 +16,10 @@ use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\TabAggregate;
 use Src\Domain\Tab\TabRepositoryInterface;
 
-class TabHandler
+class TabHandler implements HandleMessageInterface
 {
+    use HandleMessageTrait;
+
     protected EventBusInterface $eventBus;
     protected QueryBusInterface $queryBus;
     protected TabRepositoryInterface $tabRepository;

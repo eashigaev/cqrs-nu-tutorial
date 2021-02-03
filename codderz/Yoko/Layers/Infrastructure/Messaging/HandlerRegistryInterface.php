@@ -1,8 +1,8 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus;
+namespace Codderz\Yoko\Layers\Infrastructure\Messaging;
 
-interface EventHandlerRegistryInterface
+interface HandlerRegistryInterface
 {
     public function register(string $handler): self;
 

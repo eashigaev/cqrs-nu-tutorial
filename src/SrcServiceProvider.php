@@ -4,7 +4,6 @@ namespace Src;
 
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBus;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
-use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryResolverInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBus;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandBusInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandResolverInterface;
@@ -13,22 +12,10 @@ use Codderz\Yoko\Layers\Infrastructure\Container\Container;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
 use Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus\EventBus;
 use Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus\EventBusInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus\EventHandlerRegistryInterface;
 use Illuminate\Support\ServiceProvider;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
-use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
-use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
-use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
-use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
-use Src\Application\Read\OpenTabs\Queries\GetTodoListForWaiter;
 use Src\Application\Write\TabHandler;
-use Src\Domain\Tab\Commands\CloseTab;
-use Src\Domain\Tab\Commands\MarkDrinksServed;
-use Src\Domain\Tab\Commands\MarkFoodPrepared;
-use Src\Domain\Tab\Commands\MarkFoodServed;
-use Src\Domain\Tab\Commands\OpenTab;
-use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\TabRepositoryInterface;
 use Src\Infrastructure\Application\Read\EloquentChefTodoList;
 use Src\Infrastructure\Application\Read\EloquentOpenTabs;
@@ -46,15 +33,12 @@ class SrcServiceProvider extends ServiceProvider
         $this->app->singleton(ContainerInterface::class, Container::class);
 
         $this->app->singleton(EventBus::class);
-        $this->app->bind(EventHandlerRegistryInterface::class, EventBus::class);
         $this->app->bind(EventBusInterface::class, EventBus::class);
 
         $this->app->singleton(QueryBus::class);
-        $this->app->bind(QueryResolverInterface::class, QueryBus::class);
         $this->app->bind(QueryBusInterface::class, QueryBus::class);
 
         $this->app->singleton(CommandBus::class);
-        $this->app->bind(CommandResolverInterface::class, CommandBus::class);
         $this->app->bind(CommandBusInterface::class, QueueCommandBus::class);
         $this->app->when(QueueCommandBus::class)->needs(CommandBusInterface::class)->give(CommandBus::class);
 
@@ -64,35 +48,17 @@ class SrcServiceProvider extends ServiceProvider
         $this->app->singleton(TabRepositoryInterface::class, EloquentTabRepository::class);
     }
 
-    public function boot(
-        QueryResolverInterface $queryResolver,
-        CommandResolverInterface $commandResolver,
-        EventHandlerRegistryInterface $eventResolver
-    )
+    public function boot(EventBus $eventBus, QueryBus $queryBus, CommandBus $commandBus)
     {
-        $queryResolver
-            ->bindAll(OpenTabsInterface::class, [
-                GetActiveTableNumbers::class,
-                GetInvoiceForTable::class,
-                GetTabForTable::class,
-                GetTodoListForWaiter::class
-            ])
-            ->bindAll(ChefTodoListInterface::class, [
-                GetTodoList::class,
-            ]);
-
-        $eventResolver
+        $queryBus
             ->register(OpenTabsInterface::class)
             ->register(ChefTodoListInterface::class);
 
-        $commandResolver
-            ->bindAll(TabHandler::class, [
-                OpenTab::class,
-                PlaceOrder::class,
-                MarkDrinksServed::class,
-                MarkFoodPrepared::class,
-                MarkFoodServed::class,
-                CloseTab::class
-            ]);
+        $eventBus
+            ->register(OpenTabsInterface::class)
+            ->register(ChefTodoListInterface::class);
+
+        $commandBus
+            ->register(TabHandler::class);
     }
 }
