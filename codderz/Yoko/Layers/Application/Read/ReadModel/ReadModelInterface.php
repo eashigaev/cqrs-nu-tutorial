@@ -2,9 +2,8 @@
 
 namespace Codderz\Yoko\Layers\Application\Read\ReadModel;
 
-interface ReadModelInterface
-{
-    public function apply($event);
+use Codderz\Yoko\Layers\Infrastructure\Messaging\ApplyEventsInterface;
 
-    public function withEvents(array $events = []);
+interface ReadModelInterface extends ApplyEventsInterface
+{
 }

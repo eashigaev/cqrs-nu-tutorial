@@ -3,7 +3,7 @@
 namespace Src\Application\Write;
 
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
-use Codderz\Yoko\Layers\Infrastructure\EventBus\EventBusInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus\EventBusInterface;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;

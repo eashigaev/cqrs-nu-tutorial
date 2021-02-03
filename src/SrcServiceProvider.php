@@ -11,9 +11,9 @@ use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandResolverInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\QueueCommandBus;
 use Codderz\Yoko\Layers\Infrastructure\Container\Container;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
-use Codderz\Yoko\Layers\Infrastructure\EventBus\EventBus;
-use Codderz\Yoko\Layers\Infrastructure\EventBus\EventBusInterface;
-use Codderz\Yoko\Layers\Infrastructure\EventBus\EventResolverInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus\EventBus;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus\EventBusInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messaging\EventBus\EventHandlerRegistryInterface;
 use Illuminate\Support\ServiceProvider;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
@@ -29,13 +29,6 @@ use Src\Domain\Tab\Commands\MarkFoodPrepared;
 use Src\Domain\Tab\Commands\MarkFoodServed;
 use Src\Domain\Tab\Commands\OpenTab;
 use Src\Domain\Tab\Commands\PlaceOrder;
-use Src\Domain\Tab\Events\DrinksOrdered;
-use Src\Domain\Tab\Events\DrinksServed;
-use Src\Domain\Tab\Events\FoodOrdered;
-use Src\Domain\Tab\Events\FoodPrepared;
-use Src\Domain\Tab\Events\FoodServed;
-use Src\Domain\Tab\Events\TabClosed;
-use Src\Domain\Tab\Events\TabOpened;
 use Src\Domain\Tab\TabRepositoryInterface;
 use Src\Infrastructure\Application\Read\EloquentChefTodoList;
 use Src\Infrastructure\Application\Read\EloquentOpenTabs;
@@ -53,7 +46,7 @@ class SrcServiceProvider extends ServiceProvider
         $this->app->singleton(ContainerInterface::class, Container::class);
 
         $this->app->singleton(EventBus::class);
-        $this->app->bind(EventResolverInterface::class, EventBus::class);
+        $this->app->bind(EventHandlerRegistryInterface::class, EventBus::class);
         $this->app->bind(EventBusInterface::class, EventBus::class);
 
         $this->app->singleton(QueryBus::class);
@@ -74,7 +67,7 @@ class SrcServiceProvider extends ServiceProvider
     public function boot(
         QueryResolverInterface $queryResolver,
         CommandResolverInterface $commandResolver,
-        EventResolverInterface $eventResolver
+        EventHandlerRegistryInterface $eventResolver
     )
     {
         $queryResolver
@@ -89,19 +82,8 @@ class SrcServiceProvider extends ServiceProvider
             ]);
 
         $eventResolver
-            ->bindAll(OpenTabsInterface::class, [
-                TabOpened::class,
-                DrinksOrdered::class,
-                FoodOrdered::class,
-                DrinksServed::class,
-                FoodServed::class,
-                FoodPrepared::class,
-                TabClosed::class
-            ])
-            ->bindAll(ChefTodoListInterface::class, [
-                FoodOrdered::class,
-                FoodPrepared::class,
-            ]);
+            ->register(OpenTabsInterface::class)
+            ->register(ChefTodoListInterface::class);
 
         $commandResolver
             ->bindAll(TabHandler::class, [

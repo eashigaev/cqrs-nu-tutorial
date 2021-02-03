@@ -27,6 +27,6 @@ abstract class TestCase extends BaseTestCase
         return $this
             ->container()
             ->make(ChefTodoListInterface::class)
-            ->withEvents($events);
+            ->applyAll($events);
     }
 }
