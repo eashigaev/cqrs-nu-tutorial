@@ -4,6 +4,8 @@ namespace Src\Infrastructure\Application\Read;
 
 use App\Models\Read\ChefTodoListModel;
 use Codderz\Yoko\Layers\Domain\Guid;
+use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\ActionHandlerTrait;
+use Codderz\Yoko\Layers\Infrastructure\Messenger\Events\EventHandlerTrait;
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\ChefTodoList\ChefTodoList;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
@@ -14,10 +16,12 @@ use Src\Domain\Tab\Events\FoodOrdered;
 use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\OrderedItem;
 
-class EloquentChefTodoList extends ChefTodoList implements ChefTodoListInterface
+class EloquentChefTodoList implements ChefTodoListInterface
 {
-    public
-    function getTodoList(GetTodoList $query): Collection
+    use ActionHandlerTrait;
+    use EventHandlerTrait;
+
+    public function getTodoList(GetTodoList $query): Collection
     {
         return ChefTodoListModel::query()
             ->orderBy('id')
@@ -30,8 +34,7 @@ class EloquentChefTodoList extends ChefTodoList implements ChefTodoListInterface
 
     //
 
-    public
-    function mapItemCallback()
+    public function mapItemCallback()
     {
         return fn($item) => TodoListItem::of(
             $item->menu_number,
@@ -39,8 +42,7 @@ class EloquentChefTodoList extends ChefTodoList implements ChefTodoListInterface
         );
     }
 
-    public
-    function mapGroupCallback()
+    public function mapGroupCallback()
     {
         return fn($group) => TodoListGroup::of(
             Guid::of($group[0]->tab_id),
@@ -50,8 +52,7 @@ class EloquentChefTodoList extends ChefTodoList implements ChefTodoListInterface
 
     //
 
-    public
-    function applyFoodOrdered(FoodOrdered $event)
+    public function applyFoodOrdered(FoodOrdered $event)
     {
         $groupId = Guid::uuid();
 
@@ -66,8 +67,7 @@ class EloquentChefTodoList extends ChefTodoList implements ChefTodoListInterface
         $event->items->each($createItem);
     }
 
-    public
-    function applyFoodPrepared(FoodPrepared $event)
+    public function applyFoodPrepared(FoodPrepared $event)
     {
         ChefTodoListModel::query()
             ->where('tab_id', $event->id->value)

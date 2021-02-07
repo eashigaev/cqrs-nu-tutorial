@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Events;
+namespace Codderz\Yoko\Layers\Infrastructure\Messenger\Events;
 
 use Codderz\Yoko\Support\Reflect;
 

@@ -29,8 +29,8 @@
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Login</a>
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
+                        @if (Route::has('getHandlers'))
+                            <a href="{{ route('getHandlers') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
                         @endif
                     @endauth
                 </div>
@@ -68,7 +68,7 @@
 
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
+                                    Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the dispatch.
                                 </div>
                             </div>
                         </div>

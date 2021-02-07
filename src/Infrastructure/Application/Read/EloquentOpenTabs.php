@@ -5,6 +5,8 @@ namespace Src\Infrastructure\Application\Read;
 use App\Models\Read\OpenTabsItemModel;
 use App\Models\Read\OpenTabsTabsModel;
 use Codderz\Yoko\Layers\Domain\Guid;
+use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\ActionHandlerTrait;
+use Codderz\Yoko\Layers\Infrastructure\Messenger\Events\EventHandlerTrait;
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\OpenTabs\Exceptions\OpenTabNotFound;
 use Src\Application\Read\OpenTabs\OpenTabs;
@@ -25,8 +27,11 @@ use Src\Domain\Tab\Events\TabClosed;
 use Src\Domain\Tab\Events\TabOpened;
 use Src\Domain\Tab\OrderedItem;
 
-class EloquentOpenTabs extends OpenTabs implements OpenTabsInterface
+class EloquentOpenTabs implements OpenTabsInterface
 {
+    use ActionHandlerTrait;
+    use EventHandlerTrait;
+
     /* @return Collection<int> */
     public function getActiveTableNumbers(GetActiveTableNumbers $query): Collection
     {

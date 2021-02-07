@@ -1,10 +1,11 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Messages;
+namespace Codderz\Yoko\Layers\Infrastructure\Messenger\Actions;
 
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\NotDispatched;
 use Codderz\Yoko\Support\Reflect;
 
-trait MessageHandlerTrait
+trait ActionHandlerTrait
 {
     public function handle($message)
     {
@@ -14,6 +15,6 @@ trait MessageHandlerTrait
             return $this->$method($message);
         }
 
-        throw MessageNotHandled::new();
+        throw NotDispatched::new();
     }
 }

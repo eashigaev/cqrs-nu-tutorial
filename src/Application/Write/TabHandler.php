@@ -2,10 +2,10 @@
 
 namespace Src\Application\Write;
 
+use Codderz\Yoko\Layers\Application\Events\EventEmitter\EventEmitterInterface;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Events\EventEmitter\EventEmitterInterface;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Messages\MessageHandlerInterface;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Messages\MessageHandlerTrait;
+use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\ActionHandlerInterface;
+use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\ActionHandlerTrait;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -16,9 +16,9 @@ use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\TabAggregate;
 use Src\Domain\Tab\TabRepositoryInterface;
 
-class TabHandler implements MessageHandlerInterface
+class TabHandler implements ActionHandlerInterface
 {
-    use MessageHandlerTrait;
+    use ActionHandlerTrait;
 
     protected EventEmitterInterface $eventEmitter;
     protected QueryBusInterface $queryBus;
@@ -82,10 +82,5 @@ class TabHandler implements MessageHandlerInterface
         $tab->closeTab($command);
         $this->tabRepository->save($tab);
         $this->eventEmitter->emitAll($tab->releaseEvents());
-    }
-
-    public static function getHandledMessages(): array
-    {
-        // TODO: Implement getHandledMessages() method.
     }
 }

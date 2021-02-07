@@ -2,8 +2,8 @@
 
 namespace Codderz\Yoko\Layers\Application\Write\CommandBus;
 
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Messages\MessageBus\MessageBusInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Bus\BusInterface;
 
-interface CommandBusInterface extends MessageBusInterface
+interface CommandBusInterface extends BusInterface
 {
 }

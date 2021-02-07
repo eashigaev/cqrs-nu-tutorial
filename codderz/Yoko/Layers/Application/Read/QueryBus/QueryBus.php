@@ -2,8 +2,20 @@
 
 namespace Codderz\Yoko\Layers\Application\Read\QueryBus;
 
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Messages\MessageBus\MessageBus;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Bus\BusDispatcher;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\DispatcherInterface;
 
-class QueryBus extends MessageBus implements QueryBusInterface
+class QueryBus implements QueryBusInterface
 {
+    protected DispatcherInterface $dispatcher;
+
+    public function __construct(BusDispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+    }
+
+    public function handle($message)
+    {
+        return $this->dispatcher->dispatch($message);
+    }
 }
