@@ -6,6 +6,7 @@ use App\Models\Read\ChefTodoListModel;
 use Codderz\Yoko\Layers\Domain\Guid;
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\ChefTodoList\ChefTodoList;
+use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Application\Read\ChefTodoList\TodoListGroup;
 use Src\Application\Read\ChefTodoList\TodoListItem;
@@ -13,9 +14,10 @@ use Src\Domain\Tab\Events\FoodOrdered;
 use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\OrderedItem;
 
-class EloquentChefTodoList extends ChefTodoList
+class EloquentChefTodoList extends ChefTodoList implements ChefTodoListInterface
 {
-    public function getTodoList(GetTodoList $query): Collection
+    public
+    function getTodoList(GetTodoList $query): Collection
     {
         return ChefTodoListModel::query()
             ->orderBy('id')
@@ -28,7 +30,8 @@ class EloquentChefTodoList extends ChefTodoList
 
     //
 
-    public function mapItemCallback()
+    public
+    function mapItemCallback()
     {
         return fn($item) => TodoListItem::of(
             $item->menu_number,
@@ -36,7 +39,8 @@ class EloquentChefTodoList extends ChefTodoList
         );
     }
 
-    public function mapGroupCallback()
+    public
+    function mapGroupCallback()
     {
         return fn($group) => TodoListGroup::of(
             Guid::of($group[0]->tab_id),
@@ -46,7 +50,8 @@ class EloquentChefTodoList extends ChefTodoList
 
     //
 
-    public function applyFoodOrdered(FoodOrdered $event)
+    public
+    function applyFoodOrdered(FoodOrdered $event)
     {
         $groupId = Guid::uuid();
 
@@ -61,7 +66,8 @@ class EloquentChefTodoList extends ChefTodoList
         $event->items->each($createItem);
     }
 
-    public function applyFoodPrepared(FoodPrepared $event)
+    public
+    function applyFoodPrepared(FoodPrepared $event)
     {
         ChefTodoListModel::query()
             ->where('tab_id', $event->id->value)

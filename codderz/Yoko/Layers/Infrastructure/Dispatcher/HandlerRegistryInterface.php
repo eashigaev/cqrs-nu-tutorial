@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messaging;
+namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher;
 
 interface HandlerRegistryInterface
 {

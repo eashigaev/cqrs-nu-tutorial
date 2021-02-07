@@ -8,6 +8,7 @@ use Codderz\Yoko\Layers\Domain\Guid;
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\OpenTabs\Exceptions\OpenTabNotFound;
 use Src\Application\Read\OpenTabs\OpenTabs;
+use Src\Application\Read\OpenTabs\OpenTabsInterface;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
 use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
@@ -24,7 +25,7 @@ use Src\Domain\Tab\Events\TabClosed;
 use Src\Domain\Tab\Events\TabOpened;
 use Src\Domain\Tab\OrderedItem;
 
-class EloquentOpenTabs extends OpenTabs
+class EloquentOpenTabs extends OpenTabs implements OpenTabsInterface
 {
     /* @return Collection<int> */
     public function getActiveTableNumbers(GetActiveTableNumbers $query): Collection

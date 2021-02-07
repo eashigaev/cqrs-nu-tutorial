@@ -1,10 +1,10 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messaging\Messages\MessageBus;
+namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Messages\MessageBus;
 
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\HandlerRegistryInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\Messages\MessageNotHandled;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\HandlerRegistryInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Messages\MessageNotHandled;
 
 class MessageBus implements MessageBusInterface, HandlerRegistryInterface
 {

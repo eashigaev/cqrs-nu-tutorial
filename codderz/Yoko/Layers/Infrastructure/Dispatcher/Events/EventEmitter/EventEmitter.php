@@ -1,11 +1,11 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messaging\Events\EventBus;
+namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Events\EventEmitter;
 
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\HandlerRegistryInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\HandlerRegistryInterface;
 
-class EventBus implements EventBusInterface, HandlerRegistryInterface
+class EventEmitter implements EventEmitterInterface, HandlerRegistryInterface
 {
     protected ContainerInterface $container;
     protected $handlers = [];
@@ -31,14 +31,14 @@ class EventBus implements EventBusInterface, HandlerRegistryInterface
         return $this;
     }
 
-    public function applyAll(array $events)
+    public function emitAll(array $events)
     {
         foreach ($events as $event) {
-            $this->apply($event);
+            $this->emit($event);
         }
     }
 
-    public function apply($event)
+    public function emit($event)
     {
         foreach ($this->handlers as $handler) {
             $this

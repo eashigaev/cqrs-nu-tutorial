@@ -10,8 +10,8 @@ use Codderz\Yoko\Layers\Application\Write\CommandBus\CommandResolverInterface;
 use Codderz\Yoko\Layers\Application\Write\CommandBus\QueueCommandBus;
 use Codderz\Yoko\Layers\Infrastructure\Container\Container;
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\Events\EventBus\EventBus;
-use Codderz\Yoko\Layers\Infrastructure\Messaging\Events\EventBus\EventBusInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Events\EventEmitter\EventEmitter;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Events\EventEmitter\EventEmitterInterface;
 use Illuminate\Support\ServiceProvider;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\OpenTabs\OpenTabsInterface;
@@ -32,8 +32,8 @@ class SrcServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ContainerInterface::class, Container::class);
 
-        $this->app->singleton(EventBus::class);
-        $this->app->bind(EventBusInterface::class, EventBus::class);
+        $this->app->singleton(EventEmitter::class);
+        $this->app->bind(EventEmitterInterface::class, EventEmitter::class);
 
         $this->app->singleton(QueryBus::class);
         $this->app->bind(QueryBusInterface::class, QueryBus::class);
@@ -48,13 +48,13 @@ class SrcServiceProvider extends ServiceProvider
         $this->app->singleton(TabRepositoryInterface::class, EloquentTabRepository::class);
     }
 
-    public function boot(EventBus $eventBus, QueryBus $queryBus, CommandBus $commandBus)
+    public function boot(EventEmitter $eventEmitter, QueryBus $queryBus, CommandBus $commandBus)
     {
         $queryBus
             ->register(OpenTabsInterface::class)
             ->register(ChefTodoListInterface::class);
 
-        $eventBus
+        $eventEmitter
             ->register(OpenTabsInterface::class)
             ->register(ChefTodoListInterface::class);
 

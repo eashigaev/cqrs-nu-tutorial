@@ -2,9 +2,17 @@
 
 namespace Src\Application\Read\OpenTabs;
 
-use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModelTrait;
+use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModel;
 
-abstract class OpenTabs implements OpenTabsInterface
+class OpenTabs extends ReadModel
 {
-    use ReadModelTrait;
+    public static function getHandledEvents(): array
+    {
+        // TODO: Implement getHandledEvents() method.
+    }
+
+    public static function getHandledMessages(): array
+    {
+        // TODO: Implement getHandledMessages() method.
+    }
 }

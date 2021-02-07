@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messaging\Messages;
+namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Messages;
 
 use Codderz\Yoko\CommonException;
 
