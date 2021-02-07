@@ -4,11 +4,10 @@ namespace Src\Infrastructure\Application\Read;
 
 use App\Models\Read\OpenTabsItemModel;
 use App\Models\Read\OpenTabsTabsModel;
-use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModelTrait;
 use Codderz\Yoko\Layers\Domain\Guid;
 use Codderz\Yoko\Support\Collection;
 use Src\Application\Read\OpenTabs\Exceptions\OpenTabNotFound;
-use Src\Application\Read\OpenTabs\OpenTabsInterface;
+use Src\Application\Read\OpenTabs\OpenTabs;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Application\Read\OpenTabs\Queries\GetInvoiceForTable;
 use Src\Application\Read\OpenTabs\Queries\GetTabForTable;
@@ -25,10 +24,8 @@ use Src\Domain\Tab\Events\TabClosed;
 use Src\Domain\Tab\Events\TabOpened;
 use Src\Domain\Tab\OrderedItem;
 
-class EloquentOpenTabs implements OpenTabsInterface
+class EloquentOpenTabs extends OpenTabs
 {
-    use ReadModelTrait;
-
     /* @return Collection<int> */
     public function getActiveTableNumbers(GetActiveTableNumbers $query): Collection
     {
