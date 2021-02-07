@@ -2,13 +2,22 @@
 
 namespace Codderz\Yoko\Layers\Domain\Aggregate;
 
-use Codderz\Yoko\Layers\Infrastructure\Messaging\Events\EventHandlerTrait;
+use Codderz\Yoko\Support\Reflect;
 
 class Aggregate implements AggregateInterface
 {
-    use EventHandlerTrait;
-
     protected array $recordedEvents = [];
+
+    public function apply($event)
+    {
+        $method = __FUNCTION__ . Reflect::shortClass($event);
+
+        if (method_exists($this, $method)) {
+            $this->$method($event);
+        };
+
+        return $this;
+    }
 
     public function recordThat($event)
     {
@@ -31,7 +40,9 @@ class Aggregate implements AggregateInterface
     public static function fromEvents(array $events = [])
     {
         $self = new static;
-        $self->applyAll($events);
+        foreach ($events as $event) {
+            $self->apply($event);
+        }
         return $self;
     }
 }
