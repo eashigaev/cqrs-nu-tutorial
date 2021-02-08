@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Resolver;
+namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Resolver;
 
 use Codderz\Yoko\Layers\Infrastructure\Container\ContainerInterface;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Decorators;
+namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Decorators;
 
 use Codderz\Yoko\Layers\Infrastructure\Dispatcher\DispatcherInterface;
 
@@ -11,9 +11,11 @@ class QueueDecorator implements DispatcherInterface
     protected array $queue = [];
     protected bool $isHandling = false;
 
-    public function __construct(DispatcherInterface $dispatcher)
+    public static function of(DispatcherInterface $dispatcher)
     {
-        $this->dispatcher = $dispatcher;
+        $self = new self();
+        $self->dispatcher = $dispatcher;
+        return $self;
     }
 
     public function dispatch($message)

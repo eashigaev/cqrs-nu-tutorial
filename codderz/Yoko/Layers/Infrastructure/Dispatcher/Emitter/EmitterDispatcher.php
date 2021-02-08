@@ -3,8 +3,8 @@
 namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Emitter;
 
 use Codderz\Yoko\Layers\Infrastructure\Dispatcher\DispatcherInterface;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Provider\HandlerProviderInterface;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Resolver\HandlerResolverInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Provider\HandlerProviderInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Resolver\HandlerResolverInterface;
 
 class EmitterDispatcher implements DispatcherInterface
 {

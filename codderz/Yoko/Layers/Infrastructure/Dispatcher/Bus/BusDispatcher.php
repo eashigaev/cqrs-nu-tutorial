@@ -4,8 +4,8 @@ namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Bus;
 
 use Codderz\Yoko\Layers\Infrastructure\Dispatcher\DispatcherInterface;
 use Codderz\Yoko\Layers\Infrastructure\Dispatcher\NotDispatched;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Provider\HandlerProviderInterface;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Resolver\HandlerResolverInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Provider\HandlerProviderInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Resolver\HandlerResolverInterface;
 
 class BusDispatcher implements DispatcherInterface
 {

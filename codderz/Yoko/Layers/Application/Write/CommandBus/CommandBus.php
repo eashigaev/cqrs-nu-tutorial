@@ -3,8 +3,8 @@
 namespace Codderz\Yoko\Layers\Application\Write\CommandBus;
 
 use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Bus\BusDispatcher;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Decorators\QueueDecorator;
 use Codderz\Yoko\Layers\Infrastructure\Dispatcher\DispatcherInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Decorators\QueueDecorator;
 
 class CommandBus implements CommandBusInterface
 {
@@ -12,7 +12,7 @@ class CommandBus implements CommandBusInterface
 
     public function __construct(BusDispatcher $dispatcher)
     {
-        $this->dispatcher = new QueueDecorator($dispatcher);
+        $this->dispatcher = QueueDecorator::of($dispatcher);
     }
 
     public function handle($message)

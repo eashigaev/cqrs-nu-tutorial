@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Provider;
+namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Provider;
 
 interface HandlerProviderInterface
 {
