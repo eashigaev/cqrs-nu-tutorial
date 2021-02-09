@@ -9,7 +9,7 @@ trait CommandBusTestTrait
     public function commandBatch(array $commands)
     {
         Collection::of($commands)
-            ->each(fn($command) => $this->commandBus()->handle($command));
+            ->each(fn($command) => $this->commandBus()->execute($command));
     }
 
     public function commandBus(): CommandBusInterface
@@ -22,6 +22,6 @@ trait CommandBusTestTrait
         return $this
             ->setUpMock(CommandBusInterface::class)
             ->expects($expects ?: $this->once())
-            ->method('handle');
+            ->method('execute');
     }
 }

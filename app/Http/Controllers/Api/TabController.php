@@ -41,7 +41,7 @@ class TabController extends Controller
             $request->waiter
         );
 
-        $this->commandBus->handle($command);
+        $this->commandBus->execute($command);
 
         return $this->successApiResponse($tabId->value);
     }
@@ -57,7 +57,7 @@ class TabController extends Controller
             $orderedItems
         );
 
-        $this->commandBus->handle($command);
+        $this->commandBus->execute($command);
 
         return $this->successApiResponse();
     }
@@ -71,13 +71,13 @@ class TabController extends Controller
             Guid::of($request->tabId),
             $products->where('isDrink', true)->pluck('menuNumber')
         );
-        $this->commandBus->handle($drinksCommand);
+        $this->commandBus->execute($drinksCommand);
 
         $foodCommand = MarkFoodServed::of(
             Guid::of($request->tabId),
             $products->where('isDrink', false)->pluck('menuNumber')
         );
-        $this->commandBus->handle($foodCommand);
+        $this->commandBus->execute($foodCommand);
 
         return $this->successApiResponse();
     }
@@ -89,7 +89,7 @@ class TabController extends Controller
             $request->amountPaid
         );
 
-        $this->commandBus->handle($command);
+        $this->commandBus->execute($command);
 
         return $this->successApiResponse();
     }
@@ -98,7 +98,7 @@ class TabController extends Controller
     {
         $query = GetTabForTable::of($table);
 
-        $result = $this->queryBus->handle($query);
+        $result = $this->queryBus->execute($query);
 
         return $this->successApiResponse($result);
     }
@@ -107,7 +107,7 @@ class TabController extends Controller
     {
         $query = GetInvoiceForTable::of($table);
 
-        $result = $this->queryBus->handle($query);
+        $result = $this->queryBus->execute($query);
 
         return $this->successApiResponse($result);
     }

@@ -48,12 +48,12 @@ class SrcServiceProvider extends ServiceProvider
         $this->app->bind(HandlerFactoryInterface::class, HandlerFactory::class);
 
         $this->app->singleton(BusMapProvider::class);
-        $this->app->singleton(BusProviderInterface::class, BusMapProvider::class);
+        $this->app->bind(BusProviderInterface::class, BusMapProvider::class);
         $this->app->bind(QueryBusInterface::class, QueryBus::class);
         $this->app->bind(CommandBusInterface::class, CommandBus::class);
 
         $this->app->singleton(EmitterMapProvider::class);
-        $this->app->singleton(EmitterProviderInterface::class, EmitterMapProvider::class);
+        $this->app->bind(EmitterProviderInterface::class, EmitterMapProvider::class);
         $this->app->bind(EventEmitterInterface::class, EventEmitter::class);
 
         $this->app->singleton(ChefTodoListInterface::class, EloquentChefTodoList::class);

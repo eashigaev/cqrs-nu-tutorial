@@ -37,7 +37,7 @@ class TabTest extends TestCase
     /** @group a */
     public function testCanOpenTab()
     {
-        $tables = $this->queryBus()->handle(GetActiveTableNumbers::of());
+        $tables = $this->queryBus()->execute(GetActiveTableNumbers::of());
 
         $this->assertEquals(1, $tables->count());
     }
@@ -57,14 +57,14 @@ class TabTest extends TestCase
             CloseTab::of($this->aTabId, $this->drink1->price + $this->food1->price),
         ]);
 
-        $empty = $this->queryBus()->handle(GetActiveTableNumbers::of());
+        $empty = $this->queryBus()->execute(GetActiveTableNumbers::of());
         $this->assertEquals(0, $empty->count());
     }
 
     public function testCanGetTabInvoice()
     {
         /** @var TabInvoice $invoice */
-        $invoice = $this->queryBus()->handle(GetInvoiceForTable::of($this->aTable));
+        $invoice = $this->queryBus()->execute(GetInvoiceForTable::of($this->aTable));
 
         $this->assertEquals(2, $invoice->items->count());
         $this->assertEquals(false, $invoice->hasUnservedItems);
@@ -74,7 +74,7 @@ class TabTest extends TestCase
     public function testCanGetTabStatus()
     {
         /** @var TabStatus $status */
-        $status = $this->queryBus()->handle(GetTabForTable::of($this->aTable));
+        $status = $this->queryBus()->execute(GetTabForTable::of($this->aTable));
 
         $this->assertEquals($this->aTable, $status->tableNumber);
         $this->assertEquals(2, $status->served->count());
@@ -89,7 +89,7 @@ class TabTest extends TestCase
         ]);
 
         /** @var Collection<TodoListGroup> $chefTodoList */
-        $waiterTodoList = $this->queryBus()->handle(GetTodoListForWaiter::of($this->aWaiter));
+        $waiterTodoList = $this->queryBus()->execute(GetTodoListForWaiter::of($this->aWaiter));
 
         $this->assertEquals(2, $waiterTodoList[$this->aTable]->count());
         $this->assertEquals(1, $waiterTodoList[$this->bTable]->count());
@@ -97,20 +97,20 @@ class TabTest extends TestCase
 
     public function testCanManageChefTodoList()
     {
-        $this->commandBus()->handle(
+        $this->commandBus()->execute(
             PlaceOrder::of($this->aTabId, Collection::of([$this->food2]))
         );
 
         /** @var Collection<TodoListGroup> $chefTodoList */
-        $chefTodoList = $this->queryBus()->handle(GetTodoList::of());
+        $chefTodoList = $this->queryBus()->execute(GetTodoList::of());
         $this->assertEquals(1, $chefTodoList->count());
 
-        $this->commandBus()->handle(
+        $this->commandBus()->execute(
             MarkFoodPrepared::of($this->aTabId, Collection::of([$this->food2->menuNumber]))
         );
 
         /** @var Collection<TodoListGroup> $chefTodoList */
-        $chefTodoList = $this->queryBus()->handle(GetTodoList::of());
+        $chefTodoList = $this->queryBus()->execute(GetTodoList::of());
         $this->assertEquals(0, $chefTodoList->count());
     }
 }

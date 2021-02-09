@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messenger\Events;
+namespace Codderz\Yoko\Layers\Application\Events\EventEmitter;
 
 interface EventHandlerInterface
 {

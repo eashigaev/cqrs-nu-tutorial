@@ -29,7 +29,7 @@ class ChefController extends Controller
     {
         $query = GetTodoList::of();
 
-        $result = $this->queryBus->handle($query);
+        $result = $this->queryBus->execute($query);
 
         return $this->successApiResponse($result);
     }
@@ -41,7 +41,7 @@ class ChefController extends Controller
             Collection::of($request->menuNumbers)
         );
 
-        $this->commandBus->handle($command);
+        $this->commandBus->execute($command);
 
         return $this->successApiResponse();
     }

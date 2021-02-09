@@ -15,7 +15,7 @@ class CommandBus implements CommandBusInterface
         $this->dispatcher = QueueDecorator::of($dispatcher);
     }
 
-    public function handle($message)
+    public function execute($message)
     {
         $this->dispatcher->dispatch($message);
     }

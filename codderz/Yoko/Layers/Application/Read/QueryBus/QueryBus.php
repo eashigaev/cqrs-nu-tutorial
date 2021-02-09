@@ -14,7 +14,7 @@ class QueryBus implements QueryBusInterface
         $this->dispatcher = $dispatcher;
     }
 
-    public function handle($message)
+    public function execute($message)
     {
         return $this->dispatcher->dispatch($message);
     }

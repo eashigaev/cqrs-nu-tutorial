@@ -4,8 +4,7 @@ namespace Src\Application\Write;
 
 use Codderz\Yoko\Layers\Application\Events\EventEmitter\EventEmitterInterface;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\ActionHandlerInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\HandleTrait;
+use Codderz\Yoko\Layers\Application\Write\CommandHandler;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -16,10 +15,8 @@ use Src\Domain\Tab\Commands\PlaceOrder;
 use Src\Domain\Tab\TabAggregate;
 use Src\Domain\Tab\TabRepositoryInterface;
 
-class TabHandler implements ActionHandlerInterface
+class TabHandler extends CommandHandler
 {
-    use HandleTrait;
-
     protected EventEmitterInterface $eventEmitter;
     protected QueryBusInterface $queryBus;
     protected TabRepositoryInterface $tabRepository;
@@ -37,7 +34,7 @@ class TabHandler implements ActionHandlerInterface
 
     public function openTab(OpenTab $command)
     {
-        $activeTableNumbers = $this->queryBus->handle(GetActiveTableNumbers::of());
+        $activeTableNumbers = $this->queryBus->execute(GetActiveTableNumbers::of());
 
         $tab = TabAggregate::openTab($command, $activeTableNumbers);
         $this->tabRepository->save($tab);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messenger\Actions;
+namespace Codderz\Yoko\Layers\Application;
 
 interface ActionHandlerInterface
 {

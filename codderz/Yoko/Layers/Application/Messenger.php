@@ -1,8 +1,7 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Messenger;
+namespace Codderz\Yoko\Layers\Application;
 
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\NotDispatched;
 use Codderz\Yoko\Support\Reflect;
 
 class Messenger
@@ -24,7 +23,7 @@ class Messenger
             return $this->target->$method($message);
         }
 
-        throw NotDispatched::new();
+        throw NotHandled::new();
     }
 
     public function apply($event)

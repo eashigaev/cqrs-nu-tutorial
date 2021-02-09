@@ -3,11 +3,9 @@
 namespace Src\Infrastructure\Application\Read;
 
 use App\Models\Read\ChefTodoListModel;
+use Codderz\Yoko\Layers\Application\Read\ReadModel\ReadModel;
 use Codderz\Yoko\Layers\Domain\Guid;
-use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\HandleTrait;
-use Codderz\Yoko\Layers\Infrastructure\Messenger\Events\ApplyTrait;
 use Codderz\Yoko\Support\Collection;
-use Src\Application\Read\ChefTodoList\ChefTodoList;
 use Src\Application\Read\ChefTodoList\ChefTodoListInterface;
 use Src\Application\Read\ChefTodoList\Queries\GetTodoList;
 use Src\Application\Read\ChefTodoList\TodoListGroup;
@@ -16,11 +14,8 @@ use Src\Domain\Tab\Events\FoodOrdered;
 use Src\Domain\Tab\Events\FoodPrepared;
 use Src\Domain\Tab\OrderedItem;
 
-class EloquentChefTodoList implements ChefTodoListInterface
+class EloquentChefTodoList extends ReadModel implements ChefTodoListInterface
 {
-    use HandleTrait;
-    use ApplyTrait;
-
     public function getTodoList(GetTodoList $query): Collection
     {
         return ChefTodoListModel::query()

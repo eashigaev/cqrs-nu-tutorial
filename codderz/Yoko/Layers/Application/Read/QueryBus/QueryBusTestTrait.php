@@ -14,6 +14,6 @@ trait QueryBusTestTrait
         return $this
             ->setUpMock(QueryBusInterface::class)
             ->expects($expects ?: $this->once())
-            ->method('handle');
+            ->method('execute');
     }
 }
