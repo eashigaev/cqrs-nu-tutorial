@@ -2,31 +2,32 @@
 
 namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Bus;
 
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Bus\Provider\BusProviderInterface;
 use Codderz\Yoko\Layers\Infrastructure\Dispatcher\DispatcherInterface;
 use Codderz\Yoko\Layers\Infrastructure\Dispatcher\NotDispatched;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Provider\HandlerProviderInterface;
-use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Resolver\HandlerResolverInterface;
+use Codderz\Yoko\Layers\Infrastructure\Dispatcher\Support\Factory\HandlerFactoryInterface;
 
 class BusDispatcher implements DispatcherInterface
 {
-    protected HandlerProviderInterface $provider;
-    protected HandlerResolverInterface $resolver;
+    protected BusProviderInterface $provider;
+    protected HandlerFactoryInterface $factory;
 
-    public function __construct(HandlerProviderInterface $provider, HandlerResolverInterface $resolver)
+    public function __construct(BusProviderInterface $provider, HandlerFactoryInterface $factory)
     {
         $this->provider = $provider;
-        $this->resolver = $resolver;
+        $this->factory = $factory;
     }
 
     public function dispatch($message)
     {
-        foreach ($this->provider->getListenersFor(get_class($message)) as $handler) {
-            $handler = $this->resolver->resolve($handler, 'handle');
-            return $handler($message);
-        }
+        $handler = $this->provider->getHandlerFor(get_class($message));
 
-        throw NotDispatched::new(
+        if (!$handler) throw NotDispatched::new(
             get_class($this) . " does not have handler for " . get_class($message)
         );
+
+        $callable = $this->factory->make($handler, 'handle');
+
+        return $callable($message);
     }
 }

@@ -34,6 +34,7 @@ class TabTest extends TestCase
         ]);
     }
 
+    /** @group a */
     public function testCanOpenTab()
     {
         $tables = $this->queryBus()->handle(GetActiveTableNumbers::of());

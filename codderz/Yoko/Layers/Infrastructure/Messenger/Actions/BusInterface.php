@@ -1,6 +1,6 @@
 <?php
 
-namespace Codderz\Yoko\Layers\Infrastructure\Dispatcher\Bus;
+namespace Codderz\Yoko\Layers\Infrastructure\Messenger\Actions;
 
 interface BusInterface
 {
