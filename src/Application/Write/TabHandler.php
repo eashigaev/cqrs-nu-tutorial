@@ -5,7 +5,7 @@ namespace Src\Application\Write;
 use Codderz\Yoko\Layers\Application\Events\EventEmitter\EventEmitterInterface;
 use Codderz\Yoko\Layers\Application\Read\QueryBus\QueryBusInterface;
 use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\ActionHandlerInterface;
-use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\ActionHandlerTrait;
+use Codderz\Yoko\Layers\Infrastructure\Messenger\Actions\HandleTrait;
 use Src\Application\Read\OpenTabs\Queries\GetActiveTableNumbers;
 use Src\Domain\Tab\Commands\CloseTab;
 use Src\Domain\Tab\Commands\MarkDrinksServed;
@@ -18,7 +18,7 @@ use Src\Domain\Tab\TabRepositoryInterface;
 
 class TabHandler implements ActionHandlerInterface
 {
-    use ActionHandlerTrait;
+    use HandleTrait;
 
     protected EventEmitterInterface $eventEmitter;
     protected QueryBusInterface $queryBus;
